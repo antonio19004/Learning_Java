@@ -34,6 +34,9 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain defaultFilterChain(HttpSecurity httpSecurity) throws Exception {
 		return httpSecurity
+				.csrf().disable()
+				.cors()
+				.and()				
 				.authorizeHttpRequests(auth -> auth
 	                .requestMatchers("/", "/auth", "/register/**", "/api/**").permitAll()
 					.requestMatchers("/admin/**").hasRole("ADMIN")
@@ -41,6 +44,10 @@ public class SecurityConfig {
 					.anyRequest().authenticated()
 				)
 				.formLogin()
+					.loginPage("/login").permitAll()
+					.loginProcessingUrl("/login")
+					.usernameParameter("username")
+					.passwordParameter("password")
 					.successHandler(successHandler())
 					.failureHandler(failureHandler())
 					.and()
@@ -58,7 +65,7 @@ public class SecurityConfig {
 					.permitAll()
 					.logoutSuccessUrl("/login?logout")
 				)
-//				.csrf().disable()
+				
 				.build();
 	}
 

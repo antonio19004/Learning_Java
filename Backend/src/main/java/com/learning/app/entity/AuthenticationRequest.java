@@ -5,6 +5,7 @@ public class AuthenticationRequest {
 	private String user;
 	private String password;
 	
+	
 	public AuthenticationRequest() {
 	}
 

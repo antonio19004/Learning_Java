@@ -3,6 +3,7 @@ package com.learning.app.entity;
 public class AuthenticationResponse {
 
 	private String response;
+	private String username;
 	private String rol;
 
 	public AuthenticationResponse() {
@@ -12,9 +13,10 @@ public class AuthenticationResponse {
 		this.response = response;
 	}
 
-	public AuthenticationResponse(String response, String rol) {
+	public AuthenticationResponse(String response, String rol, String username) {
 		this.response = response;
 		this.rol = rol;
+		this.username = username;
 	}
 
 	public String getResponse() {
@@ -31,5 +33,12 @@ public class AuthenticationResponse {
 
 	public void setRol(String rol) {
 		this.rol = rol;
+	}
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 }
