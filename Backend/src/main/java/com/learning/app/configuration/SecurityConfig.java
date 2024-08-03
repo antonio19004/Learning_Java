@@ -1,5 +1,7 @@
 package com.learning.app.configuration;
 
+import java.util.Arrays;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +19,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import com.learning.app.service.UserService;
 
@@ -36,15 +41,16 @@ public class SecurityConfig {
 		return httpSecurity
 				.csrf().disable()
 				.cors()
-				.and()				
+	            .and()
 				.authorizeHttpRequests(auth -> auth
-	                .requestMatchers("/", "/auth", "/register/**", "/api/**").permitAll()
+	                .requestMatchers("/","/status", "/auth", "/register/**", "/api/**").permitAll()
 					.requestMatchers("/admin/**").hasRole("ADMIN")
 					.requestMatchers("/users/**").hasRole("USER")
 					.anyRequest().authenticated()
 				)
 				.formLogin()
-					.loginPage("/login").permitAll()
+					.loginPage("/login") // Asegúrate de que esta URL apunte a tu formulario de inicio de sesión
+					.permitAll()
 					.loginProcessingUrl("/login")
 					.usernameParameter("username")
 					.passwordParameter("password")
@@ -52,7 +58,7 @@ public class SecurityConfig {
 					.failureHandler(failureHandler())
 					.and()
 				.sessionManagement()
-					.sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+					.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
 					.invalidSessionUrl("/login")
 					.maximumSessions(1)
 					.expiredUrl("/login?expired")
@@ -69,6 +75,20 @@ public class SecurityConfig {
 				.build();
 	}
 
+	
+   /* @Bean
+    public CorsFilter corsFilter() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.addAllowedOrigin("http://localhost:3000");
+        corsConfiguration.addAllowedHeader("*");
+        corsConfiguration.addAllowedMethod("*");
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfiguration);
+        return new CorsFilter(source);
+    }
+	*/
+	
 	@Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
@@ -98,4 +118,6 @@ public class SecurityConfig {
 	public HttpSessionEventPublisher httpSessionEventPublisher() {
         return new HttpSessionEventPublisher();
 	}
+	
+	
 }

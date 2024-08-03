@@ -10,17 +10,40 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
+import org.springframework.web.bind.annotation.RestController;
+import com.learning.app.Dto.UsersDto;
+import com.learning.app.Dto.AdminDto;
+import com.learning.app.entity.Admin;
 import com.learning.app.entity.Users;
 import com.learning.app.repository.UsersRepository;
 
-@Controller
+@RestController
 @RequestMapping("/users")
 public class UsersController {
 
 	@Autowired
 	private UsersRepository usersRepository;
 	
+	
+	@GetMapping("/details")
+	 public UsersDto getAuthenticatedUser() {
+  
+       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+       String username = authentication.getName();
+       Users user = usersRepository.findByUser(username);
+       UsersDto userDto = new UsersDto();
+       userDto.setNombre(user.getNombre());
+       userDto.setApellido(user.getApellido());
+       userDto.setFechaNacimiento(user.getFechaNacimiento());
+       userDto.setEmail(user.getEmail());
+       userDto.getEdad();
+       
+       
+       return userDto;
+   }
+	
+	
+/*	
 	@GetMapping("/")
 	public String index(Model model) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -53,4 +76,5 @@ public class UsersController {
 		usersRepository.save(users);
 		return "redirect:/users/";
 	}
+	*/
 }

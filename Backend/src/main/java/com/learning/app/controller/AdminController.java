@@ -1,17 +1,11 @@
 package com.learning.app.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.learning.app.Dto.AdminDto;
+import com.learning.app.Dto.UsersDto;
 import com.learning.app.entity.Admin;
+import com.learning.app.entity.User;
 import com.learning.app.entity.Users;
 import com.learning.app.repository.AdminRepository;
 import com.learning.app.repository.UsersRepository;
@@ -37,53 +34,24 @@ public class AdminController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
-
-		
-		
-
-
-    @GetMapping("/Details")
-    public ResponseEntity<?> getAuthenticatedAdminInfo() {
-        try {
-          
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            String userName = auth.getName();
-            
-           
-            if ("anonymousUser".equals(userName)) {
-                throw new RuntimeException("Usuario no autenticado");
-            }
-
-            
-            Admin admin = adminRepository.findByUser(userName);
-            
-            if (admin == null) {
-                throw new RuntimeException("Admin no encontrado para el usuario: " + userName);
-            }
-
-           
-            System.out.println("Admin autenticado: " + admin);
-            System.out.println("ID: " + admin.getId());
-            System.out.println("Nombre: " + admin.getNombre());
-            System.out.println("Email: " + admin.getEmail());
-          
-            return ResponseEntity.ok(admin);
-
-        } catch (Exception e) {
-            
-            System.err.println("Error al obtener la información del Admin: " + e.getMessage());
-            
-            
-            Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("error", "Error interno del servidor: " + e.getMessage());
-            
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
-        }
-    }
-
-
 	
-	/*
+	
+	@GetMapping("/details")
+	 public AdminDto getAuthenticatedUser() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	       String username = authentication.getName();
+	       Admin admin = adminRepository.findByUser(username);
+	       AdminDto adminDto = new AdminDto();
+	       adminDto.setNombre(admin.getNombre());
+	       adminDto.setApellido(admin.getApellido());
+	       adminDto.setFechaNacimiento(admin.getFechaNacimiento());
+	       adminDto.setEmail(admin.getEmail());
+	       adminDto.getEdad();
+	       
+	       return adminDto;
+    }
+	
+/*	
 	@GetMapping("/")
 	public String index(Model model) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -225,5 +193,6 @@ public class AdminController {
 		usersRepository.delete(users);
 		return "redirect:/admin/";
 	}
+	
 	*/
 }

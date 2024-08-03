@@ -98,10 +98,4 @@ public class Admin {
 		this.password = password;
 	}
 
-	public int getEdad() {
-        LocalDate nacimiento = fechaNacimiento;
-        LocalDate fechaActual = LocalDate.now();
-        Period periodo = Period.between(nacimiento, fechaActual);
-        return periodo.getYears();
-    }
 }

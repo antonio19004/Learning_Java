@@ -9,10 +9,10 @@
 		<div th:if="${message}">
 			<p th:text="${message}"></p>
 		</div>
-		<form th:action="@{/auth}" method="post">
+		<form th:action="@{/login}" method="post">
 			<div>
 	            <label for="username">Username</label>
-	            <input type="text" id="user" name="username" />
+	            <input type="text" id="username" name="username" />
 	        </div>
 	        <div>
 	            <label for="password">Password</label>
