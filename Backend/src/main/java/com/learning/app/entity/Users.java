@@ -19,12 +19,13 @@ public class Users {
 	private String user;
 	private String password;
 	private int cursosCompletados;
+	private boolean acceptTerms;
 	
 	public Users() {
 	}
-
+	
 	public Users(String id, String imagenPerfil, String nombre, String apellido, LocalDate fechaNacimiento,
-			String email, String user, String password, int cursosCompletados) {
+			String email, String user, String password, int cursosCompletados, boolean acceptTerms) {
 		this.id = id;
 		this.imagenPerfil = imagenPerfil;
 		this.nombre = nombre;
@@ -34,8 +35,9 @@ public class Users {
 		this.user = user;
 		this.password = password;
 		this.cursosCompletados = cursosCompletados;
+		this.acceptTerms = acceptTerms;
 	}
-	
+
 	public String getId() {
 		return id;
 	}
@@ -106,6 +108,14 @@ public class Users {
 
 	public void setCursosCompletados(int cursosCompletados) {
 		this.cursosCompletados = cursosCompletados;
+	}
+
+	public boolean isAcceptTerms() {
+		return acceptTerms;
+	}
+
+	public void setAcceptTerms(boolean acceptTerms) {
+		this.acceptTerms = acceptTerms;
 	}
 
 	public int getEdad() {

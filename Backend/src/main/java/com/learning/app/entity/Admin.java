@@ -1,7 +1,6 @@
 package com.learning.app.entity;
 
 import java.time.LocalDate;
-import java.time.Period;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -97,5 +96,4 @@ public class Admin {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
 }

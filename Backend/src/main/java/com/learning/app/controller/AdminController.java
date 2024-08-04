@@ -3,23 +3,13 @@ package com.learning.app.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.learning.app.Dto.AdminDto;
-import com.learning.app.Dto.UsersDto;
 import com.learning.app.entity.Admin;
-import com.learning.app.entity.User;
-import com.learning.app.entity.Users;
 import com.learning.app.repository.AdminRepository;
-import com.learning.app.repository.UsersRepository;
 
 @RestController
 @RequestMapping("/admin")
@@ -27,14 +17,6 @@ public class AdminController {
 
 	@Autowired
 	private AdminRepository adminRepository;
-	
-	@Autowired
-	private UsersRepository usersRepository;
-	
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-	
-	
 	
 	@GetMapping("/details")
 	 public AdminDto getAuthenticatedUser() {

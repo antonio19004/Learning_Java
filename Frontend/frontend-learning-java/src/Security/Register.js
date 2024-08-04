@@ -1,0 +1,190 @@
+import React, { useState } from 'react';
+import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser, faEnvelope, faLock, faEye, faEyeSlash, faCalendar, faImage } from '@fortawesome/free-solid-svg-icons';
+import { useNavigate } from 'react-router-dom';
+
+function Register() {
+    const [imagenPerfil, setImagenPerfil] = useState(null);
+    const [nombre, setNombre] = useState('');
+    const [apellido, setApellido] = useState('');
+    const [fechaNacimiento, setFechaNacimiento] = useState('');
+    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [acceptTerms, setAcceptTerms] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const navigate = useNavigate();
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setImagenPerfil(file);
+
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const toggleShowPassword = () => {
+        setShowPassword(!showPassword);
+    };
+
+    const toggleShowConfirmPassword = () => {
+        setShowConfirmPassword(!showConfirmPassword);
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        
+        if (password !== confirmPassword) {
+            setErrorMessage("La contraseña no coincide");
+            return;
+        }
+        if (!nombre || !apellido || !fechaNacimiento || !email || !username || !password || !confirmPassword) {
+            setErrorMessage("Por favor, llena todos los campos.");
+            return;
+        }
+        if (!acceptTerms) {
+            setErrorMessage("Debes aceptar los términos para poder registrarte");
+            return;
+        }
+
+        const data = {
+            imagenPerfil: imagenPerfil,
+            nombre: nombre,
+            apellido: apellido,
+            fechaNacimiento: fechaNacimiento,
+            email: email,
+            user: username,
+            password: password,
+            acceptTerms: acceptTerms
+        };
+
+        try {
+            const response = await axios.post('http://localhost:8080/register/add-user', data, {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                withCredentials: true
+            });
+
+            if (response.status === 200) {
+                navigate('/login');
+            }
+        } catch (error) {
+            if (error.response && error.response.status === 400) {
+                setErrorMessage(error.response.data);
+            } else {
+               console.error('Ocurrió un error en el registro: ', error);
+                setErrorMessage('Error en el registro. Inténtelo de nuevo');
+            }
+        }
+    };
+
+    return (
+        <div>
+            {errorMessage && (
+                
+                <div className="alert alert-danger w-50 p-1 mx-auto mt-4"  role="alert">
+                    <p className="text-danger text-center">{JSON.stringify(errorMessage)}</p>
+                </div>
+            )}
+            <div className='d-flex flex-column align-items-center justify-content-center' style={{ height: '100vh' }}>
+                <h2 className='fw-bold'>Crea una nueva cuenta</h2>
+                <br />
+                <form onSubmit={handleSubmit} className="row g-3" style={{ maxWidth: '600px' }}>
+                    <div className="col-12 mb-3">
+                        <div className="input-group">
+                            <span className="input-group-text">
+                                <FontAwesomeIcon icon={faImage} />
+                            </span>
+                            <input className='form-control' type="file" accept="image/*" onChange={handleImageChange} />
+                        </div>
+                    </div>
+                    <div className="col-md-6">
+                        <div className="input-group">
+                            <span className="input-group-text">
+                                <FontAwesomeIcon icon={faUser} />
+                            </span>
+                            <input className='form-control' type="text" value={nombre} onChange={(e) => setNombre(e.target.value)} placeholder='Nombre' />
+                        </div>
+                    </div>
+                    <div className="col-md-6">
+                        <div className="input-group">
+                            <span className="input-group-text">
+                                <FontAwesomeIcon icon={faUser} />
+                            </span>
+                            <input className='form-control' type="text" value={apellido} onChange={(e) => setApellido(e.target.value)} placeholder='Apellido' />
+                        </div>
+                    </div>
+                    <div className="col-md-6">
+                        <div className="input-group">
+                            <span className="input-group-text">
+                                <FontAwesomeIcon icon={faCalendar} />
+                            </span>
+                            <input className='form-control' type="date" value={fechaNacimiento} onChange={(e) => setFechaNacimiento(e.target.value)} />
+                        </div>
+                    </div>
+                    <div className="col-md-6">
+                        <div className="input-group">
+                            <span className="input-group-text">
+                                <FontAwesomeIcon icon={faEnvelope} />
+                            </span>
+                            <input className='form-control' type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Email' />
+                        </div>
+                    </div>
+                    <div className="col-md-6">
+                        <div className="input-group">
+                            <span className="input-group-text">
+                                <FontAwesomeIcon icon={faUser} />
+                            </span>
+                            <input className='form-control' type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder='Usuario' />
+                        </div>
+                    </div>
+                    <div className="col-md-6">
+                        <div className="input-group position-relative">
+                            <span className="input-group-text">
+                                <FontAwesomeIcon icon={faLock} />
+                            </span>
+                            <input className='form-control' type={showPassword ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Contraseña' />
+                            <span className="position-absolute" onClick={toggleShowPassword} style={{ color: 'gray', right: '10px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer' }}>
+                                <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                            </span>
+                        </div>
+                    </div>
+                    <div className="col-md-6">
+                        <div className="input-group position-relative">
+                            <span className="input-group-text">
+                                <FontAwesomeIcon icon={faLock} />
+                            </span>
+                            <input className='form-control' type={showConfirmPassword ? 'text' : 'password'} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder='Confirmar contraseña' />
+                            <span className="position-absolute" onClick={toggleShowConfirmPassword} style={{ color: 'gray', right: '10px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer' }}>
+                                <FontAwesomeIcon icon={showConfirmPassword ? faEyeSlash : faEye} />
+                            </span>
+                        </div>
+                    </div>
+                    <div className="col-12">
+                        <div className="form-check d-flex justify-content-center">
+                            <input className='form-check-input me-2' type="checkbox" checked={acceptTerms} onChange={(e) => setAcceptTerms(e.target.checked)} />
+                            <label className="form-check-label">Acepto que la página maneje mi información</label>
+                        </div>
+                    </div>
+                    <div className="col-12">
+                        <div className="d-flex justify-content-center">
+                            <button className='btn btn-dark' type="submit">Registrarse</button>
+                        </div>
+                    </div>
+                    <h5 className='d-flex justify-content-center fw-light'>Si ya tienes una cuenta</h5>
+                    <h5 className='d-flex justify-content-center fw-bold'><a className='text-decoration-none text-dark hover:text-secondary' href='/login'>Inicia Sesión</a></h5>
+                </form>
+            </div>
+        </div>
+    );
+}
+
+export default Register;

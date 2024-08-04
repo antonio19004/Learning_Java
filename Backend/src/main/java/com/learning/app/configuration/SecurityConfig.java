@@ -1,7 +1,5 @@
 package com.learning.app.configuration;
 
-import java.util.Arrays;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,9 +17,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
 
 import com.learning.app.service.UserService;
 
@@ -49,7 +44,7 @@ public class SecurityConfig {
 					.anyRequest().authenticated()
 				)
 				.formLogin()
-					.loginPage("/login") // Asegúrate de que esta URL apunte a tu formulario de inicio de sesión
+					.loginPage("/login")
 					.permitAll()
 					.loginProcessingUrl("/login")
 					.usernameParameter("username")
@@ -74,20 +69,6 @@ public class SecurityConfig {
 				
 				.build();
 	}
-
-	
-   /* @Bean
-    public CorsFilter corsFilter() {
-        CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowCredentials(true);
-        corsConfiguration.addAllowedOrigin("http://localhost:3000");
-        corsConfiguration.addAllowedHeader("*");
-        corsConfiguration.addAllowedMethod("*");
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", corsConfiguration);
-        return new CorsFilter(source);
-    }
-	*/
 	
 	@Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
@@ -118,6 +99,4 @@ public class SecurityConfig {
 	public HttpSessionEventPublisher httpSessionEventPublisher() {
         return new HttpSessionEventPublisher();
 	}
-	
-	
 }
