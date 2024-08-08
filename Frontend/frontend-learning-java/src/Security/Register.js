@@ -6,7 +6,9 @@ import { faUser, faEnvelope, faLock, faEye, faEyeSlash, faCalendar, faImage } fr
 import { useNavigate } from 'react-router-dom';
 
 function Register() {
+    document.title = 'Register';
     const [imagenPerfil, setImagenPerfil] = useState(null);
+    const [imagePreview, setImagePreview] = useState('');
     const [nombre, setNombre] = useState('');
     const [apellido, setApellido] = useState('');
     const [fechaNacimiento, setFechaNacimiento] = useState('');
@@ -26,6 +28,9 @@ function Register() {
             setImagenPerfil(file);
 
             const reader = new FileReader();
+            reader.onloadend = () => {
+                setImagePreview(reader.result);
+            };
             reader.readAsDataURL(file);
         }
     };
@@ -40,7 +45,7 @@ function Register() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         if (password !== confirmPassword) {
             setErrorMessage("La contraseña no coincide");
             return;
@@ -54,21 +59,20 @@ function Register() {
             return;
         }
 
-        const data = {
-            imagenPerfil: imagenPerfil,
-            nombre: nombre,
-            apellido: apellido,
-            fechaNacimiento: fechaNacimiento,
-            email: email,
-            user: username,
-            password: password,
-            acceptTerms: acceptTerms
-        };
+        const formData = new FormData();
+        formData.append('imagenPerfil', imagenPerfil);
+        formData.append('nombre', nombre);
+        formData.append('apellido', apellido);
+        formData.append('fechaNacimiento', fechaNacimiento);
+        formData.append('email', email);
+        formData.append('user', username);
+        formData.append('password', password);
+        formData.append('acceptTerms', acceptTerms);
 
         try {
-            const response = await axios.post('http://localhost:8080/register/add-user', data, {
+            const response = await axios.post('http://localhost:8080/register/add-user', formData, {
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'multipart/form-data'
                 },
                 withCredentials: true
             });
@@ -80,17 +84,16 @@ function Register() {
             if (error.response && error.response.status === 400) {
                 setErrorMessage(error.response.data);
             } else {
-               console.error('Ocurrió un error en el registro: ', error);
+                console.error('Ocurrió un error en el registro: ', error);
                 setErrorMessage('Error en el registro. Inténtelo de nuevo');
             }
         }
     };
 
     return (
-        <div>
+        <div className='mt-4'>
             {errorMessage && (
-                
-                <div className="alert alert-danger w-50 p-1 mx-auto mt-4"  role="alert">
+                <div className="alert alert-danger w-50 p-1 mx-auto mt-4" role="alert">
                     <p className="text-danger text-center">{JSON.stringify(errorMessage)}</p>
                 </div>
             )}
@@ -105,6 +108,9 @@ function Register() {
                             </span>
                             <input className='form-control' type="file" accept="image/*" onChange={handleImageChange} />
                         </div>
+                        {imagePreview && (
+                            <img src={imagePreview} alt="Imagen de perfil" style={{ width: '100px', height: '100px', objectFit: 'cover', marginTop: '10px', borderRadius:'50px' }} />
+                        )}
                     </div>
                     <div className="col-md-6">
                         <div className="input-group">

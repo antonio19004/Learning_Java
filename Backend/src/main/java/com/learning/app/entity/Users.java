@@ -11,7 +11,7 @@ public class Users {
 
 	@Id
 	private String id;
-	private String imagenPerfil;
+	private byte[] imagenPerfil;
 	private String nombre;
 	private String apellido;
 	private LocalDate fechaNacimiento;
@@ -21,11 +21,15 @@ public class Users {
 	private int cursosCompletados;
 	private boolean acceptTerms;
 	
+	
+	
 	public Users() {
+		super();
 	}
 	
-	public Users(String id, String imagenPerfil, String nombre, String apellido, LocalDate fechaNacimiento,
+	public Users(String id, byte[] imagenPerfil, String nombre, String apellido, LocalDate fechaNacimiento,
 			String email, String user, String password, int cursosCompletados, boolean acceptTerms) {
+		super();
 		this.id = id;
 		this.imagenPerfil = imagenPerfil;
 		this.nombre = nombre;
@@ -37,91 +41,68 @@ public class Users {
 		this.cursosCompletados = cursosCompletados;
 		this.acceptTerms = acceptTerms;
 	}
-
 	public String getId() {
 		return id;
 	}
-
 	public void setId(String id) {
 		this.id = id;
 	}
-
-	public String getImagenPerfil() {
+	public byte[] getImagenPerfil() {
 		return imagenPerfil;
 	}
-
-	public void setImagenPerfil(String imagenPerfil) {
+	public void setImagenPerfil(byte[] imagenPerfil) {
 		this.imagenPerfil = imagenPerfil;
 	}
-
 	public String getNombre() {
 		return nombre;
 	}
-
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-
 	public String getApellido() {
 		return apellido;
 	}
-
 	public void setApellido(String apellido) {
 		this.apellido = apellido;
 	}
-
 	public LocalDate getFechaNacimiento() {
 		return fechaNacimiento;
 	}
-
 	public void setFechaNacimiento(LocalDate fechaNacimiento) {
 		this.fechaNacimiento = fechaNacimiento;
 	}
-
 	public String getEmail() {
 		return email;
 	}
-
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
 	public String getUser() {
 		return user;
 	}
-
 	public void setUser(String user) {
 		this.user = user;
 	}
-
 	public String getPassword() {
 		return password;
 	}
-
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
 	public int getCursosCompletados() {
 		return cursosCompletados;
 	}
-
 	public void setCursosCompletados(int cursosCompletados) {
 		this.cursosCompletados = cursosCompletados;
 	}
-
 	public boolean isAcceptTerms() {
 		return acceptTerms;
 	}
-
 	public void setAcceptTerms(boolean acceptTerms) {
 		this.acceptTerms = acceptTerms;
 	}
-
-	public int getEdad() {
-        LocalDate nacimiento = fechaNacimiento;
-        LocalDate fechaActual = LocalDate.now();
-        Period periodo = Period.between(nacimiento, fechaActual);
-        return periodo.getYears();
-    }
+	
 }
+	
+	
+	

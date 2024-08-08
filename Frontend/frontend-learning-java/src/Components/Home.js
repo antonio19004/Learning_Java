@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import NavMenu from '../Layouts/NavMenu.js';
+import Carrousel from '../Layouts/Carrousel.js';
+import Footer from '../Layouts/Footer.js';
+import '../Static/Styles/Style.css'
 
 const Home = () => {
+    document.title = 'Home';
     const [adminDetails, setAdminDetails] = useState(null);
     const [usersDetails, setUsersDetails] = useState(null);
     const [error, setError] = useState(null);
@@ -69,48 +74,57 @@ const Home = () => {
 
     
     return (
-        <div>
-            <h1>Bienvenido, {username}!</h1>
-            <p>Has iniciado sesión exitosamente.</p>
-            {rol === 'ROLE_ADMIN' ? (
-                <div>
-                    <h2>Panel de Administrador</h2>
-                    {adminDetails ? (
-                        <div>
-                            <p><strong>Foto de perfil:</strong></p>
-                            <p><strong>Nombre Completo:</strong> {adminDetails.nombre} {adminDetails.apellido}</p>
-                            <p><strong>Fecha de Nacimiento:</strong> {adminDetails.fechaNacimiento}</p>
-                            <p><strong>Edad:</strong> {adminDetails.edad}</p>
-                            <p><strong>Email:</strong> {adminDetails.email}</p>
-                        </div>
-                    ) : (
-                        <div class="spinner-border" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                    )}
-                    {error && <p style={{ color: 'red' }}>{error}</p>}
-                </div>
-            ) : (
-                <div>
-                    <h2>Panel de Usuario</h2>
-                    {usersDetails ? (
-                        <div>
-                            <p><strong>Foto de perfil:</strong></p>
-                            <p><strong>Nombre Completo:</strong> {usersDetails.nombre} {usersDetails.apellido}</p>
-                            <p><strong>Fecha de Nacimiento:</strong> {usersDetails.fechaNacimiento}</p>
-                            <p><strong>Edad:</strong> {usersDetails.edad}</p>
-                            <p><strong>Email:</strong> {usersDetails.email}</p>
-                        </div>
-                    ) : (
-                        <div class="spinner-border" role="status">
-                            <span class="visually-hidden">Loading...</span>
-                        </div>
-                    )}
-                     {error && <p style={{ color: 'red' }}>{error}</p>}
-                </div>
-            )}
-            <button onClick={handleLogout}>Logout</button>
+        <div className="d-flex flex-column min-vh-100">
+      <header>
+        <NavMenu />
+      </header>
+      <main className="flex-grow-1">
+        <Carrousel />
+        <h1 className='fs-1 fw-light my-5 text-center'>Recientes</h1>
+        <div className="row row-cols-1 row-cols-md-3 g-4 mx-3 my-3">
+          <div className="col">
+            <div className="card h-100">
+              <img src="..." className="card-img-top" alt="..."></img>
+              <div className="card-body">
+                <h5 className="card-title">Card title</h5>
+                <p className="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                <a href="#" className="btn btn-primary">Go somewhere</a>
+              </div>
+              <div className="card-footer">
+                <small className="text-muted">Last updated 3 mins ago</small>
+              </div>
+            </div>
+          </div>
+          <div className="col">
+            <div className="card h-100">
+              <img src="..." className="card-img-top" alt="..."></img>
+              <div className="card-body">
+                <h5 className="card-title">Card title</h5>
+                <p className="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
+                <a href="#" className="btn btn-primary">Go somewhere</a>
+              </div>
+              <div className="card-footer">
+                <small className="text-muted">Last updated 3 mins ago</small>
+              </div>
+            </div>
+          </div>
+          <div className="col">
+            <div className="card h-100">
+              <img src="..." className="card-img-top" alt="..."></img>
+              <div className="card-body">
+                <h5 className="card-title">Card title</h5>
+                <p className="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
+                <a href="#" className="btn btn-primary">Go somewhere</a>
+              </div>
+              <div className="card-footer">
+                <small className="text-muted">Last updated 3 mins ago</small>
+              </div>
+            </div>
+          </div>
         </div>
+      </main>
+      <Footer />
+    </div>
     );
 };
 

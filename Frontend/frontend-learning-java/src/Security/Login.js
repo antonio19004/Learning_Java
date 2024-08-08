@@ -6,22 +6,26 @@ import { faUser, faLock, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-i
 import { useNavigate } from 'react-router-dom';
 
 
-function Login() {
+function Login () {
+    document.title = 'Login';
+    
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
     
-        // Crear los parámetros en formato application/x-www-form-urlencoded
+
         const params = new URLSearchParams();
         params.append('username', username);
         params.append('password', password);
     
         try {
+            setLoading(true); 
             const response = await axios.post('http://localhost:8080/login', params, {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
@@ -34,19 +38,23 @@ function Login() {
                 if (role) {
                     localStorage.setItem('username', username);
                     localStorage.setItem('role', role);
-                    navigate('/welcome');
+                    setTimeout(() =>navigate('/Home'),3000);
                 } else {
                     setErrorMessage('Autenticación fallida. Inténtelo de Nuevo.');
+                    setLoading(false);
                 }
             } else {
                 setErrorMessage('Autenticación fallida. Inténtelo de Nuevo.');
+                setLoading(false);
             }
         } catch (error) {
             if (error.response && error.response.status === 401) {
                 setErrorMessage('Autenticación fallida. Inténtelo de Nuevo.');
+                setLoading(false);
             } else {
                 console.error('Ocurrió un error en la autenticación:', error);
                 setErrorMessage('Autenticación fallida. Inténtelo de Nuevo.');
+                setLoading(false);
             }
         }
     };

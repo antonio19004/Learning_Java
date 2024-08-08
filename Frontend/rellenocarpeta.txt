@@ -1,1 +1,4 @@
-carpeta de relleno
+//iconos brands
+npm install @fortawesome/free-regular-svg-icons @fortawesome/free-brands-svg-icons
+
+

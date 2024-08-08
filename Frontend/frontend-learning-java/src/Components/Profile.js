@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { Navigate, useNavigate } from "react-router-dom";
+import { useState,useEffect } from "react";
+import axios from "axios";
 
-const Welcome = () => {
+const Profile =()=>{
+
+const navigate = useNavigate();
     const [adminDetails, setAdminDetails] = useState(null);
     const [usersDetails, setUsersDetails] = useState(null);
     const [error, setError] = useState(null);
     const username = localStorage.getItem('username');
     const rol = localStorage.getItem('role');
-    const navigate = useNavigate();
 
     useEffect(() => {
         if (!username) {
@@ -19,6 +20,9 @@ const Welcome = () => {
             fetchUsersDetails();
         }
     }, [username, rol, navigate]);
+
+
+
 
     const fetchAdminDetails = async () => {
         console.log('Fetching admin details...');
@@ -37,8 +41,7 @@ const Welcome = () => {
         }
     };
 
-    
-      const fetchUsersDetails = async () => {
+    const fetchUsersDetails = async () => {
         console.log('Fetching Users details...');
         try {
             const response = await axios.get('http://localhost:8080/users/details', { withCredentials: true });
@@ -55,6 +58,9 @@ const Welcome = () => {
         }
     };
 
+
+
+    
     const handleLogout = async () => {
         console.log('Logging out...');
         try {
@@ -67,10 +73,10 @@ const Welcome = () => {
         }
     };
 
-    
-    return (
+
+    return(
         <div>
-            <h1>PAGINA WELCOME<span className='text-danger'>NO UTILIZADA</span></h1>
+             <div>
             <h1>Bienvenido, {username}!</h1>
             <p>Has iniciado sesión exitosamente.</p>
             {rol === 'ROLE_ADMIN' ? (
@@ -112,7 +118,9 @@ const Welcome = () => {
             )}
             <button onClick={handleLogout}>Logout</button>
         </div>
+        </div>
     );
-};
 
-export default Welcome;
+}
+
+export default Profile;
