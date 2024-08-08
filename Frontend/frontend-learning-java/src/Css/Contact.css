@@ -1,0 +1,37 @@
+.header-image {
+    background-image: url('../Img/Programacion.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 400px;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+}
+
+.alert {
+    margin-top: 10px;
+}
+
+.container {
+    margin-top: 20px;
+    z-index: 2;
+    position: relative;
+    padding: 50px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+textarea {
+    width: 100%;
+    height: 150px;
+}
+
+.send-btn {
+    display: inline-block;
+    width: 130px;
+    height: 40px;
+    margin-top: -10%;
+    margin-left: 70%;
+}
