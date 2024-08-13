@@ -26,8 +26,8 @@ public class ContactController {
 		email.setTo("pruebastrabajos25@gmail.com");
 		email.setSubject("Contáctanos en Learning Java - " + contactDto.getNombre());
 		email.setText("Remitente: " + contactDto.getNombre() + "\n" + 
-						"Email: " + contactDto.getEmail() + "\n" +
-						"Mensaje: " + contactDto.getContenido());
+						"\nEmail: " + contactDto.getEmail() + "\n" +
+						"\nMensaje: " + contactDto.getContenido());
 		
 		mail.send(email);
 		

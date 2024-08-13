@@ -1,4 +1,8 @@
 //iconos brands
+npm install axios
+npm install react-router-dom
+npm install react-bootstrap bootstrap
+npm install @fortawesome/react-fontawesome @fortawesome/free-solid-svg-icons @fortawesome/fontawesome-svg-core
 npm install @fortawesome/free-regular-svg-icons @fortawesome/free-brands-svg-icons
 
 

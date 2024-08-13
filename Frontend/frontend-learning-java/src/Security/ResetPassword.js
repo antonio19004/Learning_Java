@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 const ResetPassword = () => {
     const [username, setUsername] = useState('');
@@ -39,17 +39,24 @@ const ResetPassword = () => {
 
     return (
         <div>
-            <div className='d-flex flex-column align-items-center justify-content-center' style={{ height: '75vh' }}>
-                {errorMessage && (
-                    <div className="alert alert-danger w-50 p-1 mx-auto mt-4"  role="alert">
+            <div>
+                <a href='/login' class="btn btn-secondary" style={{ borderRadius: '8px', padding: '8px 20px', marginTop: '40px', marginLeft: '40px' }}>
+                    <FontAwesomeIcon icon={faArrowLeft} /> Volver
+                </a>
+            </div><br />
+            <div className="d-flex justify-content-center align-items-center">
+                {errorMessage && !successMessage && (
+                    <div className="alert alert-danger" role="alert" style={{ width: '50%' }}>
                         <p className="text-danger text-center">{errorMessage}</p>
                     </div>
                 )}
                 {successMessage && (
-                    <div className="alert alert-success w-50 p-1 mx-auto mt-4"  role="alert">
+                    <div className="alert alert-success" role="alert" style={{ width: '50%' }}>
                         <p className="text-success text-center">{successMessage}</p>
                     </div>
-                )}<br /><br />
+                )}
+            </div>
+            <div className='d-flex flex-column align-items-center justify-content-center' style={{ height: '55vh' }}>
                 <h2 className='fw-bold'>Recupera tu Contraseña</h2><br />
                 <h5 className='fw-light text-center'>Ingresa con tu usuario y enviaremos a tu correo una nueva contraseña</h5><br/>
                 <form onSubmit={handleUsernameSubmit}>

@@ -3,18 +3,20 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import axios from 'axios';
 import Logo from '../Static/Img/Logo-LJ.png';
-import UserImg from '../Static/Img/User.png'; // Imagen por defecto
+import UserImg from '../Static/Img/User.png';
 import '../Static/Styles/Style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import React, { useEffect, useState } from 'react';
+import Profile from '../Components/Profile';
 
 const NavMenu = () => {
     const navigate = useNavigate();
     const rol = localStorage.getItem('role');
     const isAuthenticated = localStorage.getItem('username') !== null;
+    const [showProfile, setShowProfile] = useState(false);
 
-    const [profileImage, setProfileImage] = useState(UserImg); // Inicializa con imagen por defecto
+    const [profileImage, setProfileImage] = useState(UserImg);
 
     useEffect(() => {
         const fetchProfileImage = async () => {
@@ -32,7 +34,6 @@ const NavMenu = () => {
                 }
             } catch (error) {
                 if (error.response && error.response.status === 404) {
-                    // Imagen no encontrada, usar la imagen por defecto
                     setProfileImage(UserImg);
                 } else {
                     console.error('Error fetching profile image:', error);
@@ -42,6 +43,7 @@ const NavMenu = () => {
 
         fetchProfileImage();
     }, []);
+
     const formatRole = (rol) => {
         switch (rol) {
             case 'ROLE_USER':
@@ -65,6 +67,9 @@ const NavMenu = () => {
         }
     };
 
+    const handleShowProfile = () => setShowProfile(true);
+    const handleCloseProfile = () => setShowProfile(false);
+
     return (
         <div>
             <nav className="navbar navbar-expand-lg">
@@ -84,21 +89,21 @@ const NavMenu = () => {
                             <a className="navbar-brand" href="#">Foro</a>
                         </li>
                         <li className="nav-item mt-3">
-                            <a className="navbar-brand" href="#">Contacto</a>
+                            <a className="navbar-brand" href="/contact">Contacto</a>
                         </li>
                         {!isAuthenticated ? (
                             <li className="nav-item">
-                                <button className='btn btn-dark' variant="outline-success">
+                                <button className='btn btn-dark' variant="outline-success" style={{ marginTop: '10px' }}>
                                     <a className='text-decoration-none text-light' href="/login">Login</a>
                                 </button>
                             </li>
                         ) : (
                             <li className='nav-item dropdown'>
                                 <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <img src={profileImage} className='ProfileLinkImg' alt='User Profile' />
+                                    <img src={profileImage} alt='User Profile' style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius:'50px' }} />
                                 </a>
                                 <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><a className="dropdown-item" href="#">Perfil</a></li>
+                                    <li><button className="dropdown-item" onClick={handleShowProfile}>Perfil</button></li>
                                     <li><a className="dropdown-item" href="#">Panel {formatRole(rol)}</a></li>
                                     <li><hr className="dropdown-divider" /></li>
                                     <li className="dropdown-item">
@@ -112,6 +117,7 @@ const NavMenu = () => {
                     </ul>
                 </div>
             </nav>
+            <Profile showModal={showProfile} handleClose={handleCloseProfile} />
         </div>
     );
 };

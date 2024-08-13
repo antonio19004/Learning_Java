@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import NavMenu from '../Layouts/NavMenu.js';
+import Footer from '../Layouts/Footer.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../Css/Contact.css';
+import '../Static/Styles/Contact.css';
 
 function Contact() {
     const [nombre , setNombre] = useState('');
@@ -47,11 +49,14 @@ function Contact() {
 
     return (
         <div>
+            <header>
+                <NavMenu />
+            </header>
             <div className="header-image"></div>
             <div className="container mt-5 pt-5">
                 <h2 className='fw-bold text-center'>¡Contáctanos!</h2> <br />
                 <h6 className='fw-light text-center'>Déjanos tus mensajes a través de este formulario y nos pondremos en contacto contigo a la brevedad</h6><br/>
-                {errorMessage && (
+                {errorMessage && !successMessage && (
                     <div className="alert alert-danger" role="alert">
                         <p className="text-danger text-center">{errorMessage}</p>
                     </div>
@@ -83,6 +88,7 @@ function Contact() {
                         </div>
                 </form>
             </div>
+            <Footer />
         </div>
     );
 }

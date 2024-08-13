@@ -92,12 +92,12 @@ function Register() {
 
     return (
         <div className='mt-4'>
-            {errorMessage && (
-                <div className="alert alert-danger w-50 p-1 mx-auto mt-4" role="alert">
-                    <p className="text-danger text-center">{JSON.stringify(errorMessage)}</p>
-                </div>
-            )}
             <div className='d-flex flex-column align-items-center justify-content-center' style={{ height: '100vh' }}>
+                {errorMessage && (
+                    <div className="alert alert-danger w-50 p-1 mx-auto mt-4" role="alert">
+                        <p className="text-danger text-center">{JSON.stringify(errorMessage)}</p>
+                    </div>
+                )}
                 <h2 className='fw-bold'>Crea una nueva cuenta</h2>
                 <br />
                 <form onSubmit={handleSubmit} className="row g-3" style={{ maxWidth: '600px' }}>

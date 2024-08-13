@@ -12,7 +12,7 @@ const useIdleTimer = (timeout, onIdle = () => {},warningTime = 1000) => {
 
     if (location.pathname === '/login' || location.pathname === '/register') {
         return;
-      }
+    }
     let idleTimer;
     let warningTimer;
 

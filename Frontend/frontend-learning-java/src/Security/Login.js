@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faLock, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 
-
 function Login () {
     document.title = 'Login';
     
@@ -19,6 +18,10 @@ function Login () {
     const handleSubmit = async (e) => {
         e.preventDefault();
     
+        if (!username || !password) {
+            setErrorMessage("Por favor, llena todos los campos.");
+            return;
+        }
 
         const params = new URLSearchParams();
         params.append('username', username);
@@ -61,13 +64,12 @@ function Login () {
 
     return (
         <div>
-            {errorMessage && (
-                
-                <div className="alert alert-danger w-50 p-1 mx-auto mt-4"  role="alert">
-                    <p className="text-danger text-center">{errorMessage}</p>
-                </div>
-            )}
-            <div className='d-flex flex-column align-items-center justify-content-center' style={{ height: '80vh' }}>
+            <div className='d-flex flex-column align-items-center justify-content-center' style={{ height: '100vh' }}>
+                {errorMessage && (
+                    <div className="alert alert-danger w-50 p-1 mx-auto mt-4"  role="alert">
+                        <p className="text-danger text-center">{errorMessage}</p>
+                    </div>
+                )}
                 <h2 className='fw-bold'>Ingresa con tus credenciales</h2>
                 <h5 className='fw-light'>Inicia sesión con tu usuario y contraseña</h5><br/>
                 <form onSubmit={handleSubmit}>
@@ -93,6 +95,7 @@ function Login () {
                 <br/>
                 <h5 className='fw-light'>O crea una cuenta si no estas registrado</h5>
                 <h5 className='fw-bold'><a className='text-decoration-none text-dark hover:text-secondary' href='/register'>Registrarse</a></h5>
+                <h5 className='fw-bold'><a className='text-decoration-none text-dark hover:text-secondary' href='/reset-password'>¿Has olvidado tu contraseña?</a></h5>
             </div>
         </div>
     );

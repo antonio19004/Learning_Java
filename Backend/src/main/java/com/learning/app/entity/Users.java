@@ -1,7 +1,6 @@
 package com.learning.app.entity;
 
 import java.time.LocalDate;
-import java.time.Period;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -21,8 +20,6 @@ public class Users {
 	private int cursosCompletados;
 	private boolean acceptTerms;
 	
-	
-	
 	public Users() {
 		super();
 	}
@@ -41,68 +38,84 @@ public class Users {
 		this.cursosCompletados = cursosCompletados;
 		this.acceptTerms = acceptTerms;
 	}
+	
 	public String getId() {
 		return id;
 	}
+	
 	public void setId(String id) {
 		this.id = id;
 	}
+	
 	public byte[] getImagenPerfil() {
 		return imagenPerfil;
 	}
+	
 	public void setImagenPerfil(byte[] imagenPerfil) {
 		this.imagenPerfil = imagenPerfil;
 	}
+	
 	public String getNombre() {
 		return nombre;
 	}
+	
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
+	
 	public String getApellido() {
 		return apellido;
 	}
+	
 	public void setApellido(String apellido) {
 		this.apellido = apellido;
 	}
+	
 	public LocalDate getFechaNacimiento() {
 		return fechaNacimiento;
 	}
+	
 	public void setFechaNacimiento(LocalDate fechaNacimiento) {
 		this.fechaNacimiento = fechaNacimiento;
 	}
+	
 	public String getEmail() {
 		return email;
 	}
+	
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	
 	public String getUser() {
 		return user;
 	}
+	
 	public void setUser(String user) {
 		this.user = user;
 	}
+	
 	public String getPassword() {
 		return password;
 	}
+	
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
 	public int getCursosCompletados() {
 		return cursosCompletados;
 	}
+	
 	public void setCursosCompletados(int cursosCompletados) {
 		this.cursosCompletados = cursosCompletados;
 	}
+	
 	public boolean isAcceptTerms() {
 		return acceptTerms;
 	}
+	
 	public void setAcceptTerms(boolean acceptTerms) {
 		this.acceptTerms = acceptTerms;
 	}
-	
 }
-	
-	
-	

@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.learning.app.Dto.PasswordDto;
 import com.learning.app.entity.Admin;
 import com.learning.app.entity.Users;
 import com.learning.app.repository.AdminRepository;
@@ -56,32 +55,6 @@ public class PasswordController {
 		}
 		return ResponseEntity.ok("La contraseña generada ha sido enviada al Email");
 	}
-	
-//	@PostMapping("/reset")
-//	public ResponseEntity<?> resetPassword(@RequestBody PasswordDto passwordDto) {
-//		Users user = usersRepository.findByUser(passwordDto.getUser());
-//		Admin admin = adminRepository.findByUser(passwordDto.getUser());
-//		
-//		if (user != null) {
-//			if (passwordEncoder.matches(passwordDto.getPassword(), user.getPassword())) {
-//				user.setPassword(passwordEncoder.encode(passwordDto.getNewPassword()));
-//				usersRepository.save(user);
-//				return ResponseEntity.ok("Contraseña Actualizada");
-//			} else {
-//				return ResponseEntity.badRequest().body("La contraseña actual es incorrecta");
-//			}
-//		} else if (admin != null) {
-//			if (passwordEncoder.matches(passwordDto.getPassword(), admin.getPassword())) {
-//				admin.setPassword(passwordEncoder.encode(passwordDto.getNewPassword()));
-//				adminRepository.save(admin);
-//				return ResponseEntity.ok("Contraseña Actualizada");
-//			} else {
-//				return ResponseEntity.badRequest().body("La contraseña actual es incorrecta");
-//			}
-//		} else {
-//			return ResponseEntity.badRequest().body("El usuario no ha sido encontrado");
-//		}
-//	}
 	
 	private String generatePassword() {
 		return UUID.randomUUID().toString().substring(0, 8);

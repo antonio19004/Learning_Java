@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import NavMenu from '../Layouts/NavMenu.js';
+import Footer from '../Layouts/Footer.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLock, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
@@ -54,7 +56,7 @@ const UpdatePassword = () => {
             });
 
             if (response.status === 200) {
-                navigate('/welcome');
+                navigate('/Home');
             }
         } catch (error) {
             if (error.response && error.response.status === 400) {
@@ -107,7 +109,10 @@ const UpdatePassword = () => {
     return (
         rol === 'ROLE_ADMIN' ? (
             <div>
-                <div className='d-flex flex-column align-items-center justify-content-center' style={{ height: '80vh' }}>
+                <header>
+                    <NavMenu />
+                </header>
+                <div className='d-flex flex-column align-items-center justify-content-center' style={{ height: '60vh' }}>
                     {errorMessage && (
                         <div className="alert alert-danger w-50 p-1 mx-auto mt-4"  role="alert">
                             <p className="text-danger text-center">{errorMessage}</p>
@@ -123,7 +128,7 @@ const UpdatePassword = () => {
                             <span className="position-absolute" onClick={toggleShowPassword} style={{ color: 'gray', right: '10px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer' }} >
                                 <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
                             </span>
-                        </div>
+                        </div><br />
                         <div className="input-group mb-3">
                             <span className="input-group-text">
                                 <FontAwesomeIcon icon={faLock} />
@@ -132,7 +137,7 @@ const UpdatePassword = () => {
                             <span className="position-absolute" onClick={toggleShowNewPassword} style={{ color: 'gray', right: '10px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer' }}>
                                 <FontAwesomeIcon icon={showNewPassword ? faEyeSlash : faEye} />
                             </span> 
-                        </div>
+                        </div><br />
                         <div className="input-group mb-3">
                             <span className="input-group-text">
                                 <FontAwesomeIcon icon={faLock} />
@@ -141,13 +146,17 @@ const UpdatePassword = () => {
                             <span className="position-absolute" onClick={toggleShowConfirmPassword} style={{ color: 'gray', right: '10px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer' }}>
                                 <FontAwesomeIcon icon={showConfirmPassword ? faEyeSlash : faEye} />
                             </span>
-                        </div>
-                        <button className='btn btn-dark ms-5' type="submit">Actualizar</button>
+                        </div><br />
+                        <button className='btn btn-dark ms-5' type="submit" style={{ width: '130px' }}>Actualizar</button>
                     </form>
                 </div>
+                <Footer />
             </div>
         ) : (
             <div>
+                <header>
+                    <NavMenu />
+                </header>
                 <div className='d-flex flex-column align-items-center justify-content-center' style={{ height: '80vh' }}>
                     {errorMessage && (
                         <div className="alert alert-danger w-50 p-1 mx-auto mt-4"  role="alert">
@@ -187,6 +196,7 @@ const UpdatePassword = () => {
                         <button className='btn btn-dark ms-5' type="submit" style={{ width: '130px' }}>Actualizar</button>
                     </form>
                 </div>
+                <Footer />
             </div>
         )
     );
