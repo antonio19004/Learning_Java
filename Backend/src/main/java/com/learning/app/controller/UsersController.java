@@ -2,16 +2,20 @@ package com.learning.app.controller;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Base64;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,13 +26,24 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.learning.app.Dto.UsersDto;
 import com.learning.app.Dto.PasswordDto;
+import com.learning.app.entity.Documentacion;
 import com.learning.app.entity.Users;
 import com.learning.app.repository.UsersRepository;
+import com.learning.app.service.DocumentacionService;
 
 @RestController
 @RequestMapping("/users")
 public class UsersController {
 
+	
+	private DocumentacionService documentacionService;
+	
+	public UsersController(DocumentacionService documentacionService) {
+		super();
+		this.documentacionService = documentacionService;
+	}
+	
+	
 	@Autowired
 	private UsersRepository usersRepository;
 	
@@ -113,6 +128,82 @@ public class UsersController {
 			return ResponseEntity.badRequest().body("El usuario no ha sido encontrado");
 		}
 	}
+	
+	
+	
+	
+	//Documentacion users//
+	
+	  
+    @GetMapping("/documentacion/{id}")
+    public ResponseEntity<byte[]> verArchivo(@PathVariable String id) {
+    	Documentacion archivo = documentacionService.obtenerArchivoPorId(id);
+        if (archivo != null) {
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + archivo.getTitulo() + "\"")
+                    .header(HttpHeaders.CONTENT_TYPE, archivo.getTipo())
+                    .body(archivo.getContenido());
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    
+    @GetMapping("/documentacion/descargar/{id}")
+    public ResponseEntity<byte[]> descargarArchivo(@PathVariable String id) {
+    	Documentacion archivo = documentacionService.obtenerArchivoPorId(id);
+        if (archivo != null) {
+        	
+            String extension = obtenerExtension(archivo.getTipo());
+            String nombreArchivo = archivo.getTitulo();
+            
+            if (!nombreArchivo.endsWith(extension)) {
+                nombreArchivo += extension;
+            }
+            System.out.println("Tipo MIME: " + archivo.getTipo());
+            System.out.println("Nombre del archivo: " + nombreArchivo);
+            
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + nombreArchivo + "\"")
+                    .header(HttpHeaders.CONTENT_TYPE, archivo.getTipo())
+                    .body(archivo.getContenido());
+            
+       
+
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    
+
+    @GetMapping("/documentacion/listar")
+    public List<Documentacion> listarArchivos() {
+        System.out.println("Entrando al método listarArchivos...");
+
+        List<Documentacion> archivos = documentacionService.listarArchivos();
+        System.out.println("Número de archivos recuperados: " + (archivos != null ? archivos.size() : "null"));
+
+        if (archivos != null) {
+            for (Documentacion archivo : archivos) {
+                System.out.println("Archivo: " + archivo.getTitulo() + ", ID: " + archivo.getId());
+            }
+        } else {
+            System.out.println("La lista de archivos es nula.");
+        }
+
+        return archivos;
+    }
+	
+    
+    private String obtenerExtension(String mimeType) {
+        switch (mimeType) {
+            case "application/pdf":
+                return ".pdf";
+            case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+                return ".docx";
+            case "application/msword":
+                return ".doc";
+            default:
+                return "";
+        }
+    }
 	
 	
 /*	

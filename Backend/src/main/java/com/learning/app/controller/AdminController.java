@@ -3,15 +3,18 @@ package com.learning.app.controller;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Base64;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,11 +26,22 @@ import org.springframework.web.multipart.MultipartFile;
 import com.learning.app.Dto.AdminDto;
 import com.learning.app.Dto.PasswordDto;
 import com.learning.app.entity.Admin;
+import com.learning.app.entity.Documentacion;
 import com.learning.app.repository.AdminRepository;
+import com.learning.app.service.DocumentacionService;
 
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
+	
+
+	private DocumentacionService documentacionService;
+	
+	public AdminController(DocumentacionService documentacionService) {
+		super();
+		this.documentacionService = documentacionService;
+	}
+	
 
 	@Autowired
 	private AdminRepository adminRepository;
@@ -112,6 +126,101 @@ public class AdminController {
 			return ResponseEntity.badRequest().body("El usuario no ha sido encontrado");
 		}
 	}
+	
+	
+	//DOCUMENTACION//
+	
+	@PostMapping("/documentacion/subir")
+	public ResponseEntity<String> subirArchivo(@RequestParam("archivo") MultipartFile archivo) {
+	    String tipo = archivo.getContentType();
+	    if (!esTipoValido(tipo)) {
+	        return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
+	                .body("Solo se permiten archivos PDF y Word.");
+	    }
+
+	    
+	    return ResponseEntity.ok("Archivo subido exitosamente.");
+	}
+
+	private boolean esTipoValido(String tipo) {
+	    return tipo.equals("application/pdf") || 
+	           tipo.equals("application/vnd.openxmlformats-officedocument.wordprocessingml.document") ||
+	           tipo.equals("application/msword");
+	}
+	
+	
+	 
+    @GetMapping("/documentacion/{id}")
+    public ResponseEntity<byte[]> verArchivo(@PathVariable String id) {
+    	Documentacion archivo = documentacionService.obtenerArchivoPorId(id);
+        if (archivo != null) {
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + archivo.getTitulo() + "\"")
+                    .header(HttpHeaders.CONTENT_TYPE, archivo.getTipo())
+                    .body(archivo.getContenido());
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    
+    @GetMapping("/documentacion/descargar/{id}")
+    public ResponseEntity<byte[]> descargarArchivo(@PathVariable String id) {
+    	Documentacion archivo = documentacionService.obtenerArchivoPorId(id);
+        if (archivo != null) {
+        	
+            String extension = obtenerExtension(archivo.getTipo());
+            String nombreArchivo = archivo.getTitulo();
+            
+            if (!nombreArchivo.endsWith(extension)) {
+                nombreArchivo += extension;
+            }
+            System.out.println("Tipo MIME: " + archivo.getTipo());
+            System.out.println("Nombre del archivo: " + nombreArchivo);
+            
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + nombreArchivo + "\"")
+                    .header(HttpHeaders.CONTENT_TYPE, archivo.getTipo())
+                    .body(archivo.getContenido());
+            
+       
+
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+    
+
+    @GetMapping("/documentacion/listar")
+    public List<Documentacion> listarArchivos() {
+        System.out.println("Entrando al método listarArchivos...");
+
+        List<Documentacion> archivos = documentacionService.listarArchivos();
+        System.out.println("Número de archivos recuperados: " + (archivos != null ? archivos.size() : "null"));
+
+        if (archivos != null) {
+            for (Documentacion archivo : archivos) {
+                System.out.println("Archivo: " + archivo.getTitulo() + ", ID: " + archivo.getId());
+            }
+        } else {
+            System.out.println("La lista de archivos es nula.");
+        }
+
+        return archivos;
+    }
+	
+    
+    private String obtenerExtension(String mimeType) {
+        switch (mimeType) {
+            case "application/pdf":
+                return ".pdf";
+            case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+                return ".docx";
+            case "application/msword":
+                return ".doc";
+            default:
+                return "";
+        }
+    }
+	
+	    
 
 	/*	
 	@GetMapping("/")

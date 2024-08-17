@@ -5,6 +5,7 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faEnvelope, faCalendar, faImage } from '@fortawesome/free-solid-svg-icons';
 import '../Static/Styles/Profile.css';
+import UserImg from '../Static/Img/User.png';
 
 const Profile = ({ showModal, handleClose }) =>{
     
@@ -18,6 +19,7 @@ const Profile = ({ showModal, handleClose }) =>{
     const username = localStorage.getItem('username');
     const rol = localStorage.getItem('role');
     const navigate = useNavigate();
+    const [profileImage, setProfileImage] = useState(UserImg);
 
     useEffect(() => {
         if (!username) {
@@ -64,7 +66,11 @@ const Profile = ({ showModal, handleClose }) =>{
     };
 
     const profileDetails = (details) => {
-        const img = details.imagenPerfil ? `data:image/jpeg;base64,${details.imagenPerfil}` : '';
+        const img = details.imagenPerfil ? `data:image/jpeg;base64,${details.imagenPerfil}` : profileImage;
+
+        const fecha = new Date(details.fechaNacimiento);
+        const options = { day: '2-digit', month: 'long', year: 'numeric' };
+        const formattedDate = fecha.toLocaleDateString('es-ES', options);
     
         return (
             rol === 'ROLE_ADMIN' ? (
@@ -74,7 +80,7 @@ const Profile = ({ showModal, handleClose }) =>{
                     </div>
                     <div className="profile-content" style={{ marginLeft: '15%' }}>
                         <p><strong>Nombre:</strong> {details.nombre} {details.apellido}</p>
-                        <p><strong>Fecha de Nacimiento:</strong> {details.fechaNacimiento}</p>
+                        <p><strong>Fecha de Nacimiento:</strong> {formattedDate}</p>
                         <p><strong>Edad:</strong> {details.edad}</p>
                         <p><strong>Email:</strong> {details.email}</p>
                         <p><strong>Nombre de Usuario:</strong> {details.user}</p>
@@ -87,7 +93,7 @@ const Profile = ({ showModal, handleClose }) =>{
                 </div>
                 <div className="profile-content" style={{ marginLeft: '15%' }}>
                     <p><strong>Nombre:</strong> {details.nombre} {details.apellido}</p>
-                    <p><strong>Fecha de Nacimiento:</strong> {details.fechaNacimiento}</p>
+                    <p><strong>Fecha de Nacimiento:</strong> {formattedDate}</p>
                     <p><strong>Edad:</strong> {details.edad}</p>
                     <p><strong>Email:</strong> {details.email}</p>
                     <p><strong>Nombre de Usuario:</strong> {details.user}</p>
@@ -155,6 +161,7 @@ const Profile = ({ showModal, handleClose }) =>{
 
             if (response.status === 200) {
                 setIsEditEnabled(false);
+                window.location.reload();
             }
         } catch (error) {
             if (error.response && error.response.status === 400) {
@@ -177,7 +184,7 @@ const Profile = ({ showModal, handleClose }) =>{
                 <Button variant="close" onClick={close}></Button>
             </Modal.Header>
             <Modal.Body>
-                <div className="d-flex align-items-center mb-3" style={{ marginLeft: '5%' }}>
+                <div className="d-flex align-items-center mb-3" style={{ marginLeft: '7.5%' }}>
                     <span>Editar</span>
                     <Form.Check type="switch" id="edit-switch" className="ms-2" checked={isEditEnabled} onChange={handleToggleEdit} />
                 </div>
@@ -186,7 +193,7 @@ const Profile = ({ showModal, handleClose }) =>{
                         <div className="col-12 mb-3">
                             <center>
                                 {imagePreview ? (
-                                    <img src={imagePreview} alt="Imagen de Perfil" style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '50px' }} />
+                                    <img src={UserImg} alt="Imagen de Perfil" style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '50px' }} />
                                 ) : (
                                     rol === 'ROLE_ADMIN' ? (
                                         adminDetails?.imagenPerfil && (

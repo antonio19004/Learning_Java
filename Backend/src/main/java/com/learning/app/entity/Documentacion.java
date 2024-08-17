@@ -9,48 +9,47 @@ public class Documentacion {
 	@Id
 	private String id;
 	private String titulo;
-	private String descripcion;
-	private String contenido;
+	private String tipo;
+	private byte[] contenido;
+	
+	
+	
 	
 	public Documentacion() {
+		super();
 	}
-
-	public Documentacion(String id, String titulo, String descripcion, String contenido) {
+	public Documentacion(String id, String titulo, String tipo, byte[] contenido) {
+		super();
 		this.id = id;
 		this.titulo = titulo;
-		this.descripcion = descripcion;
+		this.tipo = tipo;
 		this.contenido = contenido;
 	}
-
 	public String getId() {
 		return id;
 	}
-
 	public void setId(String id) {
 		this.id = id;
 	}
-
 	public String getTitulo() {
 		return titulo;
 	}
-
 	public void setTitulo(String titulo) {
 		this.titulo = titulo;
 	}
-
-	public String getDescripcion() {
-		return descripcion;
+	public String getTipo() {
+		return tipo;
 	}
-
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
 	}
-
-	public String getContenido() {
+	public byte[] getContenido() {
 		return contenido;
 	}
-
-	public void setContenido(String contenido) {
+	public void setContenido(byte[] contenido) {
 		this.contenido = contenido;
 	}
+	
+	
+	
 }
