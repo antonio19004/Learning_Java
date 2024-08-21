@@ -8,7 +8,7 @@ const Loader =()=>{
     return(
         <div>
         <img className='gifloader' src={gif}/>
-    </div>
+            </div>
     );
 }
 

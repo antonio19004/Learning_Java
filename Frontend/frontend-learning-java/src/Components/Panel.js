@@ -1,6 +1,7 @@
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useLocation,useNavigate } from 'react-router-dom';
@@ -8,6 +9,10 @@ import '../Static/Styles/Style.css';
 import NavMenu from '../Layouts/NavMenu';
 import Logo from '../Static/Img/Logo-LJ.png';
 import NavPanel from './NavPanel';
+import NoFoundR from '../Layouts/NoFoundR';
+import Document from './Document';
+import UploadDocument from './UploadDocumentation';
+import EditDocument from './EditDocument';
 
 const Panel = () => {
   const [isOpen, setIsOpen] = useState(true);
@@ -42,6 +47,9 @@ const Panel = () => {
   }
 
   document.title = 'Panel '+ formatRole(rol);
+
+  const isAuthenticated = localStorage.getItem('username') !== null;
+
   return (
     <div>
             <NavPanel/>
@@ -54,10 +62,10 @@ const Panel = () => {
         <ul className="navbar-nav flex-column p-5">
         <span class="badge bg-dark mb-2">Parametrización</span>
           <li className="nav-item">
-            <a className="nav-link text-Light" aria-current="page" href="/Document">Documentos</a>
+            <a className="nav-link text-Light" aria-current="page" href="/panel/document">Documentos</a>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="#">Usuarios</a>
+            <a className="nav-link" href="/panel/documentForm">Usuarios</a>
           </li>
           <li className="nav-item text-Light">
             <a className="nav-link text-Light" href="#">Cursos</a>
@@ -72,15 +80,21 @@ const Panel = () => {
         </div>
         </div>
       </div>
-      <div className='docbody pe-5 pt-3'>
+
+       <div className='ps-3 shadowinset pe-5 pt-3'>
         {location.pathname === '/panel' && (
-         <div className="alert alert-success" role="alert">
-         <h4 className="alert-heading">¡Bienvenido al Panel!</h4>
-         <p>Has accedido exitosamente al panel de control. Aquí encontrarás diversas funciones y opciones de parametrización, dependiendo de tu rol como usuario o administrador.</p>
-         <hr />
-         <p className="mb-0">Explora las opciones disponibles y gestiona tus tareas de manera eficiente.</p>
-       </div>       
+          <div className="alert alert-success" role="alert">
+            <h4 className="alert-heading">¡Bienvenido al Panel!</h4>
+            <p>Has accedido exitosamente al panel de control. Aquí encontrarás diversas funciones y opciones de parametrización, dependiendo de tu rol como usuario o administrador.</p>
+            <hr />
+            <p className="mb-0">Explora las opciones disponibles y gestiona tus tareas de manera eficiente.</p>
+          </div>
         )}
+        <Routes>
+          <Route path="/document" element={isAuthenticated ? <Document /> : <Navigate to="/login" />} />
+          <Route path="/add-document" element={isAuthenticated ? <UploadDocument /> : <Navigate to="/login" />} />
+          <Route path='/edit-document/:id' element={isAuthenticated ? <EditDocument/> : <Navigate to="/login" />}/>
+        </Routes>
       </div>
     </div>
   );

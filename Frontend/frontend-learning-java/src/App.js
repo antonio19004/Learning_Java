@@ -44,10 +44,8 @@ function App(){
 
   return (
     <Routes>
-       <Route path='/noroute' element={<NoFoundR/>}/>
-        <Route path='/panel' element={<Panel/>}/>
-        <Route path='/documentForm' element={isAuthenticated ? <UploadDocument/> : <Navigate to='/login'/>}/>
-        <Route path='/document' element={isAuthenticated ? <Document/> : <Navigate to='/login'/>}/>
+         <Route path='/noroute' element={<NoFoundR/>}/>
+        <Route path='/panel/*' element={<Panel/>}/>
         <Route path='/profile' element={<Profile />} />
         <Route path='/contact' element={<Contact />} />
         <Route path='/update-password' element={<UpdatePassword />} />
@@ -56,7 +54,7 @@ function App(){
         <Route path="/login" element={<Login />} />
         <Route path="/Home" element={isAuthenticated ? <Home/> : <Navigate to="/login" />} />
         <Route path="/" element={<Navigate to="/login" />} />
-
+        <Route path='/documentForm' element={isAuthenticated ? <UploadDocument/> : <Navigate to='/login'/>}/>
         <Route path="*" element={<NoFoundR/>} />
     </Routes>
   );

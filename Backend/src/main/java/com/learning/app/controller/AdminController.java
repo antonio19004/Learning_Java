@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,13 +29,16 @@ import com.learning.app.Dto.PasswordDto;
 import com.learning.app.entity.Admin;
 import com.learning.app.entity.Documentacion;
 import com.learning.app.repository.AdminRepository;
+import com.learning.app.repository.DocumentosRepository;
 import com.learning.app.service.DocumentacionService;
 
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
 	
-
+	@Autowired
+	private DocumentosRepository documentosRepository;
+	
 	private DocumentacionService documentacionService;
 	
 	public AdminController(DocumentacionService documentacionService) {
@@ -130,26 +134,22 @@ public class AdminController {
 	
 	//DOCUMENTACION//
 	
-	@PostMapping("/documentacion/subir")
-	public ResponseEntity<String> subirArchivo(@RequestParam("archivo") MultipartFile archivo) {
-	    String tipo = archivo.getContentType();
-	    if (!esTipoValido(tipo)) {
-	        return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
-	                .body("Solo se permiten archivos PDF y Word.");
+	  @PostMapping("/documentacion/subir")
+	    public ResponseEntity<Documentacion> subirArchivo(@RequestParam("file") MultipartFile file, @RequestParam("titulo") String titulo) {
+	        try {
+	            Documentacion archivo = new Documentacion();
+	            archivo.setTitulo(titulo);
+	            archivo.setTipo(file.getContentType());
+	            archivo.setContenido(file.getBytes());
+
+	            archivo = documentosRepository.save(archivo);
+	            return new ResponseEntity<>(archivo, HttpStatus.CREATED);
+	        } catch (IOException e) {
+	            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+	        }
 	    }
 
-	    
-	    return ResponseEntity.ok("Archivo subido exitosamente.");
-	}
-
-	private boolean esTipoValido(String tipo) {
-	    return tipo.equals("application/pdf") || 
-	           tipo.equals("application/vnd.openxmlformats-officedocument.wordprocessingml.document") ||
-	           tipo.equals("application/msword");
-	}
 	
-	
-	 
     @GetMapping("/documentacion/{id}")
     public ResponseEntity<byte[]> verArchivo(@PathVariable String id) {
     	Documentacion archivo = documentacionService.obtenerArchivoPorId(id);
@@ -220,8 +220,67 @@ public class AdminController {
         }
     }
 	
+    
+    @GetMapping("/documentacion/Search")
+    public ResponseEntity<List<Documentacion>> searchDocuments(@RequestParam String titulo){
+    	List<Documentacion> documents = documentosRepository.findByTitulo(titulo);
+    	return ResponseEntity.ok(documents);
+    }
 	    
 
+    @PutMapping("/documentacion/edit/{id}")
+    public ResponseEntity<String> updateDocumento(
+            @PathVariable("id") String id,
+            @RequestParam("titulo") String titulo,
+            @RequestParam(value = "file", required = false) MultipartFile file) {
+        try {
+        	Documentacion documento = documentacionService.obtenerArchivoPorId(id);
+            if (documento == null) {
+                return new ResponseEntity<>("Documento no encontrado", HttpStatus.NOT_FOUND);
+            }
+
+            documento.setTitulo(titulo);
+
+            // Si se ha subido un nuevo archivo, actualizar el archivo en el documento
+            if (file != null && !file.isEmpty()) {
+                documento.setContenido(file.getBytes());
+            }
+
+            documentosRepository.save(documento);
+            return new ResponseEntity<>("Documento actualizado con éxito", HttpStatus.OK);
+
+        } catch (IOException e) {
+            return new ResponseEntity<>("Error al procesar el archivo", HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error al actualizar el documento", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+   
+    @GetMapping("/documentacion/get/{id}")
+    public ResponseEntity<Documentacion> getDocumento(@PathVariable("id") String id) {
+        try {
+            Documentacion documento = documentacionService.obtenerArchivoPorId(id);
+            if (documento != null) {
+                return new ResponseEntity<>(documento, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    
+    @DeleteMapping("/documentacion/delete/{id}")
+    public ResponseEntity<String> eliminarDocumento(@PathVariable String id) {
+        try {
+            documentosRepository.deleteById(id);
+            return ResponseEntity.ok("Documento eliminado con éxito");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar el documento");
+        }
+    }
+    
 	/*	
 	@GetMapping("/")
 	public String index(Model model) {

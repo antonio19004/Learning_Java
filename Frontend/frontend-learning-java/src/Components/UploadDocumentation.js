@@ -3,8 +3,9 @@ import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
-
+import { faArrowUpFromBracket, faCaretLeft, faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
+import '../Static/Styles/Style.css';
+import { useNavigate } from "react-router-dom";
 
 
 const UploadDocument =()=>{
@@ -12,6 +13,7 @@ const UploadDocument =()=>{
     const [file, setFile] = useState(null);
     const [titulo, setTitulo] = useState("");
     const rol = localStorage.getItem('role');
+    const navigate = useNavigate();
 
     const handleFileChange = (e) => {
         setFile(e.target.files[0]);
@@ -35,28 +37,34 @@ const UploadDocument =()=>{
                 }
             });
             alert('Archivo subido con éxito');
+            navigate('/panel/document');
+            
         } catch (error) {
             console.error('Error al subir el archivo', error);
             alert('Error al subir el archivo');
         }
     };
 
+    const iratras=()=>{
+        navigate('/panel/document');
+    }
 
     return(
         <div className="px-5">
             {rol === 'ROLE_ADMIN' ? (
-            <div>    
-              <h2>Subir Archivo</h2>
+            <div className='border border-2 p-5 pt-2 rounded'>
+                 <button className="btn rounded" onClick={iratras}><FontAwesomeIcon icon={faCaretLeft}/> Atras</button>   
+              <h2 className="mb-3 pt-4">Subir Archivo</h2>
             <form onSubmit={handleSubmit}>
-                <div className="mb-3">
+                <div className=" mb-3 w-50">
                     <label className="form-label">Título</label>
-                    <input type="text" className="form-control" value={titulo} onChange={handleTituloChange} required />
+                    <input type="text" className="form-control" placeholder="Titulo del Documento..." value={titulo} onChange={handleTituloChange} required />
                 </div>
-                <div className="mb-3">
-                    <label className="form-label">Archivo</label>
+                <div className="mb-3 w-50">
+                    <label className="form-label">Documento</label>
                     <input type="file" className="form-control" accept=".pdf, .doc, .docx" onChange={handleFileChange} required />
                 </div>
-                <button type="submit" className="btn btn-primary">Subir</button>
+                <button type="submit" className="btn btn-primary"><FontAwesomeIcon icon={faArrowUpFromBracket}/> Subir</button>
             </form>
             </div>
             ):(

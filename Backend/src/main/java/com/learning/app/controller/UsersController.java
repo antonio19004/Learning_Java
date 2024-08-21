@@ -28,6 +28,7 @@ import com.learning.app.Dto.UsersDto;
 import com.learning.app.Dto.PasswordDto;
 import com.learning.app.entity.Documentacion;
 import com.learning.app.entity.Users;
+import com.learning.app.repository.DocumentosRepository;
 import com.learning.app.repository.UsersRepository;
 import com.learning.app.service.DocumentacionService;
 
@@ -35,6 +36,8 @@ import com.learning.app.service.DocumentacionService;
 @RequestMapping("/users")
 public class UsersController {
 
+	@Autowired
+	private DocumentosRepository documentosRepository;
 	
 	private DocumentacionService documentacionService;
 	
@@ -206,6 +209,15 @@ public class UsersController {
     }
 	
 	
+    @GetMapping("/documentacion/Search")
+    public ResponseEntity<List<Documentacion>> searchDocuments(@RequestParam String titulo){
+    	List<Documentacion> documents = documentosRepository.findByTitulo(titulo);
+    	return ResponseEntity.ok(documents);
+    }
+    
+    
+    
+    
 /*	
 	@GetMapping("/")
 	public String index(Model model) {
