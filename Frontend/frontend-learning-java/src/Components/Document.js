@@ -5,11 +5,15 @@ import axios from "axios";
 import Loader from "../Layouts/Loader";
 import '../Static/Styles/Style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleExclamation, faDownload, faEdit, faEye, faPlus, faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faCircleExclamation, faDownload, faEdit, faEye, faFilePdf, faFileWord, faFolder, faPlus, faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { faJava } from '@fortawesome/free-brands-svg-icons';
 import Logo from '../Static/Img/Logo-LJ.png'
 import {useNavigate} from 'react-router-dom';
 import Swal from 'sweetalert2';
+import { formatDistanceToNow, parseISO } from 'date-fns';
+import { es } from 'date-fns/locale'; 
+
+
 
 
 const Document =()=>{
@@ -102,6 +106,27 @@ const Document =()=>{
         }
     };
 
+
+    const formatRelativeDate = (date) => {
+        const distance = formatDistanceToNow(date, { addSuffix: true, locale: es });
+    
+        if (distance.includes('hace alrededor de')) {
+            return distance.replace('hace alrededor de ', 'hace ');
+        }
+        return distance;
+    };
+
+    const getFileIcon = (fileType) => {
+        if (fileType === 'application/pdf') {
+            return { icon: faFilePdf, color: '#cb2525' };
+        } else if (fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || fileType === 'application/msword') {
+            return { icon: faFileWord, color: '#003185' };
+        }
+        return { icon: faFileWord, color: 'gray' }; 
+    };
+
+
+
     return(
         <div>
         <link rel="icon" href={Logo} />
@@ -112,10 +137,9 @@ const Document =()=>{
                 </div>
             ) : (
                 <div>
-                    <h2>Documentación</h2>
+                     <h2><FontAwesomeIcon icon={faFolder}/> Documentación</h2>
                     <p className='pb-4'>
-                        En esta sección encontrarás Documentos importantes sobre PROGRAMACIÓN EN JAVA<br /> 
-                        que pueden servirte de apoyo.
+                        Puedes gestionar los documentos
                     </p>
 
                     <div className="input-group mb-4 w-50">
@@ -146,11 +170,17 @@ const Document =()=>{
 
                     {results.length > 0 ? (
                         <div className="row">
-                            {results.map((archivo) => (
+                            {results.map((archivo) => {
+                             const fecha = parseISO(archivo.fechaSubida);
+                             const formattedDate = formatRelativeDate(fecha);
+                             const {icon,color} = getFileIcon(archivo.tipo); 
+
+                                return (
                                 <div className="col-md-4" key={archivo.id}>
                                     <div className="card mb-4">
                                         <div className="card-header d-flex justify-content-between align-items-center">
-                                            <span><FontAwesomeIcon icon={faJava} size='xl'/></span>
+                                        <span className='pe-1'><FontAwesomeIcon  icon={icon} size='xl' style={{color:color}} /></span>
+                                            <small className='text-muted'>{formattedDate}</small>
                                             {rol==='ROLE_ADMIN' &&(
                                                 <div>
                                                 <button className="btn" onClick={()=>handleEditDocument(archivo.id)}>
@@ -163,15 +193,15 @@ const Document =()=>{
                                                 )}
                                         </div>
                                         <div className="card-body">
-                                            <h5 className='fw-bold'>{archivo.titulo}</h5>
+                                        <h5 className='fw-bold'><FontAwesomeIcon icon={faJava} size='xl' /> {archivo.titulo}</h5>
                                             <button 
-                                                className="btn btn-dark me-3" 
+                                                className="btn btn-dark me-3 mt-4" 
                                                 onClick={() => handleVerArchivo(archivo.id)}
                                             >
                                                 <FontAwesomeIcon icon={faEye} />
                                             </button>
                                             <button 
-                                                className="btn btn-primary" 
+                                                className="btn btn-primary mt-4" 
                                                 onClick={() => handleDescargarArchivo(archivo.id)}
                                             >
                                                 <FontAwesomeIcon icon={faDownload} />
@@ -180,7 +210,8 @@ const Document =()=>{
                                         </div>
                                     </div>
                                 </div>
-                            ))}
+                                );
+                            })}
                         </div>
                     ) : (
                         <div class="alert alert-info" role="alert">

@@ -134,8 +134,8 @@ public class AdminController {
 	
 	//DOCUMENTACION//
 	
-	  @PostMapping("/documentacion/subir")
-	    public ResponseEntity<Documentacion> subirArchivo(@RequestParam("file") MultipartFile file, @RequestParam("titulo") String titulo) {
+	@PostMapping("/documentacion/subir")
+	public ResponseEntity<Documentacion> subirArchivo(@RequestParam("file") MultipartFile file, @RequestParam("titulo") String titulo) {
 	        try {
 	            Documentacion archivo = new Documentacion();
 	            archivo.setTitulo(titulo);

@@ -6,7 +6,7 @@ import Logo from '../Static/Img/Logo-LJ.png';
 import UserImg from '../Static/Img/User.png';
 import '../Static/Styles/Style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { faArrowRightFromBracket, faGear, faSliders } from '@fortawesome/free-solid-svg-icons';
 import React, { useEffect, useState } from 'react';
 import Profile from '../Components/Profile';
 
@@ -43,17 +43,6 @@ const NavMenu = () => {
 
         fetchProfileImage();
     }, []);
-
-    const formatRole = (rol) => {
-        switch (rol) {
-            case 'ROLE_USER':
-                return 'USER';
-            case 'ROLE_ADMIN':
-                return 'ADMIN';
-            default:
-                return rol;
-        }
-    };
 
     const handleLogout = async () => {
         console.log('Logging out...');
@@ -94,6 +83,9 @@ const NavMenu = () => {
                             <a className="navbar-brand" href="/Home">Home</a>
                         </li>
                         <li className="nav-item mt-3">
+                            <a className="navbar-brand" href="/Document">Documentos</a>
+                        </li>
+                        <li className="nav-item mt-3">
                             <a className="navbar-brand" href="#">Cursos</a>
                         </li>
                         <li className="nav-item mt-3">
@@ -114,8 +106,10 @@ const NavMenu = () => {
                                     <img src={profileImage} alt='User Profile' style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius:'50px' }} />
                                 </a>
                                 <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><button className="dropdown-item" onClick={handleShowProfile}>Perfil</button></li>
-                                    <li><a className="dropdown-item" href="/panel">Panel {formatRole(rol)}</a></li>
+                                    <li><button className="dropdown-item" onClick={handleShowProfile}><FontAwesomeIcon icon={faGear} /> Perfil</button></li>
+                                    {rol==='ROLE_ADMIN' &&(
+                                    <li><a className="dropdown-item" href="/panel"><FontAwesomeIcon icon={faSliders} /> Panel Admin</a></li>
+                                    )}
                                     <li><hr className="dropdown-divider" /></li>
                                     <li className="dropdown-item">
                                         <button className='btn btn-danger' onClick={handleLogout} variant="outline-danger">

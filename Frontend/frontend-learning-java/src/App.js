@@ -13,6 +13,7 @@ import UploadDocument from './Components/UploadDocumentation.js';
 import Document from './Components/Document.js';
 import Panel from './Components/Panel.js';
 import NoFoundR from './Layouts/NoFoundR.js';
+import DocumentIndex from './Components/DocumentIndex.js';
 
 function App(){
   
@@ -44,6 +45,7 @@ function App(){
 
   return (
     <Routes>
+        <Route path='/Document' element={isAuthenticated ? <DocumentIndex/> : <Navigate to="/login" />}/>
          <Route path='/noroute' element={<NoFoundR/>}/>
         <Route path='/panel/*' element={<Panel/>}/>
         <Route path='/profile' element={<Profile />} />

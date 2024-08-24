@@ -11,3 +11,6 @@ npm install @fortawesome/free-regular-svg-icons @fortawesome/free-brands-svg-ico
 //sweetalert
 npm install sweetalert2
 
+//datefns para fechas relativas
+npm install date-fns
+

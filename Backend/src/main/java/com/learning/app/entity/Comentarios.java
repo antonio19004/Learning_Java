@@ -18,12 +18,12 @@ public class Comentarios {
 	private Users user;
 	
 	@DBRef
-	private Cursos curso;
+	private Course curso;
 
 	public Comentarios() {
 	}
 
-	public Comentarios(String id, String contenido, Date fechaPublicacion, Users user, Cursos curso) {
+	public Comentarios(String id, String contenido, Date fechaPublicacion, Users user, Course curso) {
 		this.id = id;
 		this.contenido = contenido;
 		this.fechaPublicacion = fechaPublicacion;
@@ -63,11 +63,11 @@ public class Comentarios {
 		this.user = user;
 	}
 
-	public Cursos getCurso() {
+	public Course getCurso() {
 		return curso;
 	}
 
-	public void setCurso(Cursos curso) {
+	public void setCurso(Course curso) {
 		this.curso = curso;
 	}
 }

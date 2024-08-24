@@ -1,7 +1,11 @@
 package com.learning.app.entity;
 
+import java.time.LocalDateTime;
+
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
 
 @Document(collection = "documentos")
 public class Documentacion {
@@ -11,6 +15,9 @@ public class Documentacion {
 	private String titulo;
 	private String tipo;
 	private byte[] contenido;
+	@CreatedDate
+	private LocalDateTime fechaSubida;
+
 	
 	
 	
@@ -49,6 +56,11 @@ public class Documentacion {
 	public void setContenido(byte[] contenido) {
 		this.contenido = contenido;
 	}
+	public LocalDateTime getFechaSubida() {
+		return fechaSubida;
+	}
+	
+	
 	
 	
 	

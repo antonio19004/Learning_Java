@@ -1,7 +1,9 @@
 package com.learning.app.entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -18,6 +20,8 @@ public class Admin {
 	private String email;
 	private String user;
 	private String password;
+	@CreatedDate
+	private LocalDateTime fechaCreado;
 	
 	public Admin(String id, byte[] imagenPerfil, String nombre, String apellido, LocalDate fechaNacimiento,
 			String email, String user, String password) {
@@ -95,4 +99,9 @@ public class Admin {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	public LocalDateTime getFechaCreado() {
+		return fechaCreado;
+	}
+	
 }
