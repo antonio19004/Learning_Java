@@ -3,14 +3,9 @@ package com.learning.app.entity;
 import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "TemaForo")
-public class Foro {
-
-	@Id
+public class ForumResponse {
+	
 	private String id;
 	private String titulo;
 	private String contenido;
@@ -18,27 +13,21 @@ public class Foro {
 	@CreatedDate
 	private LocalDateTime fechaPublicacion;
 	
-	@DBRef
-	private Users user;
-	
-	@DBRef
-	private Admin admin;
-
+	private String ultimoModificador;
 	private long respuestasCount;
 	private boolean isFixed;
 	private boolean isHidden;
 	
-	public Foro() {
+	public ForumResponse() {
 	}
 
-	public Foro(String id, String titulo, String contenido, LocalDateTime fechaPublicacion, Users user, Admin admin,
-			long respuestasCount, boolean isFixed, boolean isHidden) {
+	public ForumResponse(String id, String titulo, String contenido, LocalDateTime fechaPublicacion,
+			String ultimoModificador, long respuestasCount, boolean isFixed, boolean isHidden) {
 		this.id = id;
 		this.titulo = titulo;
 		this.contenido = contenido;
 		this.fechaPublicacion = fechaPublicacion;
-		this.user = user;
-		this.admin = admin;
+		this.ultimoModificador = ultimoModificador;
 		this.respuestasCount = respuestasCount;
 		this.isFixed = isFixed;
 		this.isHidden = isHidden;
@@ -68,10 +57,6 @@ public class Foro {
 		this.contenido = contenido;
 	}
 
-	public Users getUser() {
-		return user;
-	}
-	
 	public LocalDateTime getFechaPublicacion() {
 		return fechaPublicacion;
 	}
@@ -80,16 +65,12 @@ public class Foro {
 		this.fechaPublicacion = fechaPublicacion;
 	}
 
-	public void setUser(Users user) {
-		this.user = user;
+	public String getUltimoModificador() {
+		return ultimoModificador;
 	}
 
-	public Admin getAdmin() {
-		return admin;
-	}
-
-	public void setAdmin(Admin admin) {
-		this.admin = admin;
+	public void setUltimoModificador(String ultimoModificador) {
+		this.ultimoModificador = ultimoModificador;
 	}
 
 	public long getRespuestasCount() {

@@ -2,7 +2,11 @@ import { Route, Routes, Navigate,useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import Home from './Components/Home.js';
 import Profile from './Components/Profile.js';
+import Forum from './Components/Forum.js';
+import NewForum from './Components/NewForum.js';
+import ForumDetail from './Components/ForumDetail.js';
 import Contact from './Components/Contact.js';
+import AboutUs from './Components/AboutUs.js';
 import Login from './Security/Login';
 import Register from './Security/Register.js';
 import ResetPassword from './Security/ResetPassword.js';
@@ -40,9 +44,13 @@ function App(){
 
   return (
     <Routes>
+        <Route path='/forum-topic/:id' element={isAuthenticated ? <ForumDetail /> : <Navigate to="/login" />} />
+        <Route path='/new-forum' element={isAuthenticated ? <NewForum /> : <Navigate to="/login" />} />
+        <Route path='/forum' element={isAuthenticated ? <Forum /> : <Navigate to="/login" />} />
         <Route path='/profile' element={<Profile />} />
+        <Route path='/about-us' element={<AboutUs />} />
         <Route path='/contact' element={<Contact />} />
-        <Route path='/update-password' element={<UpdatePassword />} />
+        <Route path='/update-password' element={isAuthenticated ? <UpdatePassword /> : <Navigate to="/login" />} />
         <Route path='/reset-password' element={<ResetPassword />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />

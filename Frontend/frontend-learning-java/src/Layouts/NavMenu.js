@@ -86,7 +86,7 @@ const NavMenu = () => {
                             <a className="navbar-brand" href="#">Cursos</a>
                         </li>
                         <li className="nav-item mt-3">
-                            <a className="navbar-brand" href="#">Foro</a>
+                            <a className="navbar-brand" href="/forum">Foro</a>
                         </li>
                         <li className="nav-item mt-3">
                             <a className="navbar-brand" href="/contact">Contacto</a>

@@ -1,0 +1,99 @@
+.content {
+    padding: 20px;
+    margin-top: 20px;
+    margin-left: 150px;
+    margin-right: 150px;
+}
+
+.list, p {
+    font-family: Arial, sans-serif;
+}
+
+.about {
+    text-align: justify;
+    margin-right: 100px;
+    margin-bottom: 40px;
+}
+
+.card-container {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    margin: 20px 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-container-reverse {
+    display: flex;
+    width: 100%;
+    flex-direction: row-reverse;
+    align-items: center;
+    margin: 20px 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.img-container {
+    flex-shrink: 0;
+    padding: 10px;
+}
+
+.img-container img {
+    width: 100%;
+    max-width: 250px;
+    height: auto;
+    border-radius: 10px;
+}
+
+.info-container {
+    flex-grow: 1;
+    text-align: justify;
+    padding: 10px;
+}
+
+.university {
+    text-align: justify;
+    margin-right: 100px;
+    margin-bottom: 40px;
+}
+
+.university ul {
+    list-style: none;
+    padding-right: 0;
+}
+
+.history {
+    text-align: justify;
+    margin-left: 100px;
+    margin-bottom: 40px;
+}
+
+.valores {
+    text-align: left;
+    margin-right: 100px;
+    margin-bottom: 40px;
+}
+
+.valores ul {
+    list-style: none;
+    padding-right: 0;
+}
+
+.start {
+    text-align: center;
+    margin-top: 80px;
+}
+
+.btn-courses {
+    width: 200px;
+    height: 50px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

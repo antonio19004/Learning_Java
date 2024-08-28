@@ -7,8 +7,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "respuestaAnidada")
-public class RespuestaForo {
+@Document(collection = "respuestasForo")
+public class RespuestasForo {
 
 	@Id
 	private String id;
@@ -18,7 +18,7 @@ public class RespuestaForo {
 	private LocalDateTime fechaPublicacion;
 	
 	@DBRef
-	private RespuestasForo respuesta;
+	private Foro foro;
 	
 	@DBRef
 	private Users user;
@@ -26,15 +26,14 @@ public class RespuestaForo {
 	@DBRef
 	private Admin admin;
 
-	public RespuestaForo() {
+	public RespuestasForo() {
 	}
 
-	public RespuestaForo(String id, String contenido, LocalDateTime fechaPublicacion, RespuestasForo respuesta,
-			Users user, Admin admin) {
+	public RespuestasForo(String id, String contenido, LocalDateTime fechaPublicacion, Foro foro, Users user, Admin admin) {
 		this.id = id;
 		this.contenido = contenido;
 		this.fechaPublicacion = fechaPublicacion;
-		this.respuesta = respuesta;
+		this.foro = foro;
 		this.user = user;
 		this.admin = admin;
 	}
@@ -63,12 +62,12 @@ public class RespuestaForo {
 		this.fechaPublicacion = fechaPublicacion;
 	}
 
-	public RespuestasForo getRespuesta() {
-		return respuesta;
+	public Foro getForo() {
+		return foro;
 	}
 
-	public void setRespuesta(RespuestasForo respuesta) {
-		this.respuesta = respuesta;
+	public void setForo(Foro foro) {
+		this.foro = foro;
 	}
 
 	public Users getUser() {

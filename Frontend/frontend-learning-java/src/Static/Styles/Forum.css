@@ -1,0 +1,60 @@
+.table-foro {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.table-foro th, .table-foro td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.table-foro td.centered, .table-foro th.centered {
+    text-align: center;
+}
+
+.table-foro th {
+    background-color: #0e0d0d;
+    font-weight: bold;
+    color: #dfdfdf;
+}
+
+.table-foro tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+.link-foro {
+    color: #000;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.link-foro:hover {
+    color: #474747;
+}
+
+.dropdown-menu {
+    min-width: 150px;
+}
+
+.dropdown-menu.show {
+    display: block;
+}
+
+.hidden-row {
+    opacity: 0.5;
+}
+
+.pinned-row {
+    background-color: #f0f8ff;
+}
+
+.icon-left {
+    margin-right: 10px;
+}
+
+.agg-btn {
+    margin-top: 05%;
+    margin-left: 80%;
+}

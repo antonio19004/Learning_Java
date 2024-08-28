@@ -1,0 +1,20 @@
+.position-relative {
+    position: relative;
+}
+
+.textarea-container {
+    position: relative;
+}
+
+.textarea-container textarea {
+    width: 100%;
+    padding-right: 80px;
+    box-sizing: border-box;
+}
+
+.textarea-container .btn {
+    position: absolute;
+    right: 25px;
+    bottom: 10px;
+    z-index: 10;
+}
