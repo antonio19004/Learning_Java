@@ -1,8 +1,12 @@
 package com.learning.app.entity;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Map;
 
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "usuarios")
@@ -19,13 +23,19 @@ public class Users {
 	private String password;
 	private int cursosCompletados;
 	private boolean acceptTerms;
+	@CreatedDate
+	private LocalDateTime fechaCreado;
+	@LastModifiedDate
+	private LocalDateTime fechaActualizado;
+	
+	private Map<String,Double>courseProgress;
 	
 	public Users() {
 		super();
 	}
 	
 	public Users(String id, byte[] imagenPerfil, String nombre, String apellido, LocalDate fechaNacimiento,
-			String email, String user, String password, int cursosCompletados, boolean acceptTerms) {
+			String email, String user, String password, int cursosCompletados, boolean acceptTerms,Map<String,Double>courseProgress) {
 		super();
 		this.id = id;
 		this.imagenPerfil = imagenPerfil;
@@ -37,6 +47,7 @@ public class Users {
 		this.password = password;
 		this.cursosCompletados = cursosCompletados;
 		this.acceptTerms = acceptTerms;
+		this.courseProgress = courseProgress;
 	}
 	
 	public String getId() {
@@ -118,4 +129,24 @@ public class Users {
 	public void setAcceptTerms(boolean acceptTerms) {
 		this.acceptTerms = acceptTerms;
 	}
+
+	public LocalDateTime getFechaCreado() {
+		return fechaCreado;
+	}
+	
+
+	public LocalDateTime getFechaActualizado() {
+		return fechaActualizado;
+	}
+
+	public Map<String, Double> getCourseProgress() {
+		return courseProgress;
+	}
+
+	public void setCourseProgress(Map<String, Double> courseProgress) {
+		this.courseProgress = courseProgress;
+	}
+	
+	
+	
 }

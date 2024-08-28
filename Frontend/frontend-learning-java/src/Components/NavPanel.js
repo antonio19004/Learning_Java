@@ -10,7 +10,7 @@ import { faArrowRightFromBracket, faGear, faSliders } from '@fortawesome/free-so
 import React, { useEffect, useState } from 'react';
 import Profile from '../Components/Profile';
 
-const NavMenu = () => {
+const NavPanel = () => {
     const navigate = useNavigate();
     const rol = localStorage.getItem('role');
     const isAuthenticated = localStorage.getItem('username') !== null;
@@ -44,6 +44,7 @@ const NavMenu = () => {
         fetchProfileImage();
     }, []);
 
+
     const handleLogout = async () => {
         console.log('Logging out...');
         try {
@@ -59,40 +60,16 @@ const NavMenu = () => {
     const handleShowProfile = () => setShowProfile(true);
     const handleCloseProfile = () => setShowProfile(false);
 
-    const handleHashClick = (e) => {
-        if (e.target.getAttribute('href') === '#') {
-          e.preventDefault();
-          navigate('/noroute');
-        }
-      };
-
-      const handleSpecificClick = (e) => {
-        e.stopPropagation();
-      };
-
     return (
-        <div>
+        <div className='pb-2'>
             <nav className="navbar navbar-expand-lg">
-                <div className="container-fluid" onClick={handleHashClick}>
-                    <a href='/Home'><img src={Logo} className='NavLogo mx-5' alt='Logo...' /></a>
+                <div className="container-fluid">
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>
                     </button>
-                    <ul className="navbar-nav ms-auto me-7 py-4">
+                    <ul className="navbar-nav ms-auto me-7 py-2">
                         <li className="nav-item mt-3">
                             <a className="navbar-brand" href="/Home">Home</a>
-                        </li>
-                        <li className="nav-item mt-3">
-                            <a className="navbar-brand" href="/Document">Documentos</a>
-                        </li>
-                        <li className="nav-item mt-3">
-                            <a className="navbar-brand" href="#">Cursos</a>
-                        </li>
-                        <li className="nav-item mt-3">
-                            <a className="navbar-brand" href="/forum">Foro</a>
-                        </li>
-                        <li className="nav-item mt-3">
-                            <a className="navbar-brand" href="/contact">Contacto</a>
                         </li>
                         {!isAuthenticated ? (
                             <li className="nav-item">
@@ -102,14 +79,12 @@ const NavMenu = () => {
                             </li>
                         ) : (
                             <li className='nav-item dropdown'>
-                                <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" onClick={(e) => e.stopPropagation()}>
+                                <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <img src={profileImage} alt='User Profile' style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius:'50px' }} />
                                 </a>
                                 <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <li><button className="dropdown-item" onClick={handleShowProfile}><FontAwesomeIcon icon={faGear} /> Perfil</button></li>
-                                    {rol==='ROLE_ADMIN' &&(
-                                    <li><a className="dropdown-item" href="/panel"><FontAwesomeIcon icon={faSliders} /> Panel Admin</a></li>
-                                    )}
+                                    <li><button className="dropdown-item" onClick={handleShowProfile}> <FontAwesomeIcon icon={faGear} /> Perfil</button></li>
+                                    <li><a className="dropdown-item" href="/panel"> <FontAwesomeIcon icon={faSliders} /> Panel Admin</a></li>
                                     <li><hr className="dropdown-divider" /></li>
                                     <li className="dropdown-item">
                                         <button className='btn btn-danger' onClick={handleLogout} variant="outline-danger">
@@ -127,4 +102,4 @@ const NavMenu = () => {
     );
 };
 
-export default NavMenu;
+export default NavPanel;

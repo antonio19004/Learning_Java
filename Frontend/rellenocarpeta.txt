@@ -6,3 +6,11 @@ npm install @fortawesome/react-fontawesome @fortawesome/free-solid-svg-icons @fo
 npm install @fortawesome/free-regular-svg-icons @fortawesome/free-brands-svg-icons
 
 
+
+
+//sweetalert
+npm install sweetalert2
+
+//datefns para fechas relativas
+npm install date-fns
+
