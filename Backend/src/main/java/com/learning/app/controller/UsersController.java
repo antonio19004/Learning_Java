@@ -2,8 +2,12 @@ package com.learning.app.controller;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -26,7 +30,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.learning.app.Dto.UsersDto;
 import com.learning.app.Dto.PasswordDto;
 import com.learning.app.entity.Documentacion;
+import com.learning.app.entity.Course;
+import com.learning.app.entity.CourseProgress;
 import com.learning.app.entity.Users;
+import com.learning.app.repository.CoursesRepository;
 import com.learning.app.repository.DocumentosRepository;
 import com.learning.app.repository.UsersRepository;
 import com.learning.app.service.DocumentacionService;
@@ -51,6 +58,9 @@ public class UsersController {
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private CoursesRepository courseRepository;
 	
 	@GetMapping("/details")
 	public UsersDto getAuthenticatedUser() {
@@ -215,6 +225,125 @@ public class UsersController {
     }
     
     
+    
+    //PROGRESS
+    
+    
+    @GetMapping("/curso/{cursoId}/progreso")
+    public ResponseEntity<Double> obtenerProgreso(@PathVariable String cursoId) {
+        // Obtener el usuario autenticado
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        
+        // Obtener el usuario desde el repositorio
+        Users usuario = usersRepository.findByUser(username);
+        if (usuario == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Usuario no encontrado
+        }
+
+        // Buscar el curso en el repositorio
+        Optional<Course> cursoOpt = courseRepository.findById(cursoId);
+        if (!cursoOpt.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Curso no encontrado
+        }
+
+        Course curso = cursoOpt.get();
+        long totalLecciones = curso.getLesson().size();
+        if (totalLecciones == 0) {
+            return ResponseEntity.badRequest().body(null); // No hay lecciones en el curso
+        }
+
+        // Buscar progreso en el curso
+        Optional<CourseProgress> progresoOpt = usuario.getProgreso().stream()
+                .filter(progreso -> progreso.getCursoId().equals(cursoId))
+                .findFirst();
+        
+        if (progresoOpt.isPresent()) {
+            CourseProgress progresoCurso = progresoOpt.get();
+            long leccionesCompletadas = progresoCurso.getCompletedLessons().size();
+            double porcentajeCompletado = (leccionesCompletadas / (double) totalLecciones) * 100;
+
+            return ResponseEntity.ok(porcentajeCompletado);
+        }
+
+        return ResponseEntity.notFound().build(); // Progreso no encontrado para el curso
+    }
+
+    @PostMapping("/completados/{cursoId}/leccion/{leccionId}")
+    public ResponseEntity<Void> completarLeccion(@PathVariable String cursoId, @PathVariable String leccionId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        Users usuario = usersRepository.findByUser(username);
+        if (usuario == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        if (usuario.getProgreso() == null) {
+            usuario.setProgreso(new ArrayList<>());
+        }
+
+        Optional<CourseProgress> progresoOpt = usuario.getProgreso().stream()
+                .filter(progreso -> progreso.getCursoId().equals(cursoId))
+                .findFirst();
+
+        if (progresoOpt.isPresent()) {
+            CourseProgress progresoCurso = progresoOpt.get();
+            List<String> completedLessons = progresoCurso.getCompletedLessons();
+            if (completedLessons.contains(leccionId)) {
+                completedLessons.remove(leccionId);
+            } else {
+                completedLessons.add(leccionId);
+            }
+        } else {
+            CourseProgress nuevoProgreso = new CourseProgress(cursoId, List.of(leccionId));
+            usuario.getProgreso().add(nuevoProgreso);
+        }
+
+        try {
+            usersRepository.save(usuario);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+
+        return ResponseEntity.ok().build();
+    }
+
+
+    
+    @GetMapping("/curso/{cursoId}/lecciones-completadas")
+    public ResponseEntity<Set<String>> obtenerLeccionesCompletadas(@PathVariable String cursoId) {
+        // Obtener el usuario autenticado
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        
+        // Obtener el usuario desde el repositorio
+        Users usuario = usersRepository.findByUser(username);
+        if (usuario == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Usuario no encontrado
+        }
+
+        // Buscar el curso en el repositorio
+        Optional<Course> cursoOpt = courseRepository.findById(cursoId);
+        if (!cursoOpt.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Curso no encontrado
+        }
+
+        // Buscar progreso en el curso
+        Optional<CourseProgress> progresoOpt = usuario.getProgreso().stream()
+                .filter(progreso -> progreso.getCursoId().equals(cursoId))
+                .findFirst();
+        
+        if (progresoOpt.isPresent()) {
+            CourseProgress progresoCurso = progresoOpt.get();
+            Set<String> leccionesCompletadas = new HashSet<>(progresoCurso.getCompletedLessons());
+            return ResponseEntity.ok(leccionesCompletadas);
+        }
+
+        return ResponseEntity.ok(new HashSet<>()); // No hay lecciones completadas para el curso
+    }
+
+  
     
     
 /*	

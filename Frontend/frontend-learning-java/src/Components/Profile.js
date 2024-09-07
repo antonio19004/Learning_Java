@@ -32,10 +32,8 @@ const Profile = ({ showModal, handleClose }) =>{
     }, [username, rol, navigate]);
 
     const fetchAdminDetails = async () => {
-        console.log('Fetching admin details...');
         try {
             const response = await axios.get('http://localhost:8080/admin/details', { withCredentials: true });
-            console.log('Admin details fetched successfully:', response.data);
             setAdminDetails(response.data);
         } catch (error) {
             console.error('Error al obtener los detalles del administrador', error);
@@ -49,10 +47,8 @@ const Profile = ({ showModal, handleClose }) =>{
     };
 
     const fetchUsersDetails = async () => {
-        console.log('Fetching Users details...');
         try {
             const response = await axios.get('http://localhost:8080/users/details', { withCredentials: true });
-            console.log('Users details fetched successfully:', response.data);
             setUsersDetails(response.data);
         } catch (error) {
             console.error('Error al obtener los detalles del Usuario', error);

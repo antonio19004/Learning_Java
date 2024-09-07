@@ -2,6 +2,7 @@ package com.learning.app.entity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
@@ -20,11 +21,14 @@ public class Admin {
 	private String email;
 	private String user;
 	private String password;
+	private List<CourseProgress> progreso;
 	@CreatedDate
 	private LocalDateTime fechaCreado;
 	
+	
+	
 	public Admin(String id, byte[] imagenPerfil, String nombre, String apellido, LocalDate fechaNacimiento,
-			String email, String user, String password) {
+			String email, String user, String password, List<CourseProgress> progreso, LocalDateTime fechaCreado) {
 		super();
 		this.id = id;
 		this.imagenPerfil = imagenPerfil;
@@ -34,8 +38,10 @@ public class Admin {
 		this.email = email;
 		this.user = user;
 		this.password = password;
+		this.progreso = progreso;
+		this.fechaCreado = fechaCreado;
 	}
-	
+
 	public String getId() {
 		return id;
 	}
@@ -103,5 +109,15 @@ public class Admin {
 	public LocalDateTime getFechaCreado() {
 		return fechaCreado;
 	}
+
+	public List<CourseProgress> getProgreso() {
+		return progreso;
+	}
+
+	public void setProgreso(List<CourseProgress> progreso) {
+		this.progreso = progreso;
+	}
+	
+	
 	
 }

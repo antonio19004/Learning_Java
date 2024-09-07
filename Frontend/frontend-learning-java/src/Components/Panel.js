@@ -13,6 +13,7 @@ import NoFoundR from '../Layouts/NoFoundR';
 import Document from './Document';
 import UploadDocument from './UploadDocumentation';
 import EditDocument from './EditDocument';
+import CreateCourse from './Courses/CreateCourses';
 
 const Panel = () => {
   const [isOpen, setIsOpen] = useState(true);
@@ -68,7 +69,7 @@ const Panel = () => {
             <a className="nav-link" href="/panel/documentForm">Usuarios</a>
           </li>
           <li className="nav-item text-Light">
-            <a className="nav-link text-Light" href="#">Cursos</a>
+            <a className="nav-link text-Light" href="/panel/coursesForm">Cursos</a>
           </li>
           <li className="nav-item">
             <a className="nav-link text-Light" href="#">About</a>
@@ -94,6 +95,7 @@ const Panel = () => {
           <Route path="/document" element={isAuthenticated ? <Document /> : <Navigate to="/login" />} />
           <Route path="/add-document" element={isAuthenticated ? <UploadDocument /> : <Navigate to="/login" />} />
           <Route path='/edit-document/:id' element={isAuthenticated ? <EditDocument/> : <Navigate to="/login" />}/>
+          <Route path='/coursesForm' element={isAuthenticated ? <CreateCourse/> : <Navigate to="/login" />}/>
         </Routes>
       </div>
     </div>

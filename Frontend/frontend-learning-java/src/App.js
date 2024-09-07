@@ -10,10 +10,16 @@ import UpdatePassword from './Security/UpdatePassword.js';
 import useIdleTimer from './Security/Inactivity.js';
 import LoadingScreen from './Layouts/LoadingScreen.js';
 import UploadDocument from './Components/UploadDocumentation.js';
-import Document from './Components/Document.js';
 import Panel from './Components/Panel.js';
 import NoFoundR from './Layouts/NoFoundR.js';
 import DocumentIndex from './Components/DocumentIndex.js';
+import CourseList from './Components/Courses/CourseList.js';
+import CreateLesson from './Components/Lesson/CreateLesson.js';
+import CreateCourse from './Components/Courses/CreateCourses.js';
+import ViewCourse from './Components/Courses/ViewCourse.js';
+import CourseView from './Components/Courses/CourseView.js';
+import ViewLesson from './Components/Lesson/ViewLesson.js';
+
 
 function App(){
   
@@ -31,13 +37,15 @@ function App(){
     });
   };
 
-  useIdleTimer(600000, handleIdle);
+  useIdleTimer(43200000, handleIdle);
   const isAuthenticated = localStorage.getItem('username') !== null;
 
-  useEffect(() => {
+  /*useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 3000);
     return () => clearTimeout(timer);
-  }, []);
+  }, []);*/
+
+
 
   if (loading) {
     return <LoadingScreen />;
@@ -45,6 +53,12 @@ function App(){
 
   return (
     <Routes>
+      <Route path='/viewcourse/:id' element={<ViewCourse/>}></Route>
+      <Route path="/course/:id/lesson/:lessonIndex" element={<ViewLesson/>} />
+      <Route path='/courseview/:id' element={<CourseView/>}></Route>
+      <Route path='/lessonform' element={<CreateLesson/>}/>
+      <Route path='/cform' element={<CreateCourse/>}/>
+      <Route path='/courses' element={<CourseList/>}/>
         <Route path='/Document' element={isAuthenticated ? <DocumentIndex/> : <Navigate to="/login" />}/>
          <Route path='/noroute' element={<NoFoundR/>}/>
         <Route path='/panel/*' element={<Panel/>}/>
@@ -58,6 +72,7 @@ function App(){
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path='/documentForm' element={isAuthenticated ? <UploadDocument/> : <Navigate to='/login'/>}/>
         <Route path="*" element={<NoFoundR/>} />
+        
     </Routes>
   );
 }

@@ -39,8 +39,10 @@ const ResetPassword = () => {
 
     return (
         <div>
+            <div className='d-flex flex-column align-items-center justify-content-center '>
+            <div className='bgshadowinset px-5 pb-5 my-4 rounded'>
             <div>
-                <a href='/login' class="btn btn-secondary" style={{ borderRadius: '8px', padding: '8px 20px', marginTop: '40px', marginLeft: '40px' }}>
+                <a href='/login' class="btn btn-secondary rounded mt-3 ">
                     <FontAwesomeIcon icon={faArrowLeft} /> Volver
                 </a>
             </div><br />
@@ -70,6 +72,8 @@ const ResetPassword = () => {
                     <button className='btn btn-dark ms-5' type="submit">Restablecer</button>
                 </form>
             </div>
+        </div>
+        </div>
         </div>
     )
 }

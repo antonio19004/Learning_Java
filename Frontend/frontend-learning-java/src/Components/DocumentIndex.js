@@ -82,13 +82,12 @@ const Document =()=>{
     return (
         <div>
             <NavMenu/>
-            <link rel="icon" href={Logo} />
             <div className="px-5 pt-4">
                 {loading ? (
                     <div className='panelcenter'>
                         <Loader />
                     </div>
-                ) : (
+                    ) : (
                     <div>
                         <h2><FontAwesomeIcon icon={faFolder}/> Documentación</h2>
                         

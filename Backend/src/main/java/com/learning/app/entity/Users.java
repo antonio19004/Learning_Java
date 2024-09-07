@@ -2,7 +2,7 @@ package com.learning.app.entity;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Map;
+import java.util.List;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
@@ -28,14 +28,17 @@ public class Users {
 	@LastModifiedDate
 	private LocalDateTime fechaActualizado;
 	
-	private Map<String,Double>courseProgress;
+	private List<CourseProgress> progreso;
 	
 	public Users() {
 		super();
 	}
 	
+
+	
 	public Users(String id, byte[] imagenPerfil, String nombre, String apellido, LocalDate fechaNacimiento,
-			String email, String user, String password, int cursosCompletados, boolean acceptTerms,Map<String,Double>courseProgress) {
+			String email, String user, String password, int cursosCompletados, boolean acceptTerms,
+			LocalDateTime fechaCreado, LocalDateTime fechaActualizado, List<CourseProgress> progreso) {
 		super();
 		this.id = id;
 		this.imagenPerfil = imagenPerfil;
@@ -47,9 +50,14 @@ public class Users {
 		this.password = password;
 		this.cursosCompletados = cursosCompletados;
 		this.acceptTerms = acceptTerms;
-		this.courseProgress = courseProgress;
+		this.fechaCreado = fechaCreado;
+		this.fechaActualizado = fechaActualizado;
+		this.progreso = progreso;
 	}
-	
+
+
+
+
 	public String getId() {
 		return id;
 	}
@@ -139,13 +147,19 @@ public class Users {
 		return fechaActualizado;
 	}
 
-	public Map<String, Double> getCourseProgress() {
-		return courseProgress;
+
+
+	public List<CourseProgress> getProgreso() {
+		return progreso;
 	}
 
-	public void setCourseProgress(Map<String, Double> courseProgress) {
-		this.courseProgress = courseProgress;
+
+
+	public void setProgreso(List<CourseProgress> progreso) {
+		this.progreso = progreso;
 	}
+
+	
 	
 	
 	

@@ -12,19 +12,22 @@ public class Video {
 	private String url;
 	private int duration;
 	private int index;
+    private String Idcurso;
 	
 	
 	
 
-
-	public Video(String id, String title, String url, int duration, int index) {
+	public Video(String id, String title, String url, int duration, int index, String Idcurso) {
 		super();
 		this.id = id;
 		this.title = title;
 		this.url = url;
 		this.duration = duration;
 		this.index = index;
+		this.Idcurso = Idcurso;
 	}
+	
+	
 
 
 	public String getId() {
@@ -75,7 +78,24 @@ public class Video {
 	public void setIndex(int index) {
 		this.index = index;
 	}
-	
+
+
+
+
+	public String getIdcurso() {
+		return Idcurso;
+	}
+
+
+
+
+	public void setIdcurso(String idcurso) {
+		Idcurso = idcurso;
+	}
+
+
+
+
 	
 	
 
