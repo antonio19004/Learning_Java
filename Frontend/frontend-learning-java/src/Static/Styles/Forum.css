@@ -10,7 +10,7 @@
     border-bottom: 1px solid #ddd;
 }
 
-.table-foro td.centered, .table-foro th.centered {
+.table-foro, .table-foro th.centered {
     text-align: center;
 }
 
@@ -55,6 +55,6 @@
 }
 
 .agg-btn {
-    margin-top: 05%;
-    margin-left: 80%;
+    margin-top: 10px;
+    margin-left: 87%;
 }

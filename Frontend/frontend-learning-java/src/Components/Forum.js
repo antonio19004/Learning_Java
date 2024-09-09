@@ -1,25 +1,32 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
 import NavMenu from '../Layouts/NavMenu.js';
+import Loader from "../Layouts/Loader";
 import Footer from '../Layouts/Footer.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faComments, faMessage, faEllipsisH, faThumbtack, faThumbtackSlash, faEye, faEyeSlash, faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faComments, faMessage, faThumbtack, faVolumeHigh, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { formatDistanceToNow } from 'date-fns';
+import { es } from 'date-fns/locale'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../Static/Styles/Forum.css';
 
 const Forum = () => {
 
+    document.title = 'Foro';
     const [foro, setForo] = useState([]);
-    const [menuOpen, setMenuOpen] = useState(null);
-    const [error, setError] = useState(null);
-    const rol = localStorage.getItem('role');
-    const menuRefs = useRef([]);
+    const [query, setQuery] = useState('');
+    const [results, setResults] = useState([]);
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
     const fetchForo = () => {
         axios.get('http://localhost:8080/forum', { withCredentials: true })
-            .then(response => setForo(response.data))
+            .then(response => {
+                setForo(response.data);
+                setResults(response.data);
+                setLoading(false)
+            })
             .catch(error => console.error(error));
     };
 
@@ -32,10 +39,12 @@ const Forum = () => {
     }
 
     const formatDate = (date) => {
-        if (!date) return '';
-        const fecha = new Date(date);
-        const options = { day: '2-digit', month: 'long', year: 'numeric', timeZone: 'UTC' };
-        return fecha.toLocaleDateString('es-ES', options);
+        const distance = formatDistanceToNow(date, { addSuffix: true, locale: es });
+    
+        if (distance.includes('hace alrededor de')) {
+            return distance.replace('hace alrededor de ', 'hace ');
+        }
+        return distance;
     };
     
     const processForumData = (forum) => {
@@ -53,106 +62,41 @@ const Forum = () => {
         };
     };
 
-    const toggleMenu = (id) => {
-        setMenuOpen(menuOpen === id ? null : id);
-    };
+    const handleSearch = (e) => {
+        const searchTerm = e.target.value;
+        setQuery(searchTerm);
 
-    const handleClickOutside = (event) => {
-        if (menuRefs.current && !menuRefs.current.some(ref => ref && ref.contains(event.target))) {
-            setMenuOpen(null);
-        }
-    };
-    
-    useEffect(() => {
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, []);
-
-    const handleAction = async (id, action) => {
-        let url = '';
-
-        if (action === 'pin') {
-            url = `http://localhost:8080/forum/${id}/pin`;
-        } else if (action === 'unpin') {
-            url = `http://localhost:8080/forum/${id}/unpin`;
-        } else if (action === 'hide') {
-            url = `http://localhost:8080/forum/${id}/hide`;
-        } else if (action === 'show') {
-            url = `http://localhost:8080/forum/${id}/show`;
-        }
-
-        try {
-            setError(null);
-
-            const response = await axios.put(url, {}, { withCredentials: true });
-
-            if (response.status === 200) {
-                fetchForo();
-                console.log(foro);
-                setMenuOpen(null);
-            } else {
-                throw new Error("Error inesperado al actualizar el tema.");
-            }
-        } catch (error) {
-            if (error.response && error.response.status === 404) {
-                setError("Tema no encontrado.");
-            } else {
-                setError("Error al actualizar el tema.");
-            }
+        if (searchTerm.trim() === '') {
+            setResults(foro);
+        } else {
+            const filteredResults = foro.filter(forum => 
+                forum.titulo && forum.titulo.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            setResults(filteredResults);
         }
     };
 
     const renderTableBody = () => {
-        return foro.map((forum, index) => {
+        return results.map((forum) => {
             const { formattedDate, lastModifier, isFixed, isHidden } = processForumData(forum);
-            const rowClass = isHidden ? 'text-muted' : '';
             const pinIconColor = isFixed ? 'dark' : 'transparent';
             const textStyle = isHidden ? { color: 'darkgray', textDecoration: 'line-through' } : {};
 
             return (
-                <tr key={forum.id} className={rowClass}>
+                <tr key={forum.id}>
                     <td>
                         <Link to={`/forum-topic/${forum.id}`} className='link-foro' style={textStyle}>
                             <FontAwesomeIcon icon={faMessage} className="icon-left" style={{ marginRight: '10px' }} />
                             {forum.titulo}
                         </Link>
                     </td>
-                    <td className='centered' style={textStyle}>{forum.respuestasCount}</td>
-                    <td className='centered' style={textStyle}>
+                    <td style={{ ...textStyle, textIndent: '100px' }}>{forum.respuestasCount}</td>
+                    <td style={{ ...textStyle, textIndent: '100px', textAlign: 'justify' }}>
                         {lastModifier} - {formattedDate}
                         {isFixed && (
-                            <FontAwesomeIcon icon={faThumbtack} style={{ marginLeft: '23px', color: pinIconColor }} />
+                            <FontAwesomeIcon icon={faThumbtack} style={{ marginLeft: '23px', color: pinIconColor, transform: 'rotate(40deg)' }} />
                         )}
                     </td>
-                    {rol === 'ROLE_ADMIN' && (
-                        <td className='centered'>
-                            <div className="dropdown" ref={el => menuRefs.current[index] = el}>
-                                <FontAwesomeIcon icon={faEllipsisH} onClick={() => toggleMenu(forum.id)} className='centered' style={{ fontSize: '20px', cursor: 'pointer' }} />
-                                {menuOpen === forum.id && (
-                                    <div className="dropdown-menu show">
-                                        <button className="dropdown-item" onClick={() => handleAction(forum.id, isFixed ? 'unpin' : 'pin')}>
-                                            {isFixed ? (
-                                                <span style={{ marginLeft: '15px' }}>Desanclar<FontAwesomeIcon icon={faThumbtackSlash} style={{ marginLeft: '10px' }} /></span>
-                                            ) : (
-                                                <span style={{ marginLeft: '15px' }}>Anclar<FontAwesomeIcon icon={faThumbtack} style={{ marginLeft: '23px' }} /></span>
-                                            )}
-                                        </button>
-                                        <button className="dropdown-item" onClick={() => handleAction(forum.id, isHidden ? 'show' : 'hide')}>
-                                            {isHidden ? (
-                                                <span style={{ marginLeft: '15px' }}>Mostrar<FontAwesomeIcon icon={faEye} style={{ marginLeft: '12px' }} /></span>
-                                            ) : (
-                                                <span style={{ marginLeft: '15px' }}>Ocultar<FontAwesomeIcon icon={faEyeSlash} style={{ marginLeft: '12px', color: 'gray' }} /></span>
-                                            )}
-                                        </button>
-                                        <button className="dropdown-item" onClick={() => handleAction(forum.id, 'edit')}><span style={{ marginLeft: '15px' }}>Editar<FontAwesomeIcon icon={faPenToSquare} style={{ marginLeft: '25px' }} /></span></button>
-                                        <button className="dropdown-item" onClick={() => handleAction(forum.id, 'delete')}><span style={{ marginLeft: '15px', color: 'red' }}>Eliminar<FontAwesomeIcon icon={faTrash} style={{ marginLeft: '10px' }} /></span></button>
-                                    </div>
-                                )}
-                            </div>
-                        </td>
-                    )}
                 </tr>
             );
         });
@@ -164,26 +108,32 @@ const Forum = () => {
                 <NavMenu />
             </header>
             <div className='container mt-4'>
-                <h2 className='fw-bold text-center mb-4'>Foro de Discusión</h2><br />
-                {error && (
-                    <div className="alert alert-danger" role="alert">
-                        <p className="text-danger text-center">{error}</p>
+                {loading ? (
+                    <div className='panelcenter'>
+                        <Loader />
+                    </div>
+                ) : (
+                    <div>
+                        <h2 className='fw-bold mb-4'><FontAwesomeIcon icon={faVolumeHigh} style={{ marginRight: '10px', transform: 'rotate(-40deg)' }} /> Foro de Discusión</h2><br />
+                        <div className="input-group mb-4 w-50">
+                            <span className="input-group-text" id="basic-addon1" style={{ marginBottom: '15px' }}><FontAwesomeIcon icon={faSearch} /></span>
+                            <input type="text" className="form-control" placeholder="Buscar Tema..." aria-label="Buscar Tema..." aria-describedby="basic-addon1" value={query} onChange={handleSearch} style={{ marginBottom: '15px' }} />
+                        </div>
+                        <table className='table-foro'>
+                            <thead>
+                                <tr>
+                                    <th>Tema</th>
+                                    <th style={{ textIndent: '95px' }}><FontAwesomeIcon icon={faComments} style={{ width:'25px', height: '25px'}} /></th>
+                                    <th style={{ textIndent: '140px' }}>Última Modificación</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {renderTableBody()}
+                            </tbody>
+                        </table>
+                        <button className="btn btn-dark agg-btn" onClick={handleNewTopic}>Nuevo Tema</button>
                     </div>
                 )}
-                <table className='table-foro'>
-                    <thead>
-                        <tr>
-                            <th>Tema</th>
-                            <th className='centered'><FontAwesomeIcon icon={faComments} style={{ width:'25px', height: '25px'}} /></th>
-                            <th className='centered'>Última Modificación</th>
-                            {rol === 'ROLE_ADMIN' && <th></th>}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {renderTableBody()}
-                    </tbody>
-                </table>
-                <button className="btn btn-dark agg-btn" onClick={handleNewTopic}>Agregar Nuevo Tema</button>
             </div>
             <Footer />
         </div>

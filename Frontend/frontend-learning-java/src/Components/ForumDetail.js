@@ -2,7 +2,10 @@ import { useState, useEffect } from "react";
 import { useParams } from 'react-router-dom';
 import axios from "axios";
 import NavMenu from '../Layouts/NavMenu.js';
+import Loader from "../Layouts/Loader";
 import Footer from '../Layouts/Footer.js';
+import { formatDistanceToNow } from 'date-fns';
+import { es } from 'date-fns/locale'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../Static/Styles/ForumDetail.css';
 import UserImg from '../Static/Img/User.png';
@@ -19,7 +22,9 @@ const ForumDetail = () => {
 
     useEffect(() => {
         axios.get(`http://localhost:8080/forum/${id}`, { withCredentials: true })
-            .then(response => setForo(response.data))
+            .then(response => { 
+                setForo(response.data);
+            })
             .catch(error => console.error(error));
 
         axios.get(`http://localhost:8080/forum/${id}/respuestas`, { withCredentials: true })
@@ -124,10 +129,12 @@ const ForumDetail = () => {
     };
 
     const formatDate = (date) => {
-        if (!date) return '';
-        const fecha = new Date(date);
-        const options = { day: '2-digit', month: 'long', year: 'numeric', timeZone: 'UTC' };
-        return fecha.toLocaleDateString('es-ES', options);
+        const distance = formatDistanceToNow(date, { addSuffix: true, locale: es });
+    
+        if (distance.includes('hace alrededor de')) {
+            return distance.replace('hace alrededor de ', 'hace ');
+        }
+        return distance;
     };
 
     return (
@@ -221,7 +228,9 @@ const ForumDetail = () => {
                     </div>
                 </div>
             ) : (
-                <p>Cargando...</p>
+                <div className='panelcenter'>
+                    <Loader />
+                </div>
             )}
             <Footer />
         </div>

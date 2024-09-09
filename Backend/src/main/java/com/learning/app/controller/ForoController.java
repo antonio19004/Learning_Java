@@ -6,10 +6,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,7 +59,7 @@ public class ForoController {
 		Admin admin = adminRepository.findByUser(userDetails.getUsername());
 		
 		if (admin != null) {
-			foros = foroRepository.findAll();
+			foros = foroRepository.findAll(Sort.by(Sort.Order.desc("isFixed"), Sort.Order.asc("fechaPublicacion")));
 		} else {
 			foros = foroRepository.findVisibleSorted();
 		}
@@ -253,29 +255,46 @@ public class ForoController {
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<?> updateForum(@PathVariable String id, @RequestBody ForoDto foroDto) {
+	public ResponseEntity<Foro> updateForum(@PathVariable String id, @RequestBody ForoDto foroDto) {
+		
 		Optional<Foro> foro = foroRepository.findById(id);
+		
 		if (foro.isPresent()) {
 			Foro forum = foro.get();
+			
 			forum.setTitulo(foroDto.getTitulo());
 			forum.setContenido(foroDto.getContenido());
-			forum.setFixed(foroDto.isFixed());
-			forum.setHidden(foroDto.isHidden());
+			
 			foroRepository.save(forum);
-			
-			ForumResponse response = new ForumResponse();
-			response.setId(forum.getId());
-			response.setTitulo(forum.getTitulo());
-			response.setContenido(forum.getContenido());
-			response.setFechaPublicacion(forum.getFechaPublicacion());
-			response.setUltimoModificador(forum.getUser().getUser());
-			response.setRespuestasCount(forum.getRespuestasCount());
-			response.setFixed(forum.isFixed());
-			response.setHidden(forum.isHidden());
-			
-			return ResponseEntity.ok(response);
+			return ResponseEntity.ok(forum);
 		} else {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Tema no encontrado.");
+			return ResponseEntity.notFound().build();
 		}
+	}
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> deleteForum(@PathVariable("id") String id) {
+		Foro foro = foroRepository.findById(id).orElse(null);
+		
+		if (foro == null) {
+			return ResponseEntity.notFound().build();
+		}
+		
+		List<RespuestasForo> respuestas = respuestasRepository.findByForo(foro);
+		
+		for (RespuestasForo respuesta : respuestas) {
+			RespuestasForo response = respuestasRepository.findById(respuesta.getId()).orElse(null);
+			
+			if (response != null) {
+				List<RespuestaForo> respuestasAnidadas = responseRepository.findByRespuesta(response);
+				
+				for (RespuestaForo respuestaAnidada : respuestasAnidadas) {
+					responseRepository.deleteById(respuestaAnidada.getId());
+				}
+				respuestasRepository.deleteById(response.getId());
+			}
+		}
+		foroRepository.deleteById(id);
+		return ResponseEntity.noContent().build();
 	}
 }

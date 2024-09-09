@@ -1,4 +1,3 @@
-// src/components/CountdownAlert.js
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 

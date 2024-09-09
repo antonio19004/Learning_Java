@@ -11,7 +11,7 @@ import com.learning.app.entity.Foro;
 @Repository
 public interface ForoRepository extends MongoRepository<Foro, String> {
 
-	@Query(value = "{ 'isHidden': false }", sort = "{ 'isFixed': -1, 'fechaPublicacion': -1 }")
+	@Query(value = "{ 'isHidden': false }", sort = "{ 'isFixed': -1, 'fechaPublicacion': 1 }")
 	List<Foro> findVisibleSorted();
 
 }

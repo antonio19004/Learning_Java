@@ -14,11 +14,22 @@ public class ForumResponse {
 	private LocalDateTime fechaPublicacion;
 	
 	private String ultimoModificador;
+	private String user;
+	private String admin;
 	private long respuestasCount;
 	private boolean isFixed;
 	private boolean isHidden;
 	
-	public ForumResponse() {
+	public ForumResponse(Foro foro) {
+		this.id = foro.getId();
+		this.titulo = foro.getTitulo();
+		this.contenido = foro.getContenido();
+		this.fechaPublicacion = foro.getFechaPublicacion();
+		this.user = foro.getUser().getUser();
+		this.admin = foro.getAdmin().getUser();
+        this.respuestasCount = foro.getRespuestasCount();
+        this.isFixed = foro.isFixed();
+        this.isHidden = foro.isHidden();
 	}
 
 	public ForumResponse(String id, String titulo, String contenido, LocalDateTime fechaPublicacion,
@@ -71,6 +82,22 @@ public class ForumResponse {
 
 	public void setUltimoModificador(String ultimoModificador) {
 		this.ultimoModificador = ultimoModificador;
+	}
+
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
+
+	public String getAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(String admin) {
+		this.admin = admin;
 	}
 
 	public long getRespuestasCount() {

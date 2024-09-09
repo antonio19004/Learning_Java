@@ -7,6 +7,9 @@ import Developer1 from '../Static/Img/Developer1.jpeg';
 import Developer2 from '../Static/Img/Developer2.jpeg';
 
 const AboutUs = () => {
+
+    document.title = 'Sobre Nosotros';
+
     return (
         <div>
             <header>

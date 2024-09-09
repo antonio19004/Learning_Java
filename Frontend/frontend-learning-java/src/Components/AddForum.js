@@ -1,12 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
-import NavMenu from '../Layouts/NavMenu.js';
-import Footer from '../Layouts/Footer.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../Static/Styles/NewForum.css';
 
-const NewForum = () => {
+const AddForum = () => {
 
     document.title = 'Nuevo Foro';
     const [titulo, setTitulo] = useState('');
@@ -36,7 +34,7 @@ const NewForum = () => {
             });
 
             if (response.status === 201) {
-                navigate('/forum');
+                navigate('/panel/forum-settings');
             }
         } catch (error) {
             if (error.response && error.response.status === 400) {
@@ -50,15 +48,12 @@ const NewForum = () => {
 
     return(
         <div>
-            <header>
-                <NavMenu />
-            </header>
             <div className='forum-container my-5'>
                 {errorMessage && (
                     <div className="alert alert-danger" role="alert">
                         <p className="text-danger text-center">{errorMessage}</p>
                     </div>
-                )}
+                )}<br />
                 <h2 className='fw-bold mb-4 text-center'>Nuevo Foro</h2><br />
                 <form onSubmit={handleSubmit}>
                     <div className='mb-3'>
@@ -70,9 +65,8 @@ const NewForum = () => {
                     <center><button className='btn btn-dark send-btn-dark' type="submit">Agregar</button></center>
                 </form>
             </div>
-            <Footer />
         </div>
     );
 };
 
-export default NewForum;
+export default AddForum;

@@ -6,7 +6,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import '../Static/Styles/Contact.css';
 
 function Contact() {
-    document.title = 'Contacto';
+    
+    document.title = 'Contáctanos';
     const [nombre , setNombre] = useState('');
     const [email, setEmail] = useState('');
     const [contenido, setContenido] = useState('');
