@@ -3,26 +3,31 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faChalkboard, faChalkboardUser, faChevronLeft, faPlus } from '@fortawesome/free-solid-svg-icons';
+import {useNavigate } from 'react-router-dom';
 
-
-
-const availableTopic = [
-    'Poo',
-    'SpringBoot',
-    'NetBeans',
-    'Java',
-    'MVC',
-    'BasesdeDatos',
-    'Arrays',
-    'TiposDeDatos',
-    'Clases',
-    'Funciones',
-    'Framework',
-    'Sintaxis'
-];
 
 function CreateCourse() {
+    
+    const availableTopic = [
+        'Poo',
+        'SpringBoot',
+        'NetBeans',
+        'Java',
+        'MVC',
+        'BasesdeDatos',
+        'Arrays',
+        'TiposDeDatos',
+        'Clases',
+        'Funciones',
+        'Framework',
+        'Sintaxis'
+    ];
+
+const navigate = useNavigate();
+
+
+
     const [course, setCourse] = useState({
         title: '',
         description: '',
@@ -136,6 +141,8 @@ function CreateCourse() {
                 }
             });
             console.log(response.data);
+            alert('Curso creada con exito');
+            navigate('/panel/courses');
         } catch (error) {
             console.error(error);
         }
@@ -194,8 +201,11 @@ function CreateCourse() {
 
     return (
     <div>
-    <div className="p-5">
-    <h2>Create New Course</h2>
+        <a href='/panel/courses' className='text-blue-dark tex-decoration-none'><FontAwesomeIcon icon={faChevronLeft} size='lg'/></a>
+
+    <div className='d-flex flex-column align-items-center justify-content-center '> 
+    <div className='shadow bg-light px-5 pb-5 pt-5 my-4 rounded'>
+    <h2 className='mb-4'><FontAwesomeIcon icon={faChalkboard}/>  Nuevo Curso</h2>
     <form onSubmit={handleSubmit}>
         <div className="row mb-3">
             <div className="col-md-6">
@@ -381,54 +391,14 @@ function CreateCourse() {
             </div>
         </div>
 
-        <button type="submit" className="btn btn-success mt-4">Crear Curso</button>
+        <button type="submit" className="btn btn-primary mt-4 w-100">Crear Curso</button>
     </form>
 
-    {showModal && (
-        <div className="modal-backdrop show"></div>
-    )}
-    {showModal && (
-        <div className="modal show" style={{ display: 'block' }}>
-            <div className="modal-dialog">
-                <div className="modal-content">
-                    <div className="modal-header">
-                        <h5 className="modal-title">Crear Nuevo Tema</h5>
-                        <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
-                    </div>
-                    <div className="modal-body">
-                        <div className="form-group mb-3">
-                            <label>Titulo</label>
-                            <input
-                                type="text"
-                                className="form-control"
-                                name="title"
-                                value={newTopic.title}
-                                onChange={handleNewTopicChange}
-                            />
-                        </div>
-
-                        <div className="form-group mb-3">
-                            <label>Descripción</label>
-                            <textarea
-                                className="form-control"
-                                name="description"
-                                value={newTopic.description}
-                                onChange={handleNewTopicChange}
-                            />
-                        </div>
-                    </div>
-                    <div className="modal-footer">
-                        <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Cerrar</button>
-                        <button type="button" className="btn btn-primary">Crear Tema</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    )}
+    
 </div>
-
-
     </div>
+        </div>
+    
     );
 }
 

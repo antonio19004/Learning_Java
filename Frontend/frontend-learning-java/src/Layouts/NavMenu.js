@@ -79,7 +79,7 @@ const NavMenu = () => {
 
   
     React.useEffect(() => {
-        setActiveItem(location.pathname); // Actualiza el estado cuando cambia la ruta
+        setActiveItem(location.pathname); 
     }, [location]);
 
     const getActiveClass = (path) => {
@@ -101,31 +101,32 @@ const NavMenu = () => {
                         className={`nav-link fs-5 mt-2 ${getActiveClass('/home')}`}
                         to="/home"
                     >
-                        Home
+                        Incio
                     </Link>
                 </li>
                 <li className="nav-item">
                     <Link
-                        className={`nav-link fs-5 mt-2 ${getActiveClass('/about')}`}
-                        to="/about"
+                        className={`nav-link fs-5 mt-2 ${getActiveClass('/courses')}`}
+                        to="/courses"
                     >
-                        About
+                        Cursos
                     </Link>
                 </li>
                 <li className="nav-item">
                     <Link
-                        className={`nav-link fs-5 mt-2 ${getActiveClass('/services')}`}
-                        to="/services"
+                        className={`nav-link fs-5 mt-2 ${getActiveClass('/Document')}`}
+                        to="/Document"
                     >
-                        Services
+                        Documentación
                     </Link>
                 </li>
+
                 <li className="nav-item">
                     <Link
                         className={`nav-link fs-5 mt-2 ${getActiveClass('/contact')}`}
                         to="/contact"
                     >
-                        Contact
+                        Contacto
                     </Link>
                 </li>
                         {!isAuthenticated ? (

@@ -9,7 +9,7 @@ import { faCheckCircle ,faClock} from '@fortawesome/free-regular-svg-icons';
 import NavMenu from '../../Layouts/NavMenu';
 import Footer from '../../Layouts/Footer';
 import Loader from '../../Layouts/Loader';
-import { faCalendarDays, faChartLine, faNotdef } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarDays, faChartLine, faChevronLeft, faNotdef } from '@fortawesome/free-solid-svg-icons';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale'; 
 
@@ -22,6 +22,7 @@ function CourseView() {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [loading, setLoading] = useState(true);
     const [progress, setProgress]= useState(0);
+    const [completedLessons, setCompletedLessons] = useState(new Set());
     const rol = localStorage.getItem('role');
     const baseUrl = rol === 'ROLE_USER' ? 'users' : 'admin';
 
@@ -36,6 +37,11 @@ function CourseView() {
                 const progressResponse = await axios.get(`http://localhost:8080/${baseUrl}/curso/${id}/progreso`,{withCredentials:true});
                 setProgress(progressResponse.data);
 
+                
+                const completedLessonsResponse = await axios.get(`http://localhost:8080/${baseUrl}/curso/${id}/lecciones-completadas`, { withCredentials: true });
+                setCompletedLessons(new Set(completedLessonsResponse.data));
+
+
             } catch (error) {
                 console.error("Error fetching course details:", error);
                 setLoading(false);
@@ -43,6 +49,20 @@ function CourseView() {
         };
         fetchCourseDetails();
     }, [id]);
+
+    useEffect(() => {
+        if (lessons.length > 0) {
+            const totalLessons = lessons.length;
+            const completedCount = completedLessons.size;
+            const calculatedProgress = (completedCount / totalLessons) * 100;
+            setProgress(calculatedProgress);
+        }
+    }, [lessons, completedLessons]);
+
+
+
+
+
 
     const formatRelativeDate = (date) => {
         const distance = formatDistanceToNow(date, { addSuffix: true, locale: es });
@@ -66,6 +86,10 @@ function CourseView() {
         navigate(`/course/${course.id}/lesson/${lessonIndex}`);
     };
 
+    const goBack = () => {
+        navigate(-1);
+    };
+
 
     return (
         <div>
@@ -77,11 +101,11 @@ function CourseView() {
                     </div>
                 ) : (
                     <div className='p-5'>
+                         <a  onClick={goBack} className='text-blue-dark tex-decoration-none cursor-pointer mb-5'><FontAwesomeIcon icon={faChevronLeft} size='lg'/></a>
                         <div className='row'>
                             <div className='col me-3'>
                                 {course && (
                                     
-                          
                                     <div>
                                         <h1>{course.title}</h1>
                                         <p>{course.description}</p>
@@ -145,9 +169,7 @@ function CourseView() {
                                             </div>
                             </div>
 
-                                    
-
-
+                            
 
 
                             <div className='col'>

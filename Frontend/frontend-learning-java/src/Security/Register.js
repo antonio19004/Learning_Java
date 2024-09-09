@@ -106,7 +106,7 @@ function Register() {
     return (
         <div className='mt-4 '>
                <div className='d-flex flex-column align-items-center justify-content-center '>
-               <div className='bgshadowinset px-5 pb-5 my-4 rounded'>
+               <div className='shadow bg-light px-5 pb-5 my-4 rounded'>
             <div className='d-flex flex-column align-items-center justify-content-center' style={{ height: '100vh' }}>
                 {errorMessage && (
                     <div className="alert alert-danger w-50 p-1 mx-auto mt-4" role="alert">

@@ -14,6 +14,11 @@ import Document from './Document';
 import UploadDocument from './UploadDocumentation';
 import EditDocument from './EditDocument';
 import CreateCourse from './Courses/CreateCourses';
+import Courses from './Courses/Courses';
+import EditCourse from './Courses/EditCourse';
+import CreateLesson from './Lesson/CreateLesson';
+import Lessons from './Lesson/Lessons';
+import EditLessonForm from './Lesson/EditLesson';
 
 const Panel = () => {
   const [isOpen, setIsOpen] = useState(true);
@@ -69,7 +74,7 @@ const Panel = () => {
             <a className="nav-link" href="/panel/documentForm">Usuarios</a>
           </li>
           <li className="nav-item text-Light">
-            <a className="nav-link text-Light" href="/panel/coursesForm">Cursos</a>
+            <a className="nav-link text-Light" href="/panel/courses">Cursos</a>
           </li>
           <li className="nav-item">
             <a className="nav-link text-Light" href="#">About</a>
@@ -96,6 +101,11 @@ const Panel = () => {
           <Route path="/add-document" element={isAuthenticated ? <UploadDocument /> : <Navigate to="/login" />} />
           <Route path='/edit-document/:id' element={isAuthenticated ? <EditDocument/> : <Navigate to="/login" />}/>
           <Route path='/coursesForm' element={isAuthenticated ? <CreateCourse/> : <Navigate to="/login" />}/>
+          <Route path='/courses' element={isAuthenticated ? <Courses/> : <Navigate to="/login" />}></Route>
+          <Route path='/edit-course/:id' element={isAuthenticated ? <EditCourse/> : <Navigate to="/login" />}></Route>
+          <Route path='/edit-lesson/:id' element={isAuthenticated ? <EditLessonForm/> : <Navigate to="/login" />}></Route>
+          <Route path='/lessonForm/course/:id' element={isAuthenticated ? <CreateLesson/> : <Navigate to="/login" />}></Route>
+          <Route path='/lessons/course/:id' element={isAuthenticated ? <Lessons/> : <Navigate to="/login" />}></Route>
         </Routes>
       </div>
     </div>

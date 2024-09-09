@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -84,7 +85,7 @@ public class CourseController {
 	            course.setContent(content);
 	            course.setTopic(topicList);
 
-	            // Manejar la imagen de portada
+	            
 	            if (coverImage != null && !coverImage.isEmpty()) {
 	                course.setCoverImage(coverImage.getBytes());
 	            }
@@ -138,35 +139,69 @@ public class CourseController {
 
 	        List<Lesson> lessons = new ArrayList<>();
 	        
-	        // Verificar si el curso tiene lecciones asociadas
+
 	        if (course.getLesson() != null && !course.getLesson().isEmpty()) {
 	            lessons = lessonRepository.findAllById(course.getLesson());
 	        }
 
-	        // Crear respuesta con curso y lecciones (si hay)
 	        Map<String, Object> response = new HashMap<>();
 	        response.put("course", course);
-	        response.put("lessons", lessons); // Si no hay lecciones, devuelve lista vacía
+	        response.put("lessons", lessons); 
 
 	        return response;
 	    }
 
 
-
-	    
 	    
 	    @PutMapping("/update/{id}")
-	    public ResponseEntity<Course> updateCourse(@PathVariable String id, @RequestBody Course course) {
+	    public ResponseEntity<String> updateCourse(
+	            @PathVariable String id,
+	            @RequestParam("title") String title,
+	            @RequestParam("description") String description,
+	            @RequestParam("duration") int duration,
+	            @RequestParam("level") String levelstr,
+	            @RequestParam("progress") double progress,
+	            @RequestParam(value="coverImage"  ,required = false) MultipartFile coverImage,
+	            @RequestParam("objectives") String objectivesJson,
+	            @RequestParam("content") String contentJson,
+	            @RequestParam("topic") String topicJson
+	    ) {
 	        if (!courseRepository.existsById(id)) {
-	            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	            return new ResponseEntity<>("Curso no encontrado.", HttpStatus.NOT_FOUND);
 	        }
 
-	        course.setId(id);
 	        try {
-	            Course updatedCourse = courseRepository.save(course);
-	            return new ResponseEntity<>(updatedCourse, HttpStatus.OK);
-	        } catch (Exception e) {
-	            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	            ObjectMapper objectMapper = new ObjectMapper();
+	            List<String> objectives = objectMapper.readValue(objectivesJson, new TypeReference<List<String>>() {});
+	            List<String> content = objectMapper.readValue(contentJson, new TypeReference<List<String>>() {});
+	            List<String> topic = objectMapper.readValue(topicJson, new TypeReference<List<String>>() {});
+
+	            Level level = Level.valueOf(levelstr);
+	            List<Topic> topicList = objectMapper.readValue(topicJson, new TypeReference<List<Topic>>() {});
+	            
+	            Course course = courseRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+	            course.setTitle(title);
+	            course.setDescription(description);
+	            course.setDuration(duration);
+	            course.setLevel(level);
+	            course.setProgress(progress);
+	            course.setObjectives(objectives);
+	            course.setContent(content);
+	            course.setTopic(topicList);
+
+	            if (coverImage != null && !coverImage.isEmpty()) {
+	                course.setCoverImage(coverImage.getBytes());
+	            }
+	            
+	            
+
+	            courseRepository.save(course);
+	            return new ResponseEntity<>("Curso actualizado exitosamente.", HttpStatus.OK);
+
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	            return new ResponseEntity<>("Error al procesar los datos.", HttpStatus.BAD_REQUEST);
 	        }
 	    }
 

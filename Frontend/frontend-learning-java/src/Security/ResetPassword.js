@@ -40,7 +40,7 @@ const ResetPassword = () => {
     return (
         <div>
             <div className='d-flex flex-column align-items-center justify-content-center '>
-            <div className='bgshadowinset px-5 pb-5 my-4 rounded'>
+            <div className='shadow bg-light px-5 pb-5 my-4 rounded'>
             <div>
                 <a href='/login' class="btn btn-secondary rounded mt-3 ">
                     <FontAwesomeIcon icon={faArrowLeft} /> Volver

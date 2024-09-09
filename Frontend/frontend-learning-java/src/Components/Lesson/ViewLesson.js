@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import {Form} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChalkboardUser, faCircleExclamation} from '@fortawesome/free-solid-svg-icons';
+import { faChalkboardUser, faChevronLeft, faCircleExclamation} from '@fortawesome/free-solid-svg-icons';
 import { faJava } from '@fortawesome/free-brands-svg-icons';
 import NavMenu from '../../Layouts/NavMenu';
 import Footer from '../../Layouts/Footer';
@@ -53,13 +53,10 @@ function ViewLesson() {
 
     const handleCheckboxChange = async (lessonId) => {
         try {
-            // Actualizar el estado de la lección en el backend
             await axios.post(`http://localhost:8080/${baseUrl}/completados/${id}/leccion/${lessonId}`, {}, { withCredentials: true });
             
-            // Actualizar el progreso localmente
             const updatedProgressResponse = await axios.get(`http://localhost:8080/${baseUrl}/curso/${id}/progreso`,{withCredentials:true});
             setProgress(updatedProgressResponse.data);
-            // Actualizar el estado de lecciones completadas
             setCompletedLessons((prevCompleted) => {
                 const updatedCompleted = new Set(prevCompleted);
                 if (updatedCompleted.has(lessonId)) {
@@ -74,6 +71,15 @@ function ViewLesson() {
         }
     };
 
+
+    useEffect(() => {
+        if (lessons.length > 0) {
+            const totalLessons = lessons.length;
+            const completedCount = completedLessons.size;
+            const calculatedProgress = (completedCount / totalLessons) * 100;
+            setProgress(calculatedProgress);
+        }
+    }, [lessons, completedLessons]);
 
 
 
@@ -99,7 +105,9 @@ function ViewLesson() {
         navigate(`/courseview/${course.id}`);
     };
 
-
+    const goBack = () => {
+        navigate(-1);
+    };
    
 
     return (
@@ -112,6 +120,7 @@ function ViewLesson() {
                     </div>
                 ) : (
             <div className='p-5'>
+                <a  onClick={goBack} className='text-blue-dark tex-decoration-none cursor-pointer'><FontAwesomeIcon icon={faChevronLeft} size='lg'/></a>
                 <div className='row'>
                     
                     <div className='col me-3'>
@@ -135,7 +144,6 @@ function ViewLesson() {
                             ></iframe>
 
 
-                            {/* CHEECK DE COMPLETADO*/}
                             <div className="form-check form-switch">
                                                     <input
                                                         className="form-check-input"

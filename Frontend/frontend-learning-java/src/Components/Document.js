@@ -47,19 +47,25 @@ const Document =()=>{
 
         if (searchTerm.trim() === '') {
             setResults(allDocuments);
+        } else {
             const filteredResults = allDocuments.filter(doc => 
                 doc.titulo.toLowerCase().includes(searchTerm.toLowerCase())
             );
             setResults(filteredResults);
         }
     };
+
+
     const handleVerArchivo = async (id) => {
         window.open(`http://localhost:8080/${baseUrl}/documentacion/${id}`, '_blank');
     };
+    
 
     const handleDescargarArchivo = async (id) => {
         window.location.href =  `http://localhost:8080/${baseUrl}/documentacion/descargar/${id}`;
     };
+
+    
     console.log('Valor de archivos:', archivos);
 
     const handleAddDocument = () => {
@@ -70,8 +76,7 @@ const Document =()=>{
         navigate(`/panel/edit-document/${id}`);
       };
 
-      const handleDeleteDocument = async (id) => {
-        // Mostrar alerta de confirmación
+    const handleDeleteDocument = async (id) => {
         const result = await Swal.fire({
             title: '¿Estás seguro?',
             text: "No podrás recuperar este Documento después de eliminarlo.",

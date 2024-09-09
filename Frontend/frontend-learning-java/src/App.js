@@ -16,9 +16,9 @@ import DocumentIndex from './Components/DocumentIndex.js';
 import CourseList from './Components/Courses/CourseList.js';
 import CreateLesson from './Components/Lesson/CreateLesson.js';
 import CreateCourse from './Components/Courses/CreateCourses.js';
-import ViewCourse from './Components/Courses/ViewCourse.js';
 import CourseView from './Components/Courses/CourseView.js';
 import ViewLesson from './Components/Lesson/ViewLesson.js';
+
 
 
 function App(){
@@ -53,7 +53,6 @@ function App(){
 
   return (
     <Routes>
-      <Route path='/viewcourse/:id' element={<ViewCourse/>}></Route>
       <Route path="/course/:id/lesson/:lessonIndex" element={<ViewLesson/>} />
       <Route path='/courseview/:id' element={<CourseView/>}></Route>
       <Route path='/lessonform' element={<CreateLesson/>}/>
