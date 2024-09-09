@@ -15,11 +15,19 @@ function Login () {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
+
+    const showError = (message) => {
+        setErrorMessage(message);
+        setTimeout(() => {
+            setErrorMessage('');
+        }, 7000);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
     
         if (!username || !password) {
-            setErrorMessage("Por favor, llena todos los campos.");
+            showError("Por favor, llena todos los campos.");
             return;
         }
 
@@ -43,20 +51,20 @@ function Login () {
                     localStorage.setItem('role', role);
                     setTimeout(() =>navigate('/Home'),3000);
                 } else {
-                    setErrorMessage('Autenticación fallida. Inténtelo de Nuevo.');
+                    showError('Autenticación fallida. Inténtelo de Nuevo.');
                     setLoading(false);
                 }
             } else {
-                setErrorMessage('Autenticación fallida. Inténtelo de Nuevo.');
+                showError('Autenticación fallida. Inténtelo de Nuevo.');
                 setLoading(false);
             }
         } catch (error) {
             if (error.response && error.response.status === 401) {
-                setErrorMessage('Autenticación fallida. Inténtelo de Nuevo.');
+                showError('Autenticación fallida. Inténtelo de Nuevo.');
                 setLoading(false);
             } else {
                 console.error('Ocurrió un error en la autenticación:', error);
-                setErrorMessage('Autenticación fallida. Inténtelo de Nuevo.');
+                showError('Autenticación fallida. Inténtelo de Nuevo.');
                 setLoading(false);
             }
         }
@@ -64,12 +72,15 @@ function Login () {
 
     return (
         <div>
-            <div className='d-flex flex-column align-items-center justify-content-center' style={{ height: '100vh' }}>
+            <div className='d-flex flex-column align-items-center justify-content-center '>
+            <div className='shadow bg-light px-5 pb-5 my-4 rounded'>
+            <div className='d-flex flex-column align-items-center justify-content-center ' style={{ height: '100vh' }}>
                 {errorMessage && (
                     <div className="alert alert-danger w-50 p-1 mx-auto mt-4"  role="alert">
                         <p className="text-danger text-center">{errorMessage}</p>
                     </div>
                 )}
+                
                 <h2 className='fw-bold'>Ingresa con tus credenciales</h2>
                 <h5 className='fw-light'>Inicia sesión con tu usuario y contraseña</h5><br/>
                 <form onSubmit={handleSubmit}>
@@ -96,7 +107,10 @@ function Login () {
                 <h5 className='fw-light'>O crea una cuenta si no estas registrado</h5>
                 <h5 className='fw-bold'><a className='text-decoration-none text-dark hover:text-secondary' href='/register'>Registrarse</a></h5>
                 <h5 className='fw-bold'><a className='text-decoration-none text-dark hover:text-secondary' href='/reset-password'>¿Has olvidado tu contraseña?</a></h5>
+                </div>
             </div>
+            </div>
+            
         </div>
     );
 }

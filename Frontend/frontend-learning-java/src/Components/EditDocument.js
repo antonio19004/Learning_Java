@@ -8,7 +8,7 @@ import '../Static/Styles/Style.css';
 import { useParams,useNavigate } from "react-router-dom";
 
 const EditDocument = () => {
-    const { id } = useParams();  // Obtener el id del documento desde la URL
+    const { id } = useParams(); 
     const [file, setFile] = useState(null);
     const [titulo, setTitulo] = useState("");
     const rol = localStorage.getItem('role');

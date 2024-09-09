@@ -103,7 +103,10 @@ body,html {
 }
 
 .gifloader{
+  margin-top: 50px;
+  margin-bottom: 50px;
   width: 250px;
+  border-radius: 50%;
 }
 
 .purple{
@@ -143,4 +146,32 @@ body,html {
   min-height: 470px;
   margin-bottom: 10px;
   border-radius: 5px;
+}
+.bgshadowinset{
+  box-shadow: 0px 0px 10px 0px #b6b6b675 inset;
+}
+
+.primarycyan{
+  background: linear-gradient(45deg,#1437aa, #3dc2ff);
+}
+
+.fs-ssm{
+  font-size: 12px;
+}
+
+.fs-sm{
+  font-size: 14px;
+}
+
+.text-blue-dark{
+color: #0f1150;
+}
+
+.img-sm{
+  width: 130px;
+}
+
+.img-ssm{
+  width: 50px;
+  height: 53px;
 }

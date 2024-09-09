@@ -7,7 +7,7 @@ import { faUser, faEnvelope, faCalendar, faImage } from '@fortawesome/free-solid
 import '../Static/Styles/Profile.css';
 import UserImg from '../Static/Img/User.png';
 
-const Profile = ({ showModal, handleClose }) =>{
+const Profile = ({ showModal, handleClose }) => {
     
     const [adminDetails, setAdminDetails] = useState(null);
     const [usersDetails, setUsersDetails] = useState(null);
@@ -32,10 +32,8 @@ const Profile = ({ showModal, handleClose }) =>{
     }, [username, rol, navigate]);
 
     const fetchAdminDetails = async () => {
-        console.log('Obteniendo detalles del administrador...');
         try {
             const response = await axios.get('http://localhost:8080/admin/details', { withCredentials: true });
-            console.log('Los detalles del administrador fueron obtenidos exitosamente:', response.data);
             setAdminDetails(response.data);
         } catch (error) {
             console.error('Error al obtener los detalles del administrador', error);
@@ -49,10 +47,8 @@ const Profile = ({ showModal, handleClose }) =>{
     };
 
     const fetchUsersDetails = async () => {
-        console.log('Obteniendo detalles del usuario...');
         try {
             const response = await axios.get('http://localhost:8080/users/details', { withCredentials: true });
-            console.log('Los detalles del usuario fueron obtenidos exitosamente:', response.data);
             setUsersDetails(response.data);
         } catch (error) {
             console.error('Error al obtener los detalles del Usuario', error);

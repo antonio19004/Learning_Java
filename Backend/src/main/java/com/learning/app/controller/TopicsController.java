@@ -24,7 +24,7 @@ public class TopicsController {
 	  @Autowired
 	    private TopicsRepository topicRepository;
 
-	    @PostMapping
+	    @PostMapping("/create")
 	    public ResponseEntity<Topics> createTopic( @RequestBody Topics topic) {
 	        try {
 	            Topics savedTopic = topicRepository.save(topic);
@@ -34,7 +34,7 @@ public class TopicsController {
 	        }
 	    }
 
-	    @GetMapping
+	    @GetMapping("/list")
 	    public ResponseEntity<List<Topics>> getAllTopics() {
 	        try {
 	            List<Topics> topics = topicRepository.findAll();
@@ -44,14 +44,14 @@ public class TopicsController {
 	        }
 	    }
 
-	    @GetMapping("/{id}")
+	    @GetMapping("/select/{id}")
 	    public ResponseEntity<Topics> getTopicById(@PathVariable String id) {
 	        Optional<Topics> topic = topicRepository.findById(id);
 	        return topic.map(ResponseEntity::ok)
 	                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	    }
 
-	    @PutMapping("/{id}")
+	    @PutMapping("/update/{id}")
 	    public ResponseEntity<Topics> updateTopic(@PathVariable String id, @RequestBody Topics topic) {
 	        if (!topicRepository.existsById(id)) {
 	            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -66,7 +66,7 @@ public class TopicsController {
 	        }
 	    }
 
-	    @DeleteMapping("/{id}")
+	    @DeleteMapping("/delete/{id}")
 	    public ResponseEntity<Void> deleteTopic(@PathVariable String id) {
 	        if (!topicRepository.existsById(id)) {
 	            return new ResponseEntity<>(HttpStatus.NOT_FOUND);

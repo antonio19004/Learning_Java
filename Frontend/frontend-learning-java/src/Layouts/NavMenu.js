@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import axios from 'axios';
@@ -11,12 +11,15 @@ import React, { useEffect, useState } from 'react';
 import Profile from '../Components/Profile';
 
 const NavMenu = () => {
+    const location= useLocation();
+    const [activeItem, setActiveItem] = useState(location.pathname);
     const navigate = useNavigate();
     const rol = localStorage.getItem('role');
     const isAuthenticated = localStorage.getItem('username') !== null;
     const [showProfile, setShowProfile] = useState(false);
 
     const [profileImage, setProfileImage] = useState(UserImg);
+
 
     useEffect(() => {
         const fetchProfileImage = async () => {
@@ -70,32 +73,44 @@ const NavMenu = () => {
         e.stopPropagation();
       };
 
+      const handleClick = (item) => {
+        setActiveItem(item);
+    };
+
+    React.useEffect(() => {
+        setActiveItem(location.pathname); 
+    }, [location]);
+
+    const getActiveClass = (path) => {
+        return location.pathname === path ? 'border-bottom border-primary' : '';
+    };
+  
     return (
         <div>
-            <nav className="navbar navbar-expand-lg">
+            <nav className="navbar navbar-expand-lg bg-light">
                 <div className="container-fluid" onClick={handleHashClick}>
-                    <a href='/Home'><img src={Logo} className='NavLogo mx-5' alt='Logo...' /></a>
+                    <a href='/Home'><img src={Logo} className='img-sm mx-5' alt='Logo...' /></a>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>
                     </button>
-                    <ul className="navbar-nav ms-auto me-7 py-4">
-                        <li className="nav-item mt-3">
-                            <a className="navbar-brand" href="/Home">Home</a>
+                    <ul className="navbar-nav ms-auto me-7">
+                        <li className="nav-item">
+                            <Link className={`nav-link fs-5 mt-2 ${getActiveClass('/home')}`} to="/home">Incio</Link>
                         </li>
-                        <li className="nav-item mt-3">
-                            <a className="navbar-brand" href="/Document">Documentos</a>
+                        <li className="nav-item">
+                            <Link className={`nav-link fs-5 mt-2 ${getActiveClass('/courses')}`} to="/courses">Cursos</Link>
                         </li>
-                        <li className="nav-item mt-3">
-                            <a className="navbar-brand" href="#">Cursos</a>
+                        <li className="nav-item">
+                            <Link className={`nav-link fs-5 mt-2 ${getActiveClass('/Document')}`} to="/Document">Documentación</Link>
                         </li>
-                        <li className="nav-item mt-3">
-                            <a className="navbar-brand" href="/forum">Foro</a>
+                        <li className="nav-item">
+                            <Link className={`nav-link fs-5 mt-2 ${getActiveClass('/forum')}`} to="/forum">Foro</Link>
                         </li>
-                        <li className="nav-item mt-3">
-                            <a className="navbar-brand" href="/contact">Contáctanos</a>
+                        <li className="nav-item">
+                            <Link className={`nav-link fs-5 mt-2 ${getActiveClass('/contact')}`} to="/contact">Contáctanos</Link>
                         </li>
-                        <li className="nav-item mt-3">
-                            <a className="navbar-brand" href="/about-us">Sobre Nosotros</a>
+                        <li className="nav-item">
+                            <Link className={`nav-link fs-5 mt-2 ${getActiveClass('/about-us')}`} to="/about-us">Sobre Nosotros</Link>
                         </li>
                         {!isAuthenticated ? (
                             <li className="nav-item">
@@ -111,7 +126,7 @@ const NavMenu = () => {
                                 <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <li><button className="dropdown-item" onClick={handleShowProfile}><FontAwesomeIcon icon={faGear} /> Perfil</button></li>
                                     {rol==='ROLE_ADMIN' &&(
-                                    <li><a className="dropdown-item" href="/panel"><FontAwesomeIcon icon={faSliders} /> Panel Admin</a></li>
+                                        <li><a className="dropdown-item" href="/panel"><FontAwesomeIcon icon={faSliders} /> Panel Admin</a></li>
                                     )}
                                     <li><hr className="dropdown-divider" /></li>
                                     <li className="dropdown-item">

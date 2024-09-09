@@ -2,8 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import React, { useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { useLocation,useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import '../Static/Styles/Style.css';
 import NavMenu from '../Layouts/NavMenu';
 import Logo from '../Static/Img/Logo-LJ.png';
@@ -15,6 +14,12 @@ import EditDocument from './EditDocument';
 import ForumSettings from './ForumSettings';
 import EditForum from './EditForum';
 import AddForum from './AddForum';
+import CreateCourse from './Courses/CreateCourses';
+import Courses from './Courses/Courses';
+import EditCourse from './Courses/EditCourse';
+import CreateLesson from './Lesson/CreateLesson';
+import Lessons from './Lesson/Lessons';
+import EditLessonForm from './Lesson/EditLesson';
 
 const Panel = () => {
   const [isOpen, setIsOpen] = useState(true);
@@ -70,7 +75,7 @@ const Panel = () => {
               <a className="nav-link" href="/panel/documentForm">Usuarios</a>
             </li>
             <li className="nav-item text-Light">
-              <a className="nav-link text-Light" href="#">Cursos</a>
+              <a className="nav-link text-Light" href="/panel/courses">Cursos</a>
             </li>
             <li className="nav-item">
               <a className="nav-link text-Light" href="/panel/forum-settings">Foro</a>
@@ -100,6 +105,12 @@ const Panel = () => {
           <Route path='/forum-settings' element={isAuthenticated ? <ForumSettings /> : <Navigate to="/login" />} />
           <Route path='/add-forum' element={isAuthenticated ? <AddForum /> : <Navigate to="/login" />} />
           <Route path='/edit-forum/:id' element={isAuthenticated ? <EditForum /> : <Navigate to="/login" />} />
+          <Route path='/coursesForm' element={isAuthenticated ? <CreateCourse/> : <Navigate to="/login" />}/>
+          <Route path='/courses' element={isAuthenticated ? <Courses/> : <Navigate to="/login" />}></Route>
+          <Route path='/edit-course/:id' element={isAuthenticated ? <EditCourse/> : <Navigate to="/login" />}></Route>
+          <Route path='/edit-lesson/:id' element={isAuthenticated ? <EditLessonForm/> : <Navigate to="/login" />}></Route>
+          <Route path='/lessonForm/course/:id' element={isAuthenticated ? <CreateLesson/> : <Navigate to="/login" />}></Route>
+          <Route path='/lessons/course/:id' element={isAuthenticated ? <Lessons/> : <Navigate to="/login" />}></Route>
         </Routes>
       </div>
     </div>

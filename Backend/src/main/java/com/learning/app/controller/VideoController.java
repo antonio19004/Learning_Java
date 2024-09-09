@@ -25,6 +25,8 @@ public class VideoController {
 
     @Autowired
     private VideoRepository videoRepository;
+    
+    
 
     @PostMapping("/create")
     public ResponseEntity<Video> createVideo(@RequestBody Video video) {
@@ -35,6 +37,8 @@ public class VideoController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+    
+    
 
     @GetMapping("/list")
     public ResponseEntity<List<Video>> getAllVideos() {

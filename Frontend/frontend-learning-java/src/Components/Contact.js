@@ -56,6 +56,8 @@ function Contact() {
             </header>
             <div className="header-image"></div>
             <div className="container mt-5 pt-5">
+            <div className='d-flex flex-column align-items-center justify-content-center '>
+            <div className='shadow bg-light px-5 pb-5 pt-5 my-4 rounded'>
                 <h2 className='fw-bold text-center'>¡Contáctanos!</h2> <br />
                 <h6 className='fw-light text-center'>Déjanos tus mensajes a través de este formulario y nos pondremos en contacto contigo a la brevedad</h6><br/>
                 {errorMessage && !successMessage && (
@@ -89,6 +91,8 @@ function Contact() {
                             <button type="submit" className="btn btn-dark send-btn">Enviar</button>
                         </div>
                 </form>
+            </div>
+            </div>
             </div>
             <Footer />
         </div>

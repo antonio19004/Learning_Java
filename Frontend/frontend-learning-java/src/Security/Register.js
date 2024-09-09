@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useRef } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -21,17 +21,27 @@ function Register() {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const navigate = useNavigate();
+    const fileInputRef = useRef(null);
+
+
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
             setImagenPerfil(file);
-
             const reader = new FileReader();
             reader.onloadend = () => {
                 setImagePreview(reader.result);
             };
             reader.readAsDataURL(file);
+        }
+    };
+
+    const clearImage = () => {
+        setImagenPerfil(null);
+        setImagePreview('');
+        if (fileInputRef.current) {
+            fileInputRef.current.value = ''; // Vaciar el input de archivo
         }
     };
 
@@ -90,8 +100,13 @@ function Register() {
         }
     };
 
+   
+
+
     return (
-        <div className='mt-4'>
+        <div className='mt-4 '>
+               <div className='d-flex flex-column align-items-center justify-content-center '>
+               <div className='shadow bg-light px-5 pb-5 my-4 rounded'>
             <div className='d-flex flex-column align-items-center justify-content-center' style={{ height: '100vh' }}>
                 {errorMessage && (
                     <div className="alert alert-danger w-50 p-1 mx-auto mt-4" role="alert">
@@ -106,12 +121,32 @@ function Register() {
                             <span className="input-group-text">
                                 <FontAwesomeIcon icon={faImage} />
                             </span>
-                            <input className='form-control' type="file" accept="image/*" onChange={handleImageChange} />
-                        </div>
-                        {imagePreview && (
-                            <img src={imagePreview} alt="Imagen de perfil" style={{ width: '100px', height: '100px', objectFit: 'cover', marginTop: '10px', borderRadius:'50px' }} />
-                        )}
-                    </div>
+                            <input
+                                        ref={fileInputRef} // Asignar la referencia al input
+                                        className='form-control'
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleImageChange}
+                                    />
+                                </div>
+                                {imagePreview && (
+                                    <div className="position-relative" style={{ marginTop: '10px' }}>
+                                        <img
+                                            src={imagePreview}
+                                            alt="Imagen de perfil"
+                                            style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '50px' }}
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={clearImage}
+                                            className="btn btn-secondary ms-2"
+                                            style={{ top: '-10px', right: '-10px', borderRadius: '50%' }}
+                                        >
+                                            X
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
                     <div className="col-md-6">
                         <div className="input-group">
                             <span className="input-group-text">
@@ -189,6 +224,8 @@ function Register() {
                     <h5 className='d-flex justify-content-center fw-bold'><a className='text-decoration-none text-dark hover:text-secondary' href='/login'>Inicia Sesión</a></h5>
                 </form>
             </div>
+        </div>
+        </div>
         </div>
     );
 }

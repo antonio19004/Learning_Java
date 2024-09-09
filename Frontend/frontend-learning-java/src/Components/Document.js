@@ -7,7 +7,6 @@ import '../Static/Styles/Style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleExclamation, faDownload, faEdit, faEye, faFilePdf, faFileWord, faFolder, faPlus, faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { faJava } from '@fortawesome/free-brands-svg-icons';
-import Logo from '../Static/Img/Logo-LJ.png'
 import {useNavigate} from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { formatDistanceToNow, parseISO } from 'date-fns';
@@ -32,7 +31,7 @@ const Document =()=>{
             try {
                 const response = await axios.get(`http://localhost:8080/${baseUrl}/documentacion/listar`, { withCredentials: true });
                 setAllDocuments(response.data);
-                setResults(response.data);  // Mostrar todos los documentos al cargar
+                setResults(response.data);
                 setLoading(false);
             } catch (error) {
                 console.error('Error al obtener la lista de archivos', error);
@@ -47,7 +46,7 @@ const Document =()=>{
         setQuery(searchTerm);
 
         if (searchTerm.trim() === '') {
-            setResults(allDocuments);  // Mostrar todos los documentos si no hay búsqueda
+            setResults(allDocuments);
         } else {
             const filteredResults = allDocuments.filter(doc => 
                 doc.titulo.toLowerCase().includes(searchTerm.toLowerCase())
@@ -55,13 +54,18 @@ const Document =()=>{
             setResults(filteredResults);
         }
     };
+
+
     const handleVerArchivo = async (id) => {
         window.open(`http://localhost:8080/${baseUrl}/documentacion/${id}`, '_blank');
     };
+    
 
     const handleDescargarArchivo = async (id) => {
         window.location.href =  `http://localhost:8080/${baseUrl}/documentacion/descargar/${id}`;
     };
+
+    
     console.log('Valor de archivos:', archivos);
 
     const handleAddDocument = () => {
@@ -72,8 +76,7 @@ const Document =()=>{
         navigate(`/panel/edit-document/${id}`);
       };
 
-      const handleDeleteDocument = async (id) => {
-        // Mostrar alerta de confirmación
+    const handleDeleteDocument = async (id) => {
         const result = await Swal.fire({
             title: '¿Estás seguro?',
             text: "No podrás recuperar este Documento después de eliminarlo.",
@@ -125,11 +128,8 @@ const Document =()=>{
         return { icon: faFileWord, color: 'gray' }; 
     };
 
-
-
     return(
         <div>
-        <link rel="icon" href={Logo} />
         <div className="px-5 pt-4">
             {loading ? (
                 <div className='panelcenter'>

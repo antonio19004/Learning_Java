@@ -3,6 +3,6 @@ package com.learning.app.Enum;
 public enum Level {
 
 	Basico,
-	Internmedio,
+	Intermedio,
 	Avanzado
 }
