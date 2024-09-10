@@ -14,3 +14,7 @@ npm install sweetalert2
 //datefns para fechas relativas
 npm install date-fns
 
+
+//react beautiful para arrastrar elementos
+npm install react-beautiful-dnd
+

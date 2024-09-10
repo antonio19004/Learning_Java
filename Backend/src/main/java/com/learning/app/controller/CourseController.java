@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -138,21 +139,70 @@ public class CourseController {
 	                .orElseThrow(() -> new RuntimeException("No existe el curso"));
 
 	        List<Lesson> lessons = new ArrayList<>();
-	        
 
 	        if (course.getLesson() != null && !course.getLesson().isEmpty()) {
-	            lessons = lessonRepository.findAllById(course.getLesson());
+	            List<String> lessonIds = course.getLesson();
+
+	            // Encuentra todas las lecciones con los IDs proporcionados
+	            List<Lesson> foundLessons = lessonRepository.findAllById(lessonIds);
+
+	            // Ordena las lecciones según el orden de los IDs
+	            lessons = lessonIds.stream()
+	                    .map(ids -> foundLessons.stream()
+	                            .filter(lesson -> lesson.getId().equals(ids))
+	                            .findFirst()
+	                            .orElse(null))
+	                    .collect(Collectors.toList());
 	        }
 
 	        Map<String, Object> response = new HashMap<>();
 	        response.put("course", course);
-	        response.put("lessons", lessons); 
+	        response.put("lessons", lessons);
 
 	        return response;
 	    }
 
 
-	    
+
+
+	    @PostMapping("/{id}/update-lessons-order")
+	    public ResponseEntity<String> updateLessonsOrder(@PathVariable String id, @RequestBody List<String> lessonIds) {
+	        try {
+	        	
+	        	 System.out.println("Payload recibido: " + lessonIds);
+	            // Encuentra el curso
+	            Course course = courseRepository.findById(id)
+	                    .orElseThrow(() -> new RuntimeException("No existe el curso"));
+
+	            // Imprime la lista de lecciones actual
+	            System.out.println("Lecciones antes de la actualización: " + course.getLesson());
+
+	            // Imprime el ID del curso para verificar
+	            System.out.println("ID del curso: " + id);
+
+	            // Encuentra todas las lecciones con los IDs proporcionados
+	            List<Lesson> lessons = lessonRepository.findAllById(lessonIds);
+	            if (lessons.size() != lessonIds.size()) {
+	                throw new RuntimeException("Algunas lecciones no se encontraron");
+	            }
+
+
+	            // Establece el nuevo orden de las lecciones en el curso
+	            course.setLesson(lessonIds);
+	            courseRepository.save(course);
+
+	            // Imprime la lista de lecciones después de guardar
+	            Course updatedCourse = courseRepository.findById(id).orElseThrow();
+	            System.out.println("Lecciones después de guardar: " + updatedCourse.getLesson());
+
+	            return ResponseEntity.ok("Orden de lecciones actualizado correctamente");
+	        } catch (Exception e) {
+	            e.printStackTrace(); // Agrega esto para depuración
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar el orden de las lecciones");
+	        }
+	    }
+
+
 	    @PutMapping("/update/{id}")
 	    public ResponseEntity<String> updateCourse(
 	            @PathVariable String id,

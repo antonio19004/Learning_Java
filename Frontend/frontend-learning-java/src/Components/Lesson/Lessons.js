@@ -4,12 +4,14 @@ import { Link,useParams,useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendarDays, faChartLine, faChevronLeft, faCircleInfo, faClock, faEdit, faList, faNotdef, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarDays, faChartLine, faChevronDown, faChevronLeft, faChevronUp, faCircleInfo, faClock, faEdit, faList, faNotdef, faTrash } from '@fortawesome/free-solid-svg-icons';
 import Loader from '../../Layouts/Loader';
 import { faBookmark } from '@fortawesome/free-regular-svg-icons';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale'; 
 import Swal from 'sweetalert2';
+
+
 
 
 
@@ -23,10 +25,9 @@ function Lessons() {
     const [loading, setLoading] = useState(true);
     const [selectedLesson, setSelectedLesson] = useState(null);
 
-useEffect(() => {
     const fetchCourseDetails = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/course/${id}/lessons`,{withCredentials:true});
+            const response = await axios.get(`http://localhost:8080/course/${id}/lessons`, { withCredentials: true });
             setLessons(response.data.lessons);
             setLoading(false);
         } catch (error) {
@@ -34,9 +35,11 @@ useEffect(() => {
             setLoading(false);
         }
     };
-    
-    fetchCourseDetails();
-}, [id]);
+
+    useEffect(() => {
+        fetchCourseDetails();
+    }, [id]);
+
 
 
 const handleCardClick = async (id) => {
@@ -120,7 +123,39 @@ function extractYoutubeId(url) {
     return (match && match[2].length === 11) ? match[2] : null;
 }
 
+const handleMoveUp = (index) => {
+    if (index > 0) {
+        const newLessons = [...lessons];
+        const [movedItem] = newLessons.splice(index, 1);
+        newLessons.splice(index - 1, 0, movedItem);
+        setLessons(newLessons);
+        updateOrderOnServer(newLessons);
+    }
+};
 
+const handleMoveDown = (index) => {
+    if (index < lessons.length - 1) {
+        const newLessons = [...lessons];
+        const [movedItem] = newLessons.splice(index, 1);
+        newLessons.splice(index + 1, 0, movedItem);
+        setLessons(newLessons);
+        updateOrderOnServer(newLessons);
+    }
+};
+
+const updateOrderOnServer = async (newOrder) => {
+    try {
+        const lessonIds = newOrder.map(lesson => lesson.id);
+        await axios.post(`http://localhost:8080/course/${id}/update-lessons-order`, lessonIds, { withCredentials: true });
+        console.log('Orden actualizado en el servidor');
+
+        // Actualiza el estado local con el nuevo orden de lecciones
+        fetchCourseDetails();
+
+    } catch (error) {
+        console.error('Error al actualizar el orden en el servidor', error);
+    }
+};
 
 return(
     <div>
@@ -137,25 +172,35 @@ return(
         <div className='shadow bg-light px-5 pb-5 pt-5 rounded'>
             <div>
             <h2> <FontAwesomeIcon icon={faList}/>  Lista de Lecciones</h2>
-                            {lessons && lessons.length > 0 ? (
-                                    lessons.map((Lesson,index) => (
-                                    <div className="cursor-pointer d-flex justify-content-between p-3 mt-4 shadow bg-light rounded"
-                                    onClick={() => handleCardClick(Lesson.id)}   key={Lesson.id}>
-                                        
-                                            <a className='fs-5 text-decoration-none text-blue-dark'><FontAwesomeIcon icon={faBookmark}/>  {index +1}.  {Lesson.title}</a>
-
-                                            <div className='d-flex justify-content-between'>
-                                            <div onClick={(event) => { event.stopPropagation(); handleDeleteLesson(Lesson.id); }}><FontAwesomeIcon className='me-2' icon={faTrash} style={{color:'red',}}/></div>
-                                            <div onClick={(event) => { event.stopPropagation(); handleEditLesson(Lesson.id); }}><FontAwesomeIcon icon={faEdit} style={{color:'#ebb00f',}}/></div>
-                                            </div>
-                                      
-                                    </div>
-                                    ))):(
-                                        <div class="alert alert-primary d-flex flex-wrap" role="alert">
-                                        <FontAwesomeIcon className='mt-1' icon={faNotdef}/><p className='ms-2'>No Hay Elementos</p>
-                                      </div>
-                                    )
-                                }
+            {lessons && lessons.length > 0 ? (
+            lessons.map((Lesson, index) => (
+               
+ <div className="cursor-pointer d-flex justify-content-between p-3 mt-4 shadow bg-light rounded"
+ onClick={() => handleCardClick(Lesson.id)}   key={Lesson.id}>
+                    <a className='fs-5 text-decoration-none text-blue-dark'>
+                        <FontAwesomeIcon icon={faBookmark}/> {index + 1}. {Lesson.title}
+                    </a>
+                    <div className='d-flex justify-content-between'>
+                        <div onClick={(event) => {event.stopPropagation();  handleMoveUp(index);}}>
+                            <FontAwesomeIcon className='me-2' icon={faChevronUp} style={{color: 'blue'}}/>
+                        </div>
+                        <div onClick={(event) => {event.stopPropagation(); handleMoveDown(index); }}>
+                            <FontAwesomeIcon className='me-2' icon={faChevronDown} style={{color: 'blue'}}/>
+                        </div>
+                        <div onClick={(event) => { event.stopPropagation(); handleDeleteLesson(Lesson.id); }}>
+                            <FontAwesomeIcon className='me-2' icon={faTrash} style={{color:'red'}}/>
+                        </div>
+                        <div onClick={(event) => { event.stopPropagation(); handleEditLesson(Lesson.id); }}>
+                            <FontAwesomeIcon icon={faEdit} style={{color:'#ebb00f'}}/>
+                        </div>
+                    </div>
+                </div>
+            ))
+        ) : (
+            <div className="alert alert-primary d-flex flex-wrap" role="alert">
+                <FontAwesomeIcon className='mt-1' icon={faNotdef}/><p className='ms-2'>No Hay Elementos</p>
+            </div>
+        )}
 
 
 
@@ -196,7 +241,6 @@ return(
                     <hr />
                     <p><span className='fs-6 fw-bold'><FontAwesomeIcon icon={faCalendarDays} size='sm'/>   Ultima Actualización:</span>  {formatDate(selectedLesson?.lastUpdate)}</p>
                     <p><span className='fs-6 fw-bold'><FontAwesomeIcon icon={faClock} size='sm'/>  Duración:</span>  {selectedLesson?.duration} Horas(s)</p>
-                    <p><span className='fs-6 fw-bold'><FontAwesomeIcon icon={faChartLine} size='sm'/>  Nivel:</span>  {selectedLesson?.level}</p>
 
                 </div>
                     <div className="modal-footer">
