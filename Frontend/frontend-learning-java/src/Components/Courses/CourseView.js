@@ -110,7 +110,7 @@ function CourseView() {
                                         <h1>{course.title}</h1>
                                         <p>{course.description}</p>
                                         <div className='d-flex justify-content-end'>
-                                            <p className='fs-sm'>Creado Por: <span className='text-primary fs-ssm'>Hermes Herrera & Diego Cediel</span></p>
+                                            <p className='fs-sm'>Creado Por: <span className='text-primary fs-ssm'>{course.creador}</span></p>
                                         </div>
                                         <img
                                             src={`data:image/jpeg;base64,${course.coverImage}`}
