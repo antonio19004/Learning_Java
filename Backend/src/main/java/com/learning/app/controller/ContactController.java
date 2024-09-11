@@ -18,6 +18,7 @@ public class ContactController {
 	@Autowired
 	private JavaMailSender mail;
 	
+	//Enviar mensaje del usuario al correo predeterminado
 	@PostMapping
 	public ResponseEntity<?> contactUs(@RequestBody ContactDto contactDto) {
 		

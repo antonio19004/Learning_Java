@@ -4,7 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection="topics")
+@Document(collection = "topics")
 public class Topics {
 	
 	@Id
@@ -54,9 +54,4 @@ public class Topics {
 	public void setCourse(Course course) {
 		this.course = course;
 	}
-	
-	
-	
-	
-	
 }

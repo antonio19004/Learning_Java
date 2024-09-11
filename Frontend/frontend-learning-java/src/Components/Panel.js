@@ -11,15 +11,16 @@ import NoFoundR from '../Layouts/NoFoundR';
 import Document from './Document';
 import UploadDocument from './UploadDocumentation';
 import EditDocument from './EditDocument';
-import ForumSettings from './ForumSettings';
-import EditForum from './EditForum';
-import AddForum from './AddForum';
+import ForumSettings from './Forum/ForumSettings';
+import EditForum from './Forum/EditForum';
+import AddForum from './Forum/AddForum';
 import CreateCourse from './Courses/CreateCourses';
 import Courses from './Courses/Courses';
 import EditCourse from './Courses/EditCourse';
 import CreateLesson from './Lesson/CreateLesson';
 import Lessons from './Lesson/Lessons';
 import EditLessonForm from './Lesson/EditLesson';
+import InfoUsers from './InfoUsers.js';
 
 const Panel = () => {
   const [isOpen, setIsOpen] = useState(true);
@@ -72,7 +73,7 @@ const Panel = () => {
               <a className="nav-link text-Light" aria-current="page" href="/panel/document">Documentos</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="/panel/documentForm">Usuarios</a>
+              <a className="nav-link" href="/panel/info-users">Usuarios</a>
             </li>
             <li className="nav-item text-Light">
               <a className="nav-link text-Light" href="/panel/courses">Cursos</a>
@@ -99,6 +100,7 @@ const Panel = () => {
         )}
 
         <Routes>
+          <Route path='/info-users' element={isAuthenticated ? <InfoUsers /> : <Navigate to="/login" />} />
           <Route path="/document" element={isAuthenticated ? <Document /> : <Navigate to="/login" />} />
           <Route path="/add-document" element={isAuthenticated ? <UploadDocument /> : <Navigate to="/login" />} />
           <Route path='/edit-document/:id' element={isAuthenticated ? <EditDocument/> : <Navigate to="/login" />}/>

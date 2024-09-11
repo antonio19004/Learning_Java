@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faLock, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faLock, faEye, faEyeSlash, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 
 function Login () {
@@ -14,7 +14,6 @@ function Login () {
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-
 
     const showError = (message) => {
         setErrorMessage(message);
@@ -72,47 +71,52 @@ function Login () {
 
     return (
         <div>
-            <div className='d-flex flex-column align-items-center justify-content-center '>
-            <div className='shadow bg-light px-5 pb-5 my-4 rounded'>
-            <div className='d-flex flex-column align-items-center justify-content-center ' style={{ height: '100vh' }}>
-                {errorMessage && (
-                    <div className="alert alert-danger w-50 p-1 mx-auto mt-4"  role="alert">
-                        <p className="text-danger text-center">{errorMessage}</p>
+            <div style={{ marginLeft: '40px', marginTop: '20px' }}>
+                <a href='/' className="btn btn-secondary rounded mt-3">
+                    <FontAwesomeIcon icon={faArrowLeft} /> Volver
+                </a>
+            </div><br />
+            <div className='d-flex flex-column align-items-center justify-content-center'>
+                <div className='shadow bg-light px-5 pb-5 my-4 rounded' style={{ maxWidth: '500px', width: '100%' }}>
+                    <div className='d-flex flex-column align-items-center justify-content-center' style={{ minHeight: '70vh' }}>
+                        {errorMessage && (
+                            <div className="alert alert-danger w-100 text-center mx-auto mt-4" role="alert" style={{ maxWidth: '100%' }}>
+                                {errorMessage}
+                            </div>
+                        )}
+                        <h2 className='fw-bold text-center'>Ingresa con tus credenciales</h2>
+                        <h5 className='fw-light'>Inicia sesión con tu usuario y contraseña</h5><br />
+                        <form onSubmit={handleSubmit} style={{ marginBottom: '15px' }}>
+                            <div className="input-group mb-3">
+                                <span className="input-group-text">
+                                    <FontAwesomeIcon icon={faUser} />
+                                </span>
+                                <input className='form-control' type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder='Usuario' />
+                            </div>
+                            <br />
+                            <div className="input-group mb-3 position-relative">
+                                <span className="input-group-text">
+                                    <FontAwesomeIcon icon={faLock} />
+                                </span>
+                                <input className='form-control' type={showPassword ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Contraseña' />
+                                <span className="position-absolute" onClick={() => setShowPassword(!showPassword)} style={{ color: 'gray', right: '10px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer' }}>
+                                    <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                                </span>
+                            </div>
+                            <br />
+                            <button className='btn btn-dark w-100' type="submit" disabled={loading}>
+                                {loading ? 'Cargando...' : 'Iniciar Sesión'}
+                            </button>
+                        </form>
+                        <br />
+                        <h5 className='fw-light'>O crea una cuenta si no estás registrado</h5>
+                        <h5 className='fw-bold'><a className='text-decoration-none text-dark' href='/register'>Registrarse</a></h5>
+                        <h5 className='fw-bold'><a className='text-decoration-none text-dark' href='/reset-password'>¿Has olvidado tu contraseña?</a></h5>
                     </div>
-                )}
-                
-                <h2 className='fw-bold'>Ingresa con tus credenciales</h2>
-                <h5 className='fw-light'>Inicia sesión con tu usuario y contraseña</h5><br/>
-                <form onSubmit={handleSubmit}>
-                    <div className="input-group mb-3">
-                        <span className="input-group-text"> 
-                            <FontAwesomeIcon icon={faUser} />
-                        </span>
-                        <input className='form-control' type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder='Usuario' />
-                    </div>
-                    <br />
-                    <div className="input-group mb-3">
-                        <span className="input-group-text">
-                            <FontAwesomeIcon icon={faLock} />
-                        </span>
-                        <input className='form-control' type={showPassword ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Contraseña' />
-                        <span className="position-absolute" onClick={() => setShowPassword(!showPassword)} style={{ color: 'gray', right: '10px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer' }} >
-                            <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
-                        </span>
-                    </div>
-                    <br />
-                    <button className='btn btn-dark ms-5' type="submit">Iniciar Sesión</button>
-                </form>
-                <br/>
-                <h5 className='fw-light'>O crea una cuenta si no estas registrado</h5>
-                <h5 className='fw-bold'><a className='text-decoration-none text-dark hover:text-secondary' href='/register'>Registrarse</a></h5>
-                <h5 className='fw-bold'><a className='text-decoration-none text-dark hover:text-secondary' href='/reset-password'>¿Has olvidado tu contraseña?</a></h5>
                 </div>
             </div>
-            </div>
-            
         </div>
     );
-}
+};
 
 export default Login;

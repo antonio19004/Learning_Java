@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import { useParams } from 'react-router-dom';
 import axios from "axios";
-import NavMenu from '../Layouts/NavMenu.js';
-import Loader from "../Layouts/Loader";
-import Footer from '../Layouts/Footer.js';
+import NavMenu from '../../Layouts/NavMenu.js';
+import Loader from "../../Layouts/Loader.js";
+import Footer from '../../Layouts/Footer.js';
 import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../Static/Styles/ForumDetail.css';
-import UserImg from '../Static/Img/User.png';
+import '../../Static/Styles/ForumDetail.css';
+import UserImg from '../../Static/Img/User.png';
 
 const ForumDetail = () => {
     const { id } = useParams();
@@ -162,7 +162,7 @@ const ForumDetail = () => {
                             </div>
                         </div>
                         <div className="mb-4">
-                            <h5 style={{ marginLeft: '85%' }}>{respuestas.length} Comentarios</h5>
+                            <h5 className="cant-comentario">{respuestas.length} Comentarios</h5>
                             <hr />
                             {respuestas.map(respuesta => (
                                 <div key={respuesta.id} className='mb-3 border p-3 rounded'>

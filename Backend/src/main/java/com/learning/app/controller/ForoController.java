@@ -52,6 +52,7 @@ public class ForoController {
 	@Autowired
 	private RespuestaRepository responseRepository;
 	
+	//Obtener todos los temas del foro
 	@GetMapping
 	public ResponseEntity<List<ForumResponse>> getAllForum(@AuthenticationPrincipal UserDetails userDetails) {
 		List<Foro> foros;
@@ -92,6 +93,7 @@ public class ForoController {
 		return ResponseEntity.ok(forumResponses);
 	}
 	
+	//Añadir un tema nuevo
 	@PostMapping
 	public ResponseEntity<Foro> addForum(@RequestBody Foro foro, @AuthenticationPrincipal UserDetails userDetails) {
 		Users user = usersRepository.findByUser(userDetails.getUsername());
@@ -110,6 +112,7 @@ public class ForoController {
 		return new ResponseEntity<>(newForum, HttpStatus.CREATED);
 	}
 	
+	//Obtener detalles de un foro en específico
 	@GetMapping("/{id}")
 	public ResponseEntity<Foro> getForumById(@PathVariable String id) {
 		Optional<Foro> foro = foroRepository.findById(id);
@@ -120,6 +123,7 @@ public class ForoController {
 		return ResponseEntity.notFound().build();
 	}
 	
+	//Obtener respuestas del foro
 	@GetMapping("/{id}/respuestas")
 	public ResponseEntity<List<RespuestasForo>> getAllResponses(@PathVariable String id) {
 		Optional<Foro> foro = foroRepository.findById(id);
@@ -131,6 +135,7 @@ public class ForoController {
 		return ResponseEntity.notFound().build();
 	}
 	
+	//Añadir respuestas al foro
 	@PostMapping("/{id}/respuesta")
 	public ResponseEntity<RespuestasForo> addResponses(@PathVariable String id, @RequestBody RespuestasForo respuesta, @AuthenticationPrincipal UserDetails userDetails) {
 		Optional<Foro> foro = foroRepository.findById(id);
@@ -157,6 +162,7 @@ public class ForoController {
 		}
 	}
 	
+	//Obtener respuestas anidadas a la respuesta principal
 	@GetMapping("/{replying}/responses")
 	public ResponseEntity<List<RespuestaForo>> getAllResponsesByResponse(@PathVariable String replying) {
 		Optional<RespuestasForo> respuesta = respuestasRepository.findById(replying);
@@ -168,6 +174,7 @@ public class ForoController {
 		return ResponseEntity.notFound().build();
 	}
 	
+	//Añadir respuesta anidada
 	@PostMapping("/{replying}/response")
 	public ResponseEntity<RespuestaForo> addResponse(@PathVariable String replying, @RequestBody RespuestaForo response, @AuthenticationPrincipal UserDetails userDetails) {
 		RespuestasForo respuesta = respuestasRepository.findById(replying).orElse(null);
@@ -190,6 +197,7 @@ public class ForoController {
 		return ResponseEntity.notFound().build();
 	}
 	
+	//Anclar tema
 	@PutMapping("/{id}/pin")
 	public ResponseEntity<String> pinForum(@PathVariable String id) {
 		Optional<Foro> foro = foroRepository.findById(id);
@@ -206,6 +214,7 @@ public class ForoController {
         }
 	}
 	
+	//Desanclar tema
 	@PutMapping("/{id}/unpin")
 	public ResponseEntity<String> unpinForum(@PathVariable String id) {
 		Optional<Foro> foro = foroRepository.findById(id);
@@ -222,6 +231,7 @@ public class ForoController {
         }
 	}
 	
+	//Ocultar tema
 	@PutMapping("/{id}/hide")
 	public ResponseEntity<String> hideForum(@PathVariable String id) {
 		Optional<Foro> foro = foroRepository.findById(id);
@@ -238,6 +248,7 @@ public class ForoController {
         }
 	}
 	
+	//Mostrar tema
 	@PutMapping("/{id}/show")
 	public ResponseEntity<String> showForum(@PathVariable String id) {
 		Optional<Foro> foro = foroRepository.findById(id);
@@ -254,6 +265,7 @@ public class ForoController {
         }
 	}
 	
+	//Actualizar tema
 	@PutMapping("/{id}")
 	public ResponseEntity<Foro> updateForum(@PathVariable String id, @RequestBody ForoDto foroDto) {
 		
@@ -272,6 +284,7 @@ public class ForoController {
 		}
 	}
 	
+	//Eliminar tema junto a sus respuestas (respuesta principal y respuesta anidada)
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteForum(@PathVariable("id") String id) {
 		Foro foro = foroRepository.findById(id).orElse(null);

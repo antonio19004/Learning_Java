@@ -19,23 +19,13 @@ public class Lesson {
 	private LocalDateTime createdDate;
 	
 	private String title;
-	
 	private String description;
-	
 	private String duration;
-	
 	private String video;
-	
 	private int order;
-	
 	private Double progress;
-	
 	private boolean completed;
-	
 	private String idCourse;
-	
-	
-	
 	
 	public Lesson(String id, LocalDateTime lastUpdate, LocalDateTime createdDate, String title, String description,
 			String duration, String video, int order, Double progress, boolean completed, String idCourse) {
@@ -52,7 +42,6 @@ public class Lesson {
 		this.completed = completed;
 		this.idCourse = idCourse;
 	}
-
 
 	public String getId() {
 		return id;
@@ -93,6 +82,7 @@ public class Lesson {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
 	public String getDuration() {
 		return duration;
 	}
@@ -133,17 +123,11 @@ public class Lesson {
 		this.completed = completed;
 	}
 
-
 	public String getIdCourse() {
 		return idCourse;
 	}
 
-
 	public void setIdCourse(String idCourse) {
 		this.idCourse = idCourse;
-	}
-	
-	
-	
-	
+	}	
 }

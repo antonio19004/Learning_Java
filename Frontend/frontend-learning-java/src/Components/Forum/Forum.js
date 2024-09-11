@@ -1,19 +1,19 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
-import NavMenu from '../Layouts/NavMenu.js';
-import Loader from "../Layouts/Loader";
-import Footer from '../Layouts/Footer.js';
+import NavMenu from '../../Layouts/NavMenu.js';
+import Loader from "../../Layouts/Loader.js";
+import Footer from '../../Layouts/Footer.js';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComments, faMessage, faThumbtack, faVolumeHigh, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../Static/Styles/Forum.css';
+import '../../Static/Styles/Forum.css';
 
 const Forum = () => {
-
     document.title = 'Foro';
+    
     const [foro, setForo] = useState([]);
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
@@ -83,18 +83,18 @@ const Forum = () => {
             const textStyle = isHidden ? { color: 'darkgray', textDecoration: 'line-through' } : {};
 
             return (
-                <tr key={forum.id}>
+                <tr key={forum.id} className={`forum-row ${isHidden ? 'hidden-row' : ''}`}>
                     <td>
                         <Link to={`/forum-topic/${forum.id}`} className='link-foro' style={textStyle}>
                             <FontAwesomeIcon icon={faMessage} className="icon-left" style={{ marginRight: '10px' }} />
                             {forum.titulo}
                         </Link>
                     </td>
-                    <td style={{ ...textStyle, textIndent: '100px' }}>{forum.respuestasCount}</td>
-                    <td style={{ ...textStyle, textIndent: '100px', textAlign: 'justify' }}>
+                    <td style={{ ...textStyle, textIndent: '10px' }}>{forum.respuestasCount}</td>
+                    <td style={{ ...textStyle, textAlign: 'center' }}>
                         {lastModifier} - {formattedDate}
                         {isFixed && (
-                            <FontAwesomeIcon icon={faThumbtack} style={{ marginLeft: '23px', color: pinIconColor, transform: 'rotate(40deg)' }} />
+                            <FontAwesomeIcon icon={faThumbtack} style={{ marginLeft: '10px', color: pinIconColor, transform: 'rotate(40deg)' }} />
                         )}
                     </td>
                 </tr>
@@ -109,29 +109,33 @@ const Forum = () => {
             </header>
             <div className='container mt-4'>
                 {loading ? (
-                    <div className='panelcenter'>
+                    <center><div className='d-flex justify-content-center'>
                         <Loader />
-                    </div>
+                    </div></center>
                 ) : (
                     <div>
                         <h2 className='fw-bold mb-4'><FontAwesomeIcon icon={faVolumeHigh} style={{ marginRight: '10px', transform: 'rotate(-40deg)' }} /> Foro de Discusión</h2><br />
-                        <div className="input-group mb-4 w-50">
+                        <div className="input-group w-50 mb-4">
                             <span className="input-group-text" id="basic-addon1" style={{ marginBottom: '15px' }}><FontAwesomeIcon icon={faSearch} /></span>
                             <input type="text" className="form-control" placeholder="Buscar Tema..." aria-label="Buscar Tema..." aria-describedby="basic-addon1" value={query} onChange={handleSearch} style={{ marginBottom: '15px' }} />
                         </div>
-                        <table className='table-foro'>
-                            <thead>
-                                <tr>
-                                    <th>Tema</th>
-                                    <th style={{ textIndent: '95px' }}><FontAwesomeIcon icon={faComments} style={{ width:'25px', height: '25px'}} /></th>
-                                    <th style={{ textIndent: '140px' }}>Última Modificación</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {renderTableBody()}
-                            </tbody>
-                        </table>
-                        <button className="btn btn-dark agg-btn" onClick={handleNewTopic}>Nuevo Tema</button>
+                        <div className="table-responsive">
+                            <table className='table table-foro'>
+                                <thead>
+                                    <tr>
+                                        <th>Tema</th>
+                                        <th style={{ textIndent: '5px' }}><FontAwesomeIcon icon={faComments} style={{ width:'25px', height: '25px'}} /></th>
+                                        <th style={{ textAlign: 'center' }}>Última Modificación</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {renderTableBody()}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div className="d-flex justify-content-end">
+                            <button className="btn btn-dark agg-btn" onClick={handleNewTopic}>Nuevo Tema</button>
+                        </div>
                     </div>
                 )}
             </div>

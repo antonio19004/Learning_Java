@@ -2,9 +2,9 @@ import { Route, Routes, Navigate,useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import Home from './Components/Home.js';
 import Profile from './Components/Profile.js';
-import Forum from './Components/Forum.js';
-import NewForum from './Components/NewForum.js';
-import ForumDetail from './Components/ForumDetail.js';
+import Forum from './Components/Forum/Forum.js';
+import NewForum from './Components/Forum/NewForum.js';
+import ForumDetail from './Components/Forum/ForumDetail.js';
 import Contact from './Components/Contact.js';
 import AboutUs from './Components/AboutUs.js';
 import Login from './Security/Login';
@@ -71,8 +71,8 @@ function App(){
       <Route path='/reset-password' element={<ResetPassword />} />
       <Route path="/register" element={<Register />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/Home" element={isAuthenticated ? <Home/> : <Navigate to="/login" />} />
-      <Route path="/" element={<Navigate to="/login" />} />
+      <Route path="/Home" element={<Home />} />
+      <Route path="/" element={<Navigate to="/Home" />} />
       <Route path='/documentForm' element={isAuthenticated ? <UploadDocument/> : <Navigate to='/login'/>}/>
       <Route path="*" element={<NoFoundR/>} />  
     </Routes>

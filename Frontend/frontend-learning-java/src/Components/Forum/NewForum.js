@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
-import NavMenu from '../Layouts/NavMenu.js';
-import Footer from '../Layouts/Footer.js';
+import NavMenu from '../../Layouts/NavMenu.js';
+import Footer from '../../Layouts/Footer.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../Static/Styles/NewForum.css';
+import '../../Static/Styles/NewForum.css';
 
 const NewForum = () => {
 

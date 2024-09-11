@@ -10,11 +10,9 @@
     border-bottom: 1px solid #ddd;
 }
 
-.table-foro, .table-foro th.centered {
-    text-align: center;
-}
-
 .table-foro th {
+    vertical-align: middle;
+    height: 60px;
     background-color: #0e0d0d;
     font-weight: bold;
     color: #dfdfdf;
@@ -57,4 +55,14 @@
 .agg-btn {
     margin-top: 10px;
     margin-left: 87%;
+}
+
+@media only screen and (max-width: 600px) {
+    .table-foro th, .table-foro td {
+        padding: 8px;
+    }
+
+    .agg-btn {
+        margin-left: 50%;
+    }
 }

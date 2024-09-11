@@ -12,10 +12,9 @@ import Swal from 'sweetalert2';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale'; 
 
+const Document = () => {
+    document.title = 'Documentación';
 
-
-
-const Document =()=>{
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
     const [archivos, setArchivos] = useState([]);
@@ -55,26 +54,23 @@ const Document =()=>{
         }
     };
 
-
     const handleVerArchivo = async (id) => {
         window.open(`http://localhost:8080/${baseUrl}/documentacion/${id}`, '_blank');
     };
     
-
     const handleDescargarArchivo = async (id) => {
         window.location.href =  `http://localhost:8080/${baseUrl}/documentacion/descargar/${id}`;
     };
-
     
     console.log('Valor de archivos:', archivos);
 
     const handleAddDocument = () => {
         navigate('/panel/add-document');
-      };
-
-      const handleEditDocument = (id) => {
+    };
+    
+    const handleEditDocument = (id) => {
         navigate(`/panel/edit-document/${id}`);
-      };
+    };
 
     const handleDeleteDocument = async (id) => {
         const result = await Swal.fire({
@@ -109,7 +105,6 @@ const Document =()=>{
         }
     };
 
-
     const formatRelativeDate = (date) => {
         const distance = formatDistanceToNow(date, { addSuffix: true, locale: es });
     
@@ -130,98 +125,81 @@ const Document =()=>{
 
     return(
         <div>
-        <div className="px-5 pt-4">
-            {loading ? (
-                <div className='panelcenter'>
-                    <Loader />
-                </div>
-            ) : (
-                <div>
-                     <h2><FontAwesomeIcon icon={faFolder}/> Documentación</h2>
-                    <p className='pb-4'>
-                        Puedes gestionar los documentos
-                    </p>
-
-                    <div className="input-group mb-4 w-50">
-                        <span className="input-group-text" id="basic-addon1">
-                            <FontAwesomeIcon icon={faSearch} />
-                        </span>
-                        <input 
-                            type="text" 
-                            className="form-control" 
-                            placeholder="Buscar Documentos..." 
-                            aria-label="Buscar Documentos..." 
-                            aria-describedby="basic-addon1"
-                            value={query}
-                            onChange={handleSearch}
-                        />
+            <div className="px-5 pt-4">
+                {loading ? (
+                    <div className='panelcenter'>
+                        <Loader />
                     </div>
-
-                    {rol==='ROLE_ADMIN' &&(
-                          <div className="mb-4 ">
-                          <button className="btn btn-success me-3 position-relative" onClick={handleAddDocument}>
-                              <FontAwesomeIcon icon={faPlus} /> Nuevo Documento
-                              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">
-                                Admin
-                                </span>
-                          </button>
-                      </div>
-                    )}
-
-                    {results.length > 0 ? (
-                        <div className="row">
-                            {results.map((archivo) => {
-                             const fecha = parseISO(archivo.fechaSubida);
-                             const formattedDate = formatRelativeDate(fecha);
-                             const {icon,color} = getFileIcon(archivo.tipo); 
-
-                                return (
-                                <div className="col-md-4" key={archivo.id}>
-                                    <div className="card mb-4">
-                                        <div className="card-header d-flex justify-content-between align-items-center">
-                                        <span className='pe-1'><FontAwesomeIcon  icon={icon} size='xl' style={{color:color}} /></span>
-                                            <small className='text-muted'>{formattedDate}</small>
-                                            {rol==='ROLE_ADMIN' &&(
-                                                <div>
-                                                <button className="btn" onClick={()=>handleEditDocument(archivo.id)}>
-                                                    <FontAwesomeIcon icon={faEdit} />
-                                                </button>
-                                                 <button className="btn me-1" onClick={()=>handleDeleteDocument(archivo.id)}>
-                                                 <FontAwesomeIcon icon={faTrash} style={{color:"#b41610"}} />
-                                                 </button>
-                                                 </div>
-                                                )}
-                                        </div>
-                                        <div className="card-body">
-                                        <h5 className='fw-bold'><FontAwesomeIcon icon={faJava} size='xl' /> {archivo.titulo}</h5>
-                                            <button 
-                                                className="btn btn-dark me-3 mt-4" 
-                                                onClick={() => handleVerArchivo(archivo.id)}
-                                            >
-                                                <FontAwesomeIcon icon={faEye} />
-                                            </button>
-                                            <button 
-                                                className="btn btn-primary mt-4" 
-                                                onClick={() => handleDescargarArchivo(archivo.id)}
-                                            >
-                                                <FontAwesomeIcon icon={faDownload} />
-                                            </button>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                );
-                            })}
+                ) : (
+                    <div>
+                        <h2><FontAwesomeIcon icon={faFolder}/> Documentación</h2>
+                        <p className='pb-4'>
+                            Puedes gestionar los documentos
+                        </p>
+                        <div className="input-group mb-4 w-50">
+                            <span className="input-group-text" id="basic-addon1">
+                                <FontAwesomeIcon icon={faSearch} />
+                            </span>
+                            <input type="text" className="form-control" placeholder="Buscar Documentos..." aria-label="Buscar Documentos..."  aria-describedby="basic-addon1" value={query} onChange={handleSearch} />
                         </div>
-                    ) : (
-                        <div class="alert alert-info" role="alert">
-                          <FontAwesomeIcon icon={faCircleExclamation}/>  No hay Resultados!
-                        </div>
-                    )}
-                </div>
-            )}
+                        {rol==='ROLE_ADMIN' &&(
+                            <div className="mb-4 ">
+                                <button className="btn btn-success me-3 position-relative" onClick={handleAddDocument}>
+                                    <FontAwesomeIcon icon={faPlus} /> Nuevo Documento
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">
+                                        Admin
+                                    </span>
+                                </button>
+                            </div>
+                        )}
+                        {results.length > 0 ? (
+                            <div className="row">
+                                {results.map((archivo) => {
+                                    const fecha = parseISO(archivo.fechaSubida);
+                                    const formattedDate = formatRelativeDate(fecha);
+                                    const {icon,color} = getFileIcon(archivo.tipo); 
+                                    
+                                    return (
+                                        <div className="col-md-4" key={archivo.id}>
+                                            <div className="card mb-4">
+                                                <div className="card-header d-flex justify-content-between align-items-center">
+                                                    <span className='pe-1'><FontAwesomeIcon  icon={icon} size='xl' style={{color:color}} /></span>
+                                                    <small className='text-muted'>{formattedDate}</small>
+                                                    {rol==='ROLE_ADMIN' &&(
+                                                        <div>
+                                                            <button className="btn" onClick={()=>handleEditDocument(archivo.id)}>
+                                                                <FontAwesomeIcon icon={faEdit} />
+                                                            </button>
+                                                            <button className="btn me-1" onClick={()=>handleDeleteDocument(archivo.id)}>
+                                                                <FontAwesomeIcon icon={faTrash} style={{color:"#b41610"}} />
+                                                            </button>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                                <div className="card-body">
+                                                    <h5 className='fw-bold'><FontAwesomeIcon icon={faJava} size='xl' /> {archivo.titulo}</h5>
+                                                    <button className="btn btn-dark me-3 mt-4" onClick={() => handleVerArchivo(archivo.id)}>
+                                                        <FontAwesomeIcon icon={faEye} />
+                                                    </button>
+                                                    <button className="btn btn-primary mt-4" onClick={() => handleDescargarArchivo(archivo.id)}>
+                                                        <FontAwesomeIcon icon={faDownload} />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        ) : (
+                            <div class="alert alert-info" role="alert">
+                                <FontAwesomeIcon icon={faCircleExclamation}/>  No hay Resultados!
+                            </div>
+                        )}
+                    </div>
+                )}
+            </div>
         </div>
-    </div>
     );
 }
+
 export default Document;

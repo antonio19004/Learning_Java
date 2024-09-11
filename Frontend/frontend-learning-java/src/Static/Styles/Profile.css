@@ -1,8 +1,15 @@
 .profile-modal .modal-dialog {
+    width: 96.5%;
     z-index: 1050;
-    max-width: 41%;
+}
+
+@media (min-width: 768px) {
+    .profile-modal .modal-dialog {
+        max-width: 50%;
+    }
 }
 
 .profile-content {
     margin-left: 20px;
+    padding: 0 15px;
 }

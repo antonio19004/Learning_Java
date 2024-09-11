@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChalkboard, faChalkboardUser, faChevronLeft, faPlus } from '@fortawesome/free-solid-svg-icons';
 import {useNavigate } from 'react-router-dom';
 
-
 function CreateCourse() {
     
     const availableTopic = [
@@ -24,9 +23,7 @@ function CreateCourse() {
         'Sintaxis'
     ];
 
-const navigate = useNavigate();
-
-
+    const navigate = useNavigate();
 
     const [course, setCourse] = useState({
         title: '',
@@ -42,9 +39,9 @@ const navigate = useNavigate();
         coverImage: null,
         imagePreview:''
     });
-    
 
     const fileInputRef = useRef(null);
+    
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -75,11 +72,11 @@ const navigate = useNavigate();
         }
     };
 
-
     const [newTopic, setNewTopic] = useState({
         title: '',
         description: ''
     });
+    
     const [showModal, setShowModal] = useState(false);
 
     const handleChange = (e) => {
@@ -89,7 +86,6 @@ const navigate = useNavigate();
             [name]: value
         });
     };
-
 
     const handleAddObjective = () => {
         if (course.newObjectives.trim() === '') {
@@ -115,9 +111,6 @@ const navigate = useNavigate();
             newContent: ''
         });
     };
-
-
-
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -147,8 +140,6 @@ const navigate = useNavigate();
             console.error(error);
         }
     };
-    
-
 
     const handleRemoveObjective = (indexToRemove) => {
         setCourse((prevCourse) => ({
@@ -163,7 +154,6 @@ const navigate = useNavigate();
             content: prevCourse.content.filter((_, index) => index !== indexToRemove),
         }));
     };
-
 
     const handleCheckboxChange = (event) => {
         const { name, checked } = event.target;
@@ -187,7 +177,6 @@ const navigate = useNavigate();
             });
         }
     };
-    
 
     const handleNewTopicChange = (e) => {
         const { name, value } = e.target;
@@ -197,208 +186,110 @@ const navigate = useNavigate();
         });
     };
 
-
-
     return (
-    <div>
-        <a href='/panel/courses' className='text-blue-dark tex-decoration-none'><FontAwesomeIcon icon={faChevronLeft} size='lg'/></a>
-
-    <div className='d-flex flex-column align-items-center justify-content-center '> 
-    <div className='shadow bg-light px-5 pb-5 pt-5 my-4 rounded'>
-    <h2 className='mb-4'><FontAwesomeIcon icon={faChalkboard}/>  Nuevo Curso</h2>
-    <form onSubmit={handleSubmit}>
-        <div className="row mb-3">
-            <div className="col-md-6">
-            <div className="form-group mb-3">
-                    <label>Imagen del Curso</label>
-                    <input
-                        type="file"
-                        className="form-control"
-                        name="coverImage"
-                        onChange={handleImageChange}
-                        required={!course.imagePreview}
-                        ref={fileInputRef}
-                    />
-                    {course.imagePreview && (
-                        <div className="position-relative mt-2">
-                            <img
-                                src={course.imagePreview}
-                                alt="Imagen de perfil"
-                                style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '50px' }}
-                            />
-                            <button
-                                type="button"
-                                className="ms-2 btn btn-secondary"
-                                onClick={handleRemoveImage}
-                                style={{ borderRadius: '50%'}}
-                            >X
-                            </button>
+        <div>
+            <a href='/panel/courses' className='text-blue-dark tex-decoration-none'><FontAwesomeIcon icon={faChevronLeft} size='lg'/></a>
+            <div className='d-flex flex-column align-items-center justify-content-center '>
+                <div className='shadow bg-light px-5 pb-5 pt-5 my-4 rounded'>
+                    <h2 className='mb-4'><FontAwesomeIcon icon={faChalkboard}/>  Nuevo Curso</h2>
+                    <form onSubmit={handleSubmit}>
+                        <div className="row mb-3">
+                            <div className="col-md-6">
+                                <div className="form-group mb-3">
+                                    <label>Imagen del Curso</label>
+                                    <input type="file" className="form-control" name="coverImage" onChange={handleImageChange} required={!course.imagePreview} ref={fileInputRef} />
+                                    {course.imagePreview && (
+                                        <div className="position-relative mt-2">
+                                            <img src={course.imagePreview} alt="Imagen de perfil" style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '50px' }} />
+                                            <button type="button" className="ms-2 btn btn-secondary" onClick={handleRemoveImage} style={{ borderRadius: '50%'}}>X</button>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                            <div className="col-md-6">
+                                <div className="form-group">
+                                    <label>Titulo</label>
+                                    <input type="text" className="form-control" name="title" value={course.title} onChange={handleChange} required />
+                                </div>
+                            </div>
                         </div>
-                    )}
+                        <div className="form-group mb-3">
+                            <label>Descripción</label>
+                            <textarea className="form-control" name="description" value={course.description} onChange={handleChange} required />
+                        </div>
+                        <div className="row mb-3">
+                            <div className="col-md-6">
+                                <div className="form-group">
+                                    <label>Duración (horas)</label>
+                                    <input type="number" className="form-control" name="duration" value={course.duration} onChange={handleChange} required min="1" />
+                                </div>
+                            </div>
+                            <div className="col-md-6">
+                                <div className="form-group">
+                                    <label>Nivel</label>
+                                    <select className="form-control" name="level" value={course.level} onChange={handleChange} required>
+                                        <option value="" disabled>Elige un Nivel...</option>
+                                        <option value="Basico">Basico</option>
+                                        <option value="Intermedio">Intermedio</option>
+                                        <option value="Avanzado">Avanzado</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="form-group mb-3">
+                            <label>Objetivos del Curso</label>
+                            <div className='input-group mb-3'>
+                                <input type="text" className="form-control" name="newObjectives" value={course.newObjectives} onChange={handleChange} />
+                                <div className="input-group-append">
+                                    <button type="button" className="btn btn-primary ms-2" onClick={handleAddObjective}>
+                                        <FontAwesomeIcon icon={faPlus} />
+                                    </button>
+                                </div>
+                            </div>
+                            <ol>
+                                {course.objectives.map((objective, index) => (
+                                    <li className="d-flex justify-content-between align-items-center mb-2" key={index}>
+                                        <div><span className='text-muted fs-5'>{index+1}.</span> {objective}</div>
+                                        <button type="button" className="btn-close" aria-label="Close" onClick={() => handleRemoveObjective(index)} />
+                                    </li>
+                                ))}
+                            </ol>
+                        </div>
+                        <div className="form-group mb-3">
+                            <label>Contenido</label>
+                            <div className='input-group mb-3'>
+                                <input type="text" className="form-control" name="newContent" value={course.newContent} onChange={handleChange} />
+                                <div className="input-group-append">
+                                    <button type="button" className="btn btn-primary ms-2" onClick={handleAddContent}>
+                                        <FontAwesomeIcon icon={faPlus} />
+                                    </button>
+                                </div>
+                            </div>
+                            <ol>
+                                {course.content.map((content, index) => (
+                                    <li className="d-flex justify-content-between align-items-center mb-2" key={index}>
+                                        <div><span className='text-muted fs-5'>{index+1}.</span> {content}</div>
+                                        <button type="button" className="btn-close" aria-label="Close" onClick={() => handleRemoveContent(index)} />
+                                    </li>
+                                ))}
+                            </ol>
+                        </div>
+                        <div className="mb-3">
+                            <label className='form-label'>Seleccionar Temas</label>
+                            <div>
+                                {availableTopic.map((topic) => (
+                                    <div className="form-check form-check-inline" key={topic}>
+                                        <input className='form-check-input' type="checkbox" name={topic} checked={course.topic.includes(topic)} onChange={handleCheckboxChange} />
+                                        <label className='ms-1 text-secondary'>{topic}</label>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        <button type="submit" className="btn btn-primary mt-4 w-100">Crear Curso</button>
+                    </form>
                 </div>
             </div>
-            <div className="col-md-6">
-                <div className="form-group">
-                    <label>Titulo</label>
-                    <input
-                        type="text"
-                        className="form-control"
-                        name="title"
-                        value={course.title}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-            </div>
         </div>
-
-        <div className="form-group mb-3">
-            <label>Descripción</label>
-            <textarea
-                className="form-control"
-                name="description"
-                value={course.description}
-                onChange={handleChange}
-                required
-            />
-        </div>
-
-        <div className="row mb-3">
-            <div className="col-md-6">
-                <div className="form-group">
-                    <label>Duración (horas)</label>
-                    <input
-                        type="number"
-                        className="form-control"
-                        name="duration"
-                        value={course.duration}
-                        onChange={handleChange}
-                        required
-                        min="1"
-                    />
-                </div>
-            </div>
-            <div className="col-md-6">
-                <div className="form-group">
-                    <label>Nivel</label>
-                    <select
-                        className="form-control"
-                        name="level"
-                        value={course.level}
-                        onChange={handleChange}
-                        required
-                    >
-                        <option value="" disabled>Elige un Nivel...</option>
-                        <option value="Basico">Basico</option>
-                        <option value="Intermedio">Intermedio</option>
-                        <option value="Avanzado">Avanzado</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <div className="form-group mb-3">
-            <label>Objetivos del Curso</label>
-            <div className='input-group mb-3'>
-                <input
-                    type="text"
-                    className="form-control"
-                    name="newObjectives"
-                    value={course.newObjectives}
-                    onChange={handleChange}
-                />
-                <div className="input-group-append">
-                    <button
-                        type="button"
-                        className="btn btn-primary ms-2"
-                        onClick={handleAddObjective}
-                    >
-                        <FontAwesomeIcon icon={faPlus} />
-                    </button>
-                </div>
-            </div>
-            <ol >
-                {course.objectives.map((objective, index) => (
-                    <li
-                        className="d-flex justify-content-between align-items-center mb-2"
-                        key={index}
-                    >
-                        <div><span className='text-muted fs-5'>{index+1}.</span> {objective}</div>
-                        <button
-                            type="button"
-                            className="btn-close"
-                            aria-label="Close"
-                            onClick={() => handleRemoveObjective(index)}
-                        />
-                    </li>
-                ))}
-            </ol>
-        </div>
-
-        <div className="form-group mb-3">
-            <label>Contenido</label>
-            <div className='input-group mb-3'>
-                <input
-                    type="text"
-                    className="form-control"
-                    name="newContent"
-                    value={course.newContent}
-                    onChange={handleChange}
-                />
-                <div className="input-group-append">
-                    <button
-                        type="button"
-                        className="btn btn-primary ms-2"
-                        onClick={handleAddContent}
-                    >
-                        <FontAwesomeIcon icon={faPlus} />
-                    </button>
-                </div>
-            </div>
-            <ol>
-                {course.content.map((content, index) => (
-                    <li
-                        className="d-flex justify-content-between align-items-center mb-2"
-                        key={index}
-                    >
-                        <div><span className='text-muted fs-5'>{index+1}.</span> {content}</div>
-                        <button
-                            type="button"
-                            className="btn-close"
-                            aria-label="Close"
-                            onClick={() => handleRemoveContent(index)}
-                        />
-                    </li>
-                ))}
-            </ol>
-        </div>
-
-        <div className="mb-3">
-            <label className='form-label'>Seleccionar Temas</label>
-            <div>
-                {availableTopic.map((topic) => (
-                    <div className="form-check form-check-inline" key={topic}>
-                        <input
-                            className='form-check-input'
-                            type="checkbox"
-                            name={topic}
-                            checked={course.topic.includes(topic)}
-                            onChange={handleCheckboxChange}
-                        />
-                        <label className='ms-1 text-secondary'>{topic}</label>
-                    </div>
-                ))}
-            </div>
-        </div>
-
-        <button type="submit" className="btn btn-primary mt-4 w-100">Crear Curso</button>
-    </form>
-
-    
-</div>
-    </div>
-        </div>
-    
     );
 }
 

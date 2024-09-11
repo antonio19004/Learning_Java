@@ -1,6 +1,5 @@
 package com.learning.app.Enum;
 
-
 public enum Topic {
 	
 	Poo,
@@ -15,7 +14,4 @@ public enum Topic {
 	Funciones,
 	Framework,
 	Sintaxis;
-
-	
-
 }

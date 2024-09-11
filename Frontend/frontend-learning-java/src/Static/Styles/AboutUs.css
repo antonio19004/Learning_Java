@@ -1,8 +1,7 @@
 .content {
     padding: 20px;
-    margin-top: 20px;
-    margin-left: 150px;
-    margin-right: 150px;
+    margin: 20px auto;
+    max-width: 1200px;
 }
 
 .list, p {
@@ -11,36 +10,7 @@
 
 .about {
     text-align: justify;
-    margin-right: 100px;
     margin-bottom: 40px;
-}
-
-.card-container {
-    display: flex;
-    width: 100%;
-    align-items: center;
-    margin: 20px 0;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.card-container-reverse {
-    display: flex;
-    width: 100%;
-    flex-direction: row-reverse;
-    align-items: center;
-    margin: 20px 0;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.img-container {
-    flex-shrink: 0;
-    padding: 10px;
 }
 
 .img-container img {
@@ -56,32 +26,14 @@
     padding: 10px;
 }
 
-.university {
+.university, .history, .valores {
     text-align: justify;
-    margin-right: 100px;
     margin-bottom: 40px;
 }
 
-.university ul {
+.university ul, .valores ul {
     list-style: none;
-    padding-right: 0;
-}
-
-.history {
-    text-align: justify;
-    margin-left: 100px;
-    margin-bottom: 40px;
-}
-
-.valores {
-    text-align: left;
-    margin-right: 100px;
-    margin-bottom: 40px;
-}
-
-.valores ul {
-    list-style: none;
-    padding-right: 0;
+    padding-left: 0;
 }
 
 .start {
@@ -97,3 +49,56 @@
     align-items: center;
     justify-content: center;
 }
+
+@media (max-width: 768px) {
+    .content {
+        margin: 10px;
+        padding: 10px;
+    }
+
+    .about, .university, .history, .valores {
+        margin: 0;
+    }
+
+    .img-container img {
+        max-width: 200px;
+    }
+
+    .card-container, .card-container-reverse {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .info-container {
+        padding: 0;
+    }
+}
+
+@media (max-width: 576px) {
+    .img-container img {
+        max-width: 150px;
+    }
+
+    .btn-courses {
+        width: 160px;
+        height: auto;
+        border-radius: 20px;
+    }
+}
+
+.card-container {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    margin: 20px 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.img-container {
+    flex-shrink: 0;
+    padding: 10px;
+}
+

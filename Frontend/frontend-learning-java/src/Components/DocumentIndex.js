@@ -13,8 +13,9 @@ import { es } from 'date-fns/locale';
 import NavMenu from '../Layouts/NavMenu';
 import Footer from '../Layouts/Footer';
 
+const Document = () => {
+    document.title = 'Documentación';
 
-const Document =()=>{
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
     const [archivos, setArchivos] = useState([]);
@@ -52,6 +53,7 @@ const Document =()=>{
             setResults(filteredResults);
         }
     };
+
     const handleVerArchivo = async (id) => {
         window.open(`http://localhost:8080/${baseUrl}/documentacion/${id}`, '_blank');
     };
@@ -87,41 +89,31 @@ const Document =()=>{
                     <div className='panelcenter'>
                         <Loader />
                     </div>
-                    ) : (
+                ) : (
                     <div>
                         <h2><FontAwesomeIcon icon={faFolder}/> Documentación</h2>
                         
                         <a class="btn btn-primary mt-2 ms-2 mb-3" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                        <FontAwesomeIcon icon={faInfo}/> Información
+                            <FontAwesomeIcon icon={faInfo}/> Información
                         </a>
                         <div class="collapse" id="collapseExample">
-                        <div class="card card-body mb-4">
-                           En esta Seccion encontraras material de apoyo sobre progrmación en JAVA que te puede servir como ayuda para estudiar algunos conceptos sencillos o hasta mas avanzados.
-                        </div>
+                            <div class="card card-body mb-4">
+                                En esta Seccion encontraras material de apoyo sobre progrmación en JAVA que te puede servir como ayuda para estudiar algunos conceptos sencillos o hasta mas avanzados.
+                            </div>
                         </div>
                         <div className="input-group mb-4 w-50">
                             <span className="input-group-text" id="basic-addon1">
                                 <FontAwesomeIcon icon={faSearch} />
                             </span>
-                            <input
-                                type="text"
-                                className="form-control"
-                                placeholder="Buscar Documentos..."
-                                aria-label="Buscar Documentos..."
-                                aria-describedby="basic-addon1"
-                                value={query}
-                                onChange={handleSearch}
-                            />
+                            <input type="text" className="form-control" placeholder="Buscar Documentos..." aria-label="Buscar Documentos..." aria-describedby="basic-addon1" value={query} onChange={handleSearch} />
                         </div>
-    
                         {results.length > 0 ? (
                             <div className="row">
                                 {results.map((archivo) => {
-                                   const fecha = parseISO(archivo.fechaSubida);
-                                   const formattedDate = formatRelativeDate(fecha);
-                                   const {icon,color} = getFileIcon(archivo.tipo); 
+                                    const fecha = parseISO(archivo.fechaSubida);
+                                    const formattedDate = formatRelativeDate(fecha);
+                                    const {icon,color} = getFileIcon(archivo.tipo); 
 
-    
                                     return (
                                         <div className="col-md-4" key={archivo.id}>
                                             <div className="card mb-4">
@@ -131,16 +123,10 @@ const Document =()=>{
                                                 </div>
                                                 <div className="card-body">
                                                     <h5 className='fw-bold'><FontAwesomeIcon icon={faJava} size='xl' /> {archivo.titulo}</h5>
-                                                    <button
-                                                        className="btn btn-dark me-3 mt-4"
-                                                        onClick={() => handleVerArchivo(archivo.id)}
-                                                    >
+                                                    <button className="btn btn-dark me-3 mt-4" onClick={() => handleVerArchivo(archivo.id)}>
                                                         <FontAwesomeIcon icon={faEye} />
                                                     </button>
-                                                    <button
-                                                        className="btn btn-primary mt-4"
-                                                        onClick={() => handleDescargarArchivo(archivo.id)}
-                                                    >
+                                                    <button className="btn btn-primary mt-4" onClick={() => handleDescargarArchivo(archivo.id)}>
                                                         <FontAwesomeIcon icon={faDownload} />
                                                     </button>
                                                 </div>
@@ -160,5 +146,6 @@ const Document =()=>{
             <Footer/>
         </div>
     );
-}    
+}
+
 export default Document;

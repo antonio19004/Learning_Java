@@ -38,44 +38,40 @@ const ResetPassword = () => {
     };
 
     return (
-        <div>
-            <div className='d-flex flex-column align-items-center justify-content-center '>
-            <div className='shadow bg-light px-5 pb-5 my-4 rounded'>
-            <div>
-                <a href='/login' class="btn btn-secondary rounded mt-3 ">
+        <div className='container'>
+            <div className='mt-3'>
+                <a href='/login' className="btn btn-secondary rounded">
                     <FontAwesomeIcon icon={faArrowLeft} /> Volver
                 </a>
             </div><br />
-            <div className="d-flex justify-content-center align-items-center">
-                {errorMessage && !successMessage && (
-                    <div className="alert alert-danger" role="alert" style={{ width: '50%' }}>
-                        <p className="text-danger text-center">{errorMessage}</p>
-                    </div>
-                )}
-                {successMessage && (
-                    <div className="alert alert-success" role="alert" style={{ width: '50%' }}>
-                        <p className="text-success text-center">{successMessage}</p>
-                    </div>
-                )}
+            <div className='d-flex flex-column align-items-center justify-content-center '>
+                <div className='shadow bg-light p-4 p-sm-5 my-4 rounded' style={{ maxWidth: '500px', width: '100%' }}>
+                    <h2 className='fw-bold text-center mb-4'>Recupera tu Contraseña</h2>
+                    <h5 className='fw-light text-center mb-4'>Ingresa tu usuario y enviaremos a tu correo una nueva contraseña</h5>
+                    {errorMessage && !successMessage && (
+                        <div className="alert alert-danger" role="alert">
+                            <p className="text-danger text-center">{errorMessage}</p>
+                        </div>
+                    )}
+                    {successMessage && (
+                        <div className="alert alert-success" role="alert">
+                            <p className="text-success text-center">{successMessage}</p>
+                        </div>
+                    )}
+                    <form onSubmit={handleUsernameSubmit} className='w-100'>
+                        <div className="input-group mb-3">
+                            <span className="input-group-text"> 
+                                <FontAwesomeIcon icon={faUser} />
+                            </span>
+                            <input className='form-control' type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder='Usuario' />
+                        </div>
+                        <br />
+                        <center><button className='btn btn-dark ms-5' type="submit">Restablecer</button></center>
+                    </form>
+                </div>
             </div>
-            <div className='d-flex flex-column align-items-center justify-content-center' style={{ height: '55vh' }}>
-                <h2 className='fw-bold'>Recupera tu Contraseña</h2><br />
-                <h5 className='fw-light text-center'>Ingresa con tu usuario y enviaremos a tu correo una nueva contraseña</h5><br/>
-                <form onSubmit={handleUsernameSubmit}>
-                    <div className="input-group mb-3">
-                        <span className="input-group-text"> 
-                            <FontAwesomeIcon icon={faUser} />
-                        </span>
-                        <input className='form-control' type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder='Usuario' />
-                    </div>
-                    <br />
-                    <button className='btn btn-dark ms-5' type="submit">Restablecer</button>
-                </form>
-            </div>
         </div>
-        </div>
-        </div>
-    )
-}
+    );
+};
 
 export default ResetPassword;

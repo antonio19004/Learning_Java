@@ -53,7 +53,7 @@ const AboutUs = () => {
                             </ul>
                         </div>
                     </div><br />
-                    <div className='card-container-reverse'>
+                    <div className='card-container'>
                         <div className='img-container'>
                             <img src={Developer2}></img>
                         </div>
@@ -128,7 +128,7 @@ const AboutUs = () => {
                 </section>
                 <section className='start'>
                     <h2 className='fw-bold text-center'>¿Listo para Aprender Programación?</h2><br />
-                    <center><a href='' className='btn btn-dark btn-courses'>Explora Nuestros Cursos</a></center>
+                    <center><a href='/courses' className='btn btn-dark btn-courses'>Explora Nuestros Cursos</a></center>
                 </section>
             </div>
             <Footer />
