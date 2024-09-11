@@ -69,13 +69,6 @@ const NavMenu = () => {
         }
       };
 
-      const handleSpecificClick = (e) => {
-        e.stopPropagation();
-      };
-
-      const handleClick = (item) => {
-        setActiveItem(item);
-    };
 
   
     React.useEffect(() => {
@@ -110,6 +103,14 @@ const NavMenu = () => {
                         to="/courses"
                     >
                         Cursos
+                    </Link>
+                </li>
+                <li className="nav-item">
+                    <Link
+                        className={`nav-link fs-5 mt-2 ${getActiveClass('/exercises')}`}
+                        to="/exercises"
+                    >
+                        Practica
                     </Link>
                 </li>
                 <li className="nav-item">

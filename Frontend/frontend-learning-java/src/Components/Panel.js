@@ -2,37 +2,30 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import React, { useState } from 'react';
+import React, {  } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useLocation,useNavigate } from 'react-router-dom';
 import '../Static/Styles/Style.css';
-import NavMenu from '../Layouts/NavMenu';
 import Logo from '../Static/Img/Logo-LJ.png';
 import NavPanel from './NavPanel';
-import NoFoundR from '../Layouts/NoFoundR';
-import Document from './Document';
-import UploadDocument from './UploadDocumentation';
-import EditDocument from './EditDocument';
+import Document from './Document/Document.js';
+import UploadDocument from './Document/UploadDocumentation.js';
+import EditDocument from './Document/EditDocument.js';
 import CreateCourse from './Courses/CreateCourses';
 import Courses from './Courses/Courses';
 import EditCourse from './Courses/EditCourse';
 import CreateLesson from './Lesson/CreateLesson';
 import Lessons from './Lesson/Lessons';
 import EditLessonForm from './Lesson/EditLesson';
+import CreateExercise from './Exercise/CreateExercise.js';
+import Exercises from './Exercise/Exercises.js';
+import EditExercise from './Exercise/EditExercise.js';
 
 const Panel = () => {
-  const [isOpen, setIsOpen] = useState(true);
-  const [isCollapsed, setIsCollapsed] = useState(false);
   const rol = localStorage.getItem('role');
   const location = useLocation();
   const navigate = useNavigate();
 
-    const toggleCollapse = () => {
-        setIsCollapsed(!isCollapsed);
-    };
-  const toggleNavbar = () => {
-    setIsOpen(!isOpen);
-  };
 
   const handleHashClick = (e) => {
     if (e.target.getAttribute('href') === '#') {
@@ -68,7 +61,7 @@ const Panel = () => {
         <ul className="navbar-nav flex-column p-5">
         <span class="badge bg-dark mb-2">Parametrización</span>
           <li className="nav-item">
-            <a className="nav-link text-Light" aria-current="page" href="/panel/document">Documentos</a>
+            <a className="nav-link text-Light" aria-current="page" href="/panel/document">Documentación</a>
           </li>
           <li className="nav-item">
             <a className="nav-link" href="/panel/documentForm">Usuarios</a>
@@ -77,7 +70,7 @@ const Panel = () => {
             <a className="nav-link text-Light" href="/panel/courses">Cursos</a>
           </li>
           <li className="nav-item">
-            <a className="nav-link text-Light" href="#">About</a>
+            <a className="nav-link text-Light" href="/panel/exercises">Ejercicios</a>
           </li>
         </ul>
         <div className='pt-5'>
@@ -106,6 +99,9 @@ const Panel = () => {
           <Route path='/edit-lesson/:id' element={isAuthenticated ? <EditLessonForm/> : <Navigate to="/login" />}></Route>
           <Route path='/lessonForm/course/:id' element={isAuthenticated ? <CreateLesson/> : <Navigate to="/login" />}></Route>
           <Route path='/lessons/course/:id' element={isAuthenticated ? <Lessons/> : <Navigate to="/login" />}></Route>
+          <Route path='/exerciseForm' element={isAuthenticated ? <CreateExercise/> : <Navigate to="/login" />}  />
+          <Route path='/exercises' element={isAuthenticated ? <Exercises/> : <Navigate to="/login" />}  />
+          <Route path='/edit-exercise/:id' element={isAuthenticated ? <EditExercise/> : <Navigate to="/login" />}  />
         </Routes>
       </div>
     </div>

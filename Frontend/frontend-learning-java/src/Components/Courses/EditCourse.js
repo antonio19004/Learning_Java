@@ -133,6 +133,7 @@ const availableTopic = [
             formData.append('duration', course.duration);
             formData.append('level', course.level);
             formData.append('progress', course.progress);
+            formData.append('creador', course.creador);
             formData.append('objectives', JSON.stringify(course.objectives));
             formData.append('content', JSON.stringify(course.content));
             formData.append('topic', JSON.stringify(course.topic));

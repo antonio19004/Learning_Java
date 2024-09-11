@@ -2,8 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import React,{useState,useEffect} from "react";
 import axios from "axios";
-import Loader from "../Layouts/Loader";
-import '../Static/Styles/Style.css';
+import '../../Static/Styles/Style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleExclamation, faDownload, faEdit, faEye, faFilePdf, faFileWord, faFolder, faPlus, faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { faJava } from '@fortawesome/free-brands-svg-icons';
@@ -11,6 +10,7 @@ import {useNavigate} from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { formatDistanceToNow, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale'; 
+import Loader from '../../Layouts/Loader';
 
 
 
@@ -130,12 +130,15 @@ const Document =()=>{
 
     return(
         <div>
-        <div className="px-5 pt-4">
+        <div className="">
+        <div className='shadow bg-light px-5 pb-5 pt-5 rounded'>
+        <div>
             {loading ? (
-                <div className='panelcenter'>
+                <div className='d-flex justify-content-center'>
                     <Loader />
                 </div>
             ) : (
+      
                 <div>
                      <h2><FontAwesomeIcon icon={faFolder}/> Documentación</h2>
                     <p className='pb-4'>
@@ -161,65 +164,73 @@ const Document =()=>{
                           <div className="mb-4 ">
                           <button className="btn btn-success me-3 position-relative" onClick={handleAddDocument}>
                               <FontAwesomeIcon icon={faPlus} /> Nuevo Documento
-                              <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">
-                                Admin
-                                </span>
                           </button>
                       </div>
                     )}
+                   
 
-                    {results.length > 0 ? (
-                        <div className="row">
-                            {results.map((archivo) => {
-                             const fecha = parseISO(archivo.fechaSubida);
-                             const formattedDate = formatRelativeDate(fecha);
-                             const {icon,color} = getFileIcon(archivo.tipo); 
+                   {results.length > 0 ? (
+    <div className="row">
+        {results.map((archivo) => {
+            const fecha = parseISO(archivo.fechaSubida);
+            const formattedDate = formatRelativeDate(fecha);
+            const { icon, color } = getFileIcon(archivo.tipo);
 
-                                return (
-                                <div className="col-md-4" key={archivo.id}>
-                                    <div className="card mb-4">
-                                        <div className="card-header d-flex justify-content-between align-items-center">
-                                        <span className='pe-1'><FontAwesomeIcon  icon={icon} size='xl' style={{color:color}} /></span>
-                                            <small className='text-muted'>{formattedDate}</small>
-                                            {rol==='ROLE_ADMIN' &&(
-                                                <div>
-                                                <button className="btn" onClick={()=>handleEditDocument(archivo.id)}>
-                                                    <FontAwesomeIcon icon={faEdit} />
-                                                </button>
-                                                 <button className="btn me-1" onClick={()=>handleDeleteDocument(archivo.id)}>
-                                                 <FontAwesomeIcon icon={faTrash} style={{color:"#b41610"}} />
-                                                 </button>
-                                                 </div>
-                                                )}
-                                        </div>
-                                        <div className="card-body">
-                                        <h5 className='fw-bold'><FontAwesomeIcon icon={faJava} size='xl' /> {archivo.titulo}</h5>
-                                            <button 
-                                                className="btn btn-dark me-3 mt-4" 
-                                                onClick={() => handleVerArchivo(archivo.id)}
-                                            >
-                                                <FontAwesomeIcon icon={faEye} />
-                                            </button>
-                                            <button 
-                                                className="btn btn-primary mt-4" 
-                                                onClick={() => handleDescargarArchivo(archivo.id)}
-                                            >
-                                                <FontAwesomeIcon icon={faDownload} />
-                                            </button>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                );
-                            })}
+            return (
+                <div className="col-12 mb-4" key={archivo.id}>
+                    <div className="shadow bg-light d-flex flex-row align-items-center justify-content-between p-3 rounded">
+                        
+                        <div className="d-flex align-items-center">
+                            <FontAwesomeIcon icon={icon} size="xl" style={{ color: color }} className="me-3" />
+                            <div>
+                                <h5 className="fw-bold mb-0">
+                                    <FontAwesomeIcon icon={faJava} size="xl" /> {archivo.titulo}
+                                </h5>
+                                <small className="text-muted">{formattedDate}</small>
+                            </div>
                         </div>
-                    ) : (
-                        <div class="alert alert-info" role="alert">
-                          <FontAwesomeIcon icon={faCircleExclamation}/>  No hay Resultados!
+                        
+                        <div className="d-flex align-items-center px-3">
+                            <a
+                                className="text-secondary me-2 cursor-pointer"
+                                onClick={() => handleVerArchivo(archivo.id)}
+                            >
+                                <FontAwesomeIcon icon={faEye} size='xl'/>
+                            </a>
+                            <a
+                                className="text-primary me-2 cursor-pointer"
+                                onClick={() => handleDescargarArchivo(archivo.id)}
+                            >
+                                <FontAwesomeIcon icon={faDownload} size='xl' />
+                            </a>
+                            {rol === 'ROLE_ADMIN' && (
+                                <>
+                                    <a className="text-warning me-2 cursor-pointer" onClick={() => handleEditDocument(archivo.id)}>
+                                        <FontAwesomeIcon icon={faEdit} size='xl' />
+                                    </a>
+                                    <a className="text-danger cursor-pointer"  onClick={() => handleDeleteDocument(archivo.id)}>
+                                        <FontAwesomeIcon icon={faTrash} size='xl' />
+                                    </a>
+                                </>
+                            )}
                         </div>
-                    )}
+                    </div>
+                </div>
+            );
+        })}
+    </div>
+) : (
+    <div className="alert alert-info" role="alert">
+        <FontAwesomeIcon icon={faCircleExclamation} /> No hay Resultados!
+    </div>
+)}
+
+
+                   
                 </div>
             )}
+            </div>
+            </div>
         </div>
     </div>
     );

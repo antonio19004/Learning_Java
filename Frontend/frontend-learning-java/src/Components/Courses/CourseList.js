@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 import NavMenu from '../../Layouts/NavMenu';
 import Footer from '../../Layouts/Footer';
 import { useNavigate } from 'react-router-dom';
@@ -11,6 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleExclamation, faSearch } from '@fortawesome/free-solid-svg-icons';
 
 function CourseList() {
+  document.title='Cursos';
     const [courses, setCourses] = useState([]);
     const navigate= useNavigate();
     const [loading, setLoading] = useState(true);
@@ -66,7 +66,9 @@ function CourseList() {
     return (
         <div>
             <NavMenu/>
-        <div className="mt-5">
+        <div className="p-4">
+        <div className='shadow bg-light px-5 pb-5 pt-5 rounded'>
+        <div>
         <h1 className='fs-1 fw-light my-5 text-center'>Cursos Disponibles</h1>
             <div className="mx-5">
             {loading ? (
@@ -134,8 +136,8 @@ function CourseList() {
       )}
       </div>
 
-
-          
+      </div>
+      </div>
         </div>
         <Footer/>
         </div>

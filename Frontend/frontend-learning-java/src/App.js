@@ -8,15 +8,16 @@ import Register from './Security/Register.js';
 import ResetPassword from './Security/ResetPassword.js';
 import UpdatePassword from './Security/UpdatePassword.js';
 import useIdleTimer from './Security/Inactivity.js';
-import UploadDocument from './Components/UploadDocumentation.js';
+import UploadDocument from './Components/Document/UploadDocumentation.js';
 import Panel from './Components/Panel.js';
 import NoFoundR from './Layouts/NoFoundR.js';
-import DocumentIndex from './Components/DocumentIndex.js';
+import DocumentIndex from './Components/Document/DocumentIndex.js';
 import CourseList from './Components/Courses/CourseList.js';
 import CreateLesson from './Components/Lesson/CreateLesson.js';
 import CreateCourse from './Components/Courses/CreateCourses.js';
 import CourseView from './Components/Courses/CourseView.js';
 import ViewLesson from './Components/Lesson/ViewLesson.js';
+import ExercisesList from './Components/Exercise/ListExercise.js';
 
 
 
@@ -42,6 +43,7 @@ function App(){
 
   return (
     <Routes>
+      <Route path="/exercises" element={<ExercisesList/>} />
       <Route path="/course/:id/lesson/:lessonIndex" element={<ViewLesson/>} />
       <Route path='/courseview/:id' element={<CourseView/>}></Route>
       <Route path='/lessonform' element={<CreateLesson/>}/>

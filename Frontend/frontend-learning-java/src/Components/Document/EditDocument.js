@@ -3,8 +3,8 @@ import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretLeft, faFloppyDisk, faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
-import '../Static/Styles/Style.css';
+import { faCaretLeft, faChevronLeft, faFloppyDisk, faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
+import '../../Static/Styles/Style.css';
 import { useParams,useNavigate } from "react-router-dom";
 
 const EditDocument = () => {
@@ -61,10 +61,12 @@ const EditDocument = () => {
     }
 
     return (
-        <div className="px-5">
+        <div>
+             <div className='shadow bg-light px-5 pb-5 pt-5 rounded'>
+             <div>
             {rol === 'ROLE_ADMIN' ? (
-                <div className='border border-2 p-5 pt-2 rounded'>
-                    <button className="btn rounded" onClick={iratras}><FontAwesomeIcon icon={faCaretLeft}/> Atras</button> 
+                <div className=''>
+                    <button className="btn rounded" onClick={iratras}><FontAwesomeIcon icon={faChevronLeft} size="lg"/></button> 
                     <h2 className="mb-3 pt-4">Editar Archivo</h2>
                     <form onSubmit={handleSubmit}>
                         <div className="mb-3 w-50">
@@ -105,6 +107,8 @@ const EditDocument = () => {
                     </div>
                 </div>
             )}
+        </div>
+        </div>
         </div>
     );
 }

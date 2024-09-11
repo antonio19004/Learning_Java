@@ -4,7 +4,7 @@ import { Link,useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendarDays, faChalkboardUser, faChartLine, faCircle, faCircleInfo, faClock, faEdit, faFlagCheckered, faGraduationCap, faList, faMagnifyingGlassChart, faNotdef, faSitemap, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarDays, faChalkboardUser, faChartLine, faCircle, faCircleInfo, faClock, faEdit, faFlagCheckered, faGraduationCap, faList, faMagnifyingGlassChart, faNotdef, faSitemap, faTrash, faUserTie } from '@fortawesome/free-solid-svg-icons';
 import Loader from '../../Layouts/Loader';
 import { faBookmark } from '@fortawesome/free-regular-svg-icons';
 import { formatDistanceToNow, parseISO } from 'date-fns';
@@ -194,6 +194,7 @@ function Courses() {
                                         />
                     </div>
                     <hr />
+                    <p><span className='fs-6 fw-bold'><FontAwesomeIcon icon={faUserTie} size='sm'/>   Autor(a/s):</span>  {selectedCourse?.creador}</p>
                     <p><span className='fs-6 fw-bold'><FontAwesomeIcon icon={faCalendarDays} size='sm'/>   Ultima Actualización:</span>  {formatDate(selectedCourse?.lastUpdate)}</p>
                     <p><span className='fs-6 fw-bold'><FontAwesomeIcon icon={faClock} size='sm'/>  Duración:</span>  {selectedCourse?.duration} Horas(s)</p>
                     <p><span className='fs-6 fw-bold'><FontAwesomeIcon icon={faChartLine} size='sm'/>  Nivel:</span>  {selectedCourse?.level}</p>

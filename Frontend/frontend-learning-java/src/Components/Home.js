@@ -101,13 +101,15 @@ const Home = () => {
         </header>
         <main className="flex-grow-1">
           <Carrousel />
-            <div className="mx-5">
+            <div className="mx-4">
             {loading ? (
                     <div className='d-flex justify-content-center'>
                         <Loader/>
                     </div>
                 ) : (
-           <div>       
+           <div className='p-4'>       
+             <div className='shadow bg-light px-5 pb-5 pt-5 rounded'>
+             <div>
           <h1 className='fs-1 fw-light my-5 text-center'>Recientes</h1>
           <div className="row row-cols-1 row-cols-md-3 g-4 my-3">
           {cursos.map((curso) => {
@@ -142,6 +144,8 @@ const Home = () => {
     </div>
   );
 })}
+      </div>
+      </div>
       </div>
       </div>
       )}

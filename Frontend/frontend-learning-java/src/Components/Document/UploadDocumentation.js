@@ -3,8 +3,8 @@ import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowUpFromBracket, faCaretLeft, faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
-import '../Static/Styles/Style.css';
+import { faArrowUpFromBracket, faCaretLeft, faChevronLeft, faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
+import '../../Static/Styles/Style.css';
 import { useNavigate } from "react-router-dom";
 
 
@@ -50,10 +50,12 @@ const UploadDocument =()=>{
     }
 
     return(
-        <div className="px-5">
+        <div>
+            <div className='shadow bg-light px-5 pb-5 pt-5 rounded'>
+            <div>
             {rol === 'ROLE_ADMIN' ? (
-            <div className='border border-2 p-5 pt-2 rounded'>
-                 <button className="btn rounded" onClick={iratras}><FontAwesomeIcon icon={faCaretLeft}/> Atras</button>   
+            <div className=''>
+                 <button className="btn" onClick={iratras}><FontAwesomeIcon icon={faChevronLeft} size="lg"/></button>   
               <h2 className="mb-3 pt-4">Subir Archivo</h2>
             <form onSubmit={handleSubmit}>
                 <div className=" mb-3 w-50">
@@ -78,6 +80,8 @@ const UploadDocument =()=>{
                 </div>
             )}
         </div>       
+        </div>    
+        </div>    
     );
 }
 export default UploadDocument;

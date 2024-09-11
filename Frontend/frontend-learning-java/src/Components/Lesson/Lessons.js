@@ -172,6 +172,8 @@ return(
         <div className='shadow bg-light px-5 pb-5 pt-5 rounded'>
             <div>
             <h2> <FontAwesomeIcon icon={faList}/>  Lista de Lecciones</h2>
+
+            
             {lessons && lessons.length > 0 ? (
             lessons.map((Lesson, index) => (
                
