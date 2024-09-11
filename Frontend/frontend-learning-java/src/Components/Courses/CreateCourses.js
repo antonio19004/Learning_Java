@@ -36,6 +36,7 @@ const navigate = useNavigate();
         objectives: [],
         content: [],
         progress: 0.0,
+        creador:'',
         topic: [],
         newObjectives: '',
         newContent: '',
@@ -250,7 +251,10 @@ const navigate = useNavigate();
                     />
                 </div>
             </div>
+            
         </div>
+
+
 
         <div className="form-group mb-3">
             <label>Descripción</label>
@@ -296,6 +300,19 @@ const navigate = useNavigate();
                 </div>
             </div>
         </div>
+
+        <div className="form-group">
+                    <label>Autor(a)</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        name="creador"
+                        value={course.creador}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+
 
         <div className="form-group mb-3">
             <label>Objetivos del Curso</label>

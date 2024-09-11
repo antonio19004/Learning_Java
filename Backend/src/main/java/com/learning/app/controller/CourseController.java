@@ -55,7 +55,8 @@ public class CourseController {
 	            @RequestParam("coverImage") MultipartFile coverImage,
 	            @RequestParam("objectives") String objectivesJson,
 	            @RequestParam("content") String contentJson,
-	            @RequestParam("topic") String topicJson
+	            @RequestParam("topic") String topicJson,
+	            @RequestParam("creador") String creador
 	    ) {
 
 		    Optional<Course> existingCourse = courseRepository.findByTitle(title);
@@ -85,6 +86,7 @@ public class CourseController {
 	            course.setObjectives(objectives);
 	            course.setContent(content);
 	            course.setTopic(topicList);
+	            course.setCreador(creador);
 
 	            
 	            if (coverImage != null && !coverImage.isEmpty()) {
@@ -143,10 +145,8 @@ public class CourseController {
 	        if (course.getLesson() != null && !course.getLesson().isEmpty()) {
 	            List<String> lessonIds = course.getLesson();
 
-	            // Encuentra todas las lecciones con los IDs proporcionados
 	            List<Lesson> foundLessons = lessonRepository.findAllById(lessonIds);
 
-	            // Ordena las lecciones según el orden de los IDs
 	            lessons = lessonIds.stream()
 	                    .map(ids -> foundLessons.stream()
 	                            .filter(lesson -> lesson.getId().equals(ids))
@@ -170,17 +170,13 @@ public class CourseController {
 	        try {
 	        	
 	        	 System.out.println("Payload recibido: " + lessonIds);
-	            // Encuentra el curso
 	            Course course = courseRepository.findById(id)
 	                    .orElseThrow(() -> new RuntimeException("No existe el curso"));
-
-	            // Imprime la lista de lecciones actual
 	            System.out.println("Lecciones antes de la actualización: " + course.getLesson());
 
-	            // Imprime el ID del curso para verificar
 	            System.out.println("ID del curso: " + id);
 
-	            // Encuentra todas las lecciones con los IDs proporcionados
+
 	            List<Lesson> lessons = lessonRepository.findAllById(lessonIds);
 	            if (lessons.size() != lessonIds.size()) {
 	                throw new RuntimeException("Algunas lecciones no se encontraron");
@@ -214,7 +210,8 @@ public class CourseController {
 	            @RequestParam(value="coverImage"  ,required = false) MultipartFile coverImage,
 	            @RequestParam("objectives") String objectivesJson,
 	            @RequestParam("content") String contentJson,
-	            @RequestParam("topic") String topicJson
+	            @RequestParam("topic") String topicJson,
+	            @RequestParam("creador") String creador
 	    ) {
 	        if (!courseRepository.existsById(id)) {
 	            return new ResponseEntity<>("Curso no encontrado.", HttpStatus.NOT_FOUND);
@@ -239,6 +236,7 @@ public class CourseController {
 	            course.setObjectives(objectives);
 	            course.setContent(content);
 	            course.setTopic(topicList);
+	            course.setCreador(creador);
 
 	            if (coverImage != null && !coverImage.isEmpty()) {
 	                course.setCoverImage(coverImage.getBytes());

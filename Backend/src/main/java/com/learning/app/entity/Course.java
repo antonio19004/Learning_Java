@@ -30,6 +30,7 @@ public class Course {
 	private List<Topic> topic;
 	private byte[] coverImage;
 	private List<String> lesson;
+	private String creador;
 	
 	
 	
@@ -203,6 +204,18 @@ public class Course {
 
 	public void setLesson(List<String> lesson) {
 		this.lesson = lesson;
+	}
+
+
+
+	public String getCreador() {
+		return creador;
+	}
+
+
+
+	public void setCreador(String creador) {
+		this.creador = creador;
 	}
 
 	

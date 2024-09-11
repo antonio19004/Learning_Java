@@ -22,6 +22,7 @@ function EditCourseForm() {
         level: '',
         newObjectives: '',
         objectives: [],
+        creador:'',
         newContent: '',
         content: [],
         topic: [],
@@ -261,6 +262,18 @@ const availableTopic = [
                             </div>
                         </div>
                     </div>
+
+                    <div className="form-group">
+                    <label>Autor(a)</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        name="creador"
+                        value={course.creador}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
 
                     <div className="form-group mb-3">
                         <label>Objetivos del Curso</label>
