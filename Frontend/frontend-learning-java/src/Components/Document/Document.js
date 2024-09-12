@@ -125,7 +125,7 @@ const Document = () => {
 
     return(
         <div>
-        <div className="">
+        <div className="ms-3">
         <div className='shadow bg-light px-5 pb-5 pt-5 rounded'>
         <div>
             {loading ? (

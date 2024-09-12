@@ -204,7 +204,7 @@ const ForumSettings = () => {
 
     return (
         <div>
-            <div className='container mt-4'>
+            <div className=''>
                 {loading ? (
                     <div className='panelcenter'>
                         <Loader />

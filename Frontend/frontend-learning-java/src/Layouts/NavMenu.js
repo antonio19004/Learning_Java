@@ -88,20 +88,20 @@ const NavMenu = () => {
                     <div className="collapse navbar-collapse" id="navbarNav">
                         <ul className="navbar-nav ms-auto me-7">
                             <li className="nav-item">
-                                <Link className={`nav-link fs-5 mt-2 ${getActiveClass('/Home')}`} to="/home">Inicio</Link>
+                                <Link className={`nav-link fs-5 mt-2 fw-light ${getActiveClass('/home')}`} to="/home">Inicio</Link>
                             </li>
                             <li className="nav-item">
-                                <Link className={`nav-link fs-5 mt-2 ${getActiveClass('/courses')}`} to="/courses">Cursos</Link>
+                                <Link className={`nav-link fs-5 mt-2 fw-light ${getActiveClass('/courses')}`} to="/courses">Cursos</Link>
                             </li>
                             {isAuthenticated && (
                                 <li className="nav-item">
-                                    <Link className={`nav-link fs-5 mt-2 ${getActiveClass('/Document')}`} to="/Document">Documentación</Link>
+                                    <Link className={`nav-link fs-5 mt-2 fw-light ${getActiveClass('/Document')}`} to="/Document">Documentación</Link>
                                 </li>
                             )}
 
                                 <li className="nav-item">
                                     <Link
-                                        className={`nav-link fs-5 mt-2 ${getActiveClass('/exercises')}`}
+                                        className={`nav-link fs-5 mt-2 fw-light ${getActiveClass('/exercises')}`}
                                         to="/exercises"
                                     >
                                         Practica
@@ -109,14 +109,14 @@ const NavMenu = () => {
                                 </li>
                             {isAuthenticated && (
                                 <li className="nav-item">
-                                    <Link className={`nav-link fs-5 mt-2 ${getActiveClass('/forum')}`} to="/forum">Foro</Link>
+                                    <Link className={`nav-link fs-5 mt-2 fw-light ${getActiveClass('/forum')}`} to="/forum">Foro</Link>
                                 </li>
                             )}
                             <li className="nav-item">
-                                <Link className={`nav-link fs-5 mt-2 ${getActiveClass('/contact')}`} to="/contact">Contacto</Link>
+                                <Link className={`nav-link fs-5 mt-2 fw-light ${getActiveClass('/contact')}`} to="/contact">Contacto</Link>
                             </li>
                             <li className="nav-item">
-                                <Link className={`nav-link fs-5 mt-2 ${getActiveClass('/about-us')}`} to="/about-us">Acerca de</Link>
+                                <Link className={`nav-link fs-5 mt-2 fw-light ${getActiveClass('/about-us')}`} to="/about-us">Acerca de</Link>
                             </li>
                             {!isAuthenticated ? (
                                 <li className="nav-item nav-login">

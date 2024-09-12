@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faLock, faEye, faEyeSlash, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faLock, faEye, faEyeSlash, faArrowLeft, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 
 function Login () {
@@ -72,8 +72,8 @@ function Login () {
     return (
         <div>
             <div style={{ marginLeft: '40px', marginTop: '20px' }}>
-                <a href='/' className="btn btn-secondary rounded mt-3">
-                    <FontAwesomeIcon icon={faArrowLeft} /> Volver
+                <a href='/' className="text-decoration-none text-blue-dark">
+                    <FontAwesomeIcon icon={faChevronLeft} size='xl' />
                 </a>
             </div><br />
             <div className='d-flex flex-column align-items-center justify-content-center'>

@@ -108,7 +108,12 @@ function CourseView() {
                                         <div className='d-flex justify-content-end'>
                                             <p className='fs-sm'>Creado Por: <span className='text-primary fs-ssm'>{course.creador}</span></p>
                                         </div>
-                                        <img src={`data:image/jpeg;base64,${course.coverImage}`} alt={course.title} width="760" height="470" className='mb-3 border rounded' />
+                                        <img 
+                                        src={`data:image/jpeg;base64,${course.coverImage}`} 
+                                        alt={course.title} 
+                                        className="img-fluid mb-3 border rounded" 
+                                    />
+
                                     </div>
                                 )}
                                 <h3>Objetivos del curso</h3>
@@ -132,7 +137,7 @@ function CourseView() {
                                         </div>
                                     )
                                 }
-                                <div className='my-4 mx-2'>
+                                <div className='my-5 mx-2'>
                                     <h4 className=''>¿Que Aprenderas?</h4>
                                     <ul className='d-flex flex-wrap mt-4'>
                                         {course.content && course.content.length > 0 ? (
@@ -146,7 +151,8 @@ function CourseView() {
                                         )}
                                     </ul>
                                 </div>
-                                <Comment id={id} />
+
+                               
                             </div>
                             <div className='col'>
                                 <div className='bg-light shadow rounded p-3'>
@@ -202,6 +208,9 @@ function CourseView() {
                                     )}
                                 </div>
                             </div>
+                            <div style={{marginTop:'10%'}}>
+                                <Comment id={id} />
+                                </div>
                         </div>
                     </div>
                 )}

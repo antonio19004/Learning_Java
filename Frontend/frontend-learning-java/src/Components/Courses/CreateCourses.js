@@ -3,7 +3,7 @@ import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChalkboard, faChalkboardUser, faChevronLeft, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faChalkboard, faChevronLeft, faPlus } from '@fortawesome/free-solid-svg-icons';
 import {useNavigate } from 'react-router-dom';
 
 
@@ -76,12 +76,6 @@ const navigate = useNavigate();
         }
     };
 
-
-    const [newTopic, setNewTopic] = useState({
-        title: '',
-        description: ''
-    });
-    const [showModal, setShowModal] = useState(false);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -189,15 +183,6 @@ const navigate = useNavigate();
         }
     };
     
-
-    const handleNewTopicChange = (e) => {
-        const { name, value } = e.target;
-        setNewTopic({
-            ...newTopic,
-            [name]: value
-        });
-    };
-
 
 
     return (

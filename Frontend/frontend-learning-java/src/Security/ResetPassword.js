@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUser, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faChevronLeft } from '@fortawesome/free-solid-svg-icons';
 
 const ResetPassword = () => {
     const [username, setUsername] = useState('');
@@ -39,9 +39,9 @@ const ResetPassword = () => {
 
     return (
         <div className='container'>
-            <div className='mt-3'>
-                <a href='/login' className="btn btn-secondary rounded">
-                    <FontAwesomeIcon icon={faArrowLeft} /> Volver
+            <div style={{ marginLeft: '40px', marginTop: '20px' }}>
+                <a href='/login' className="text-decoration-none text-blue-dark">
+                    <FontAwesomeIcon icon={faChevronLeft} size='xl' />
                 </a>
             </div><br />
             <div className='d-flex flex-column align-items-center justify-content-center '>

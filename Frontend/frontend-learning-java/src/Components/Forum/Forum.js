@@ -107,7 +107,9 @@ const Forum = () => {
             <header>
                 <NavMenu />
             </header>
-            <div className='container mt-4'>
+            <div className='m-3'>
+            <div className='shadow bg-light px-5 pb-5 pt-5 rounded'>
+            <div>
                 {loading ? (
                     <center><div className='d-flex justify-content-center'>
                         <Loader />
@@ -119,7 +121,7 @@ const Forum = () => {
                             <span className="input-group-text" id="basic-addon1" style={{ marginBottom: '15px' }}><FontAwesomeIcon icon={faSearch} /></span>
                             <input type="text" className="form-control" placeholder="Buscar Tema..." aria-label="Buscar Tema..." aria-describedby="basic-addon1" value={query} onChange={handleSearch} style={{ marginBottom: '15px' }} />
                         </div>
-                        <div className="table-responsive">
+                        <div className="table-responsive rounded">
                             <table className='table table-foro'>
                                 <thead>
                                     <tr>
@@ -139,6 +141,9 @@ const Forum = () => {
                     </div>
                 )}
             </div>
+            </div>
+            </div>
+
             <Footer />
         </div>
     );

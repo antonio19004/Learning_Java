@@ -54,35 +54,48 @@ const Panel = () => {
   return (
     <div>
       <NavPanel/>
-      <div className='sidebar' id="navbarNav">
-        <a href='/panel'><img src={Logo} className='NavLogo mx-5' alt='Logo...' /></a>
-        <h4 className='ms-6 text-secondary'>PANEL {formatRole(rol)}</h4>
-        <hr className='mx-5'></hr>
-        <div onClick={handleHashClick}>
-          <ul className="navbar-nav flex-column p-5">
-            <span class="badge bg-dark mb-2">Parametrización</span>
-            <li className="nav-item">
-              <a className="nav-link text-Light" aria-current="page" href="/panel/document">Documentos</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="/panel/info-users">Usuarios</a>
-            </li>
-            <li className="nav-item text-Light">
-              <a className="nav-link text-Light" href="/panel/courses">Cursos</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link text-Light" href="/panel/forum-settings">Foro</a>
-            </li>
-            <li className="nav-item">
-            <a className="nav-link text-Light" href="/panel/exercises">Ejercicios</a>
-          </li>
-          </ul>
-          <div className='pt-5'>
-            <hr className='mx-5'></hr>
-            <p className="sidebar-footer pt-3">© 2024 Learning Java.</p>
-          </div>
-        </div>
-      </div>
+     
+
+      <div className='d-flex'>
+  {/* Botón de hamburguesa */}
+  <button className="navbar-toggler d-lg-none ms-3 mt-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span className="navbar-toggler-icon"></span>
+  </button>
+
+  <div className='sidebar collapse d-lg-block' id="navbarNav">
+    <a href='/panel'><img src={Logo} className='NavLogo mx-5' alt='Logo...' /></a>
+    <h4 className='ms-6 text-secondary'>PANEL {formatRole(rol)}</h4>
+    <hr className='mx-5'></hr>
+    <div className='pb-5' onClick={handleHashClick}>
+      <ul className="navbar-nav flex-column p-5">
+      <div className='parent-container'>
+  <span className="badge bg-dark mb-2">Parametrización</span>
+</div>
+
+        <li className="nav-item">
+          <a className="nav-link text-Light" aria-current="page" href="/panel/document">Documentos</a>
+        </li>
+        <li className="nav-item">
+          <a className="nav-link" href="/panel/info-users">Usuarios</a>
+        </li>
+        <li className="nav-item text-Light">
+          <a className="nav-link text-Light" href="/panel/courses">Cursos</a>
+        </li>
+        <li className="nav-item">
+          <a className="nav-link text-Light" href="/panel/forum-settings">Foro</a>
+        </li>
+        <li className="nav-item">
+          <a className="nav-link text-Light" href="/panel/exercises">Ejercicios</a>
+        </li>
+        <hr className=''></hr>
+        <p className="sidebar-footer pt-3 text-secondary">© 2024 Learning Java.</p>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+
       
       <div className='ps-3 shadowinset pe-5 pt-3'>
         {location.pathname === '/panel' && (

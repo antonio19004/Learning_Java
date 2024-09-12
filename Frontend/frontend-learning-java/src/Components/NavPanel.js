@@ -64,20 +64,10 @@ const NavPanel = () => {
         <div className='pb-2'>
             <nav className="navbar navbar-expand-lg">
                 <div className="container-fluid">
-                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
-                    <ul className="navbar-nav ms-auto me-7 py-2">
+                    <ul className="navbar-nav ms-auto me-7">
                         <li className="nav-item mt-3">
-                            <a className="navbar-brand" href="/Home">Home</a>
+                            <a className="navbar-brand " href="/Home">Home</a>
                         </li>
-                        {!isAuthenticated ? (
-                            <li className="nav-item">
-                                <button className='btn btn-dark' variant="outline-success" style={{ marginTop: '10px' }}>
-                                    <a className='text-decoration-none text-light' href="/login">Login</a>
-                                </button>
-                            </li>
-                        ) : (
                             <li className='nav-item dropdown'>
                                 <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <img src={profileImage} alt='User Profile' style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius:'50px' }} />
@@ -93,7 +83,7 @@ const NavPanel = () => {
                                     </li>
                                 </ul>
                             </li>
-                        )}
+                     
                     </ul>
                 </div>
             </nav>

@@ -125,15 +125,20 @@ function ViewLesson() {
                             <div className='col me-3'>
                                 {lessons.length > 0 && (
                                     <div>
-                                        {/*<h3>{lessons[currentIndex].title}</h3>
-                                        <p>{lessons[currentIndex].description}</p>
-                                        <div className='d-flex justify-content-end'><p className='fs-sm'>Creado Por: <span className='text-primary fs-ssm'>Hermes Herrera & Diego Cediel</span></p></div>*/}
                                         
                                         {lessons[currentIndex].video && (
                                             <div>
-                                                <iframe width="760" height="415" src={`https://www.youtube.com/embed/${extractYoutubeId(lessons[currentIndex].video)}`} className='mb-3'
-                                                frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen
-                                                title={lessons[currentIndex].title}></iframe>
+                                               <div className="responsive-iframe-container mb-3">
+    <iframe 
+        src={`https://www.youtube.com/embed/${extractYoutubeId(lessons[currentIndex].video)}`} 
+        className="responsive-iframe"
+        frameBorder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowFullScreen
+        title={lessons[currentIndex].title}>
+    </iframe>
+</div>
+
                                                 
                                                 <div className="form-check form-switch">
                                                     <input className="form-check-input" type="checkbox" id={`lessonCheckbox${currentIndex}`} checked={completedLessons.has(lessons[currentIndex].id)} onChange={() => handleCheckboxChange(lessons[currentIndex].id)} />
@@ -151,7 +156,13 @@ function ViewLesson() {
                                         <span className='text-blue-dark fw-bold'>Siguiente</span>
                                     </button>
                                 </div>
-                                <Comment id={course.id} />
+
+
+                                <div style={{marginTop:'20%'}}>
+                                <Comment id={id} />
+                                </div>
+
+
                             </div>
                             <div className='col'>
                                 <div className='bg-light shadow rounded p-3'>
