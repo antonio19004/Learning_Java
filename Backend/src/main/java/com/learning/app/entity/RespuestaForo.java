@@ -1,34 +1,42 @@
 package com.learning.app.entity;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "respuestasForo")
+@Document(collection = "respuestaAnidada")
 public class RespuestaForo {
 
 	@Id
 	private String id;
 	private String contenido;
-	private Date fechaPublicacion;
+	
+	@CreatedDate
+	private LocalDateTime fechaPublicacion;
 	
 	@DBRef
-	private Foro foro;
+	private RespuestasForo respuesta;
 	
 	@DBRef
 	private Users user;
+	
+	@DBRef
+	private Admin admin;
 
 	public RespuestaForo() {
 	}
 
-	public RespuestaForo(String id, String contenido, Date fechaPublicacion, Foro foro, Users user) {
+	public RespuestaForo(String id, String contenido, LocalDateTime fechaPublicacion, RespuestasForo respuesta,
+			Users user, Admin admin) {
 		this.id = id;
 		this.contenido = contenido;
 		this.fechaPublicacion = fechaPublicacion;
-		this.foro = foro;
+		this.respuesta = respuesta;
 		this.user = user;
+		this.admin = admin;
 	}
 
 	public String getId() {
@@ -47,20 +55,20 @@ public class RespuestaForo {
 		this.contenido = contenido;
 	}
 
-	public Date getFechaPublicacion() {
+	public LocalDateTime getFechaPublicacion() {
 		return fechaPublicacion;
 	}
 
-	public void setFechaPublicacion(Date fechaPublicacion) {
+	public void setFechaPublicacion(LocalDateTime fechaPublicacion) {
 		this.fechaPublicacion = fechaPublicacion;
 	}
 
-	public Foro getForo() {
-		return foro;
+	public RespuestasForo getRespuesta() {
+		return respuesta;
 	}
 
-	public void setForo(Foro foro) {
-		this.foro = foro;
+	public void setRespuesta(RespuestasForo respuesta) {
+		this.respuesta = respuesta;
 	}
 
 	public Users getUser() {
@@ -69,5 +77,13 @@ public class RespuestaForo {
 
 	public void setUser(Users user) {
 		this.user = user;
+	}
+
+	public Admin getAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(Admin admin) {
+		this.admin = admin;
 	}
 }

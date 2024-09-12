@@ -22,10 +22,9 @@ public class Admin {
 	private String user;
 	private String password;
 	private List<CourseProgress> progreso;
+	
 	@CreatedDate
 	private LocalDateTime fechaCreado;
-	
-	
 	
 	public Admin(String id, byte[] imagenPerfil, String nombre, String apellido, LocalDate fechaNacimiento,
 			String email, String user, String password, List<CourseProgress> progreso, LocalDateTime fechaCreado) {
@@ -117,7 +116,4 @@ public class Admin {
 	public void setProgreso(List<CourseProgress> progreso) {
 		this.progreso = progreso;
 	}
-	
-	
-	
 }

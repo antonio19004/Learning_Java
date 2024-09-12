@@ -23,8 +23,10 @@ public class Users {
 	private String password;
 	private int cursosCompletados;
 	private boolean acceptTerms;
+	
 	@CreatedDate
 	private LocalDateTime fechaCreado;
+	
 	@LastModifiedDate
 	private LocalDateTime fechaActualizado;
 	
@@ -33,8 +35,6 @@ public class Users {
 	public Users() {
 		super();
 	}
-	
-
 	
 	public Users(String id, byte[] imagenPerfil, String nombre, String apellido, LocalDate fechaNacimiento,
 			String email, String user, String password, int cursosCompletados, boolean acceptTerms,
@@ -54,9 +54,6 @@ public class Users {
 		this.fechaActualizado = fechaActualizado;
 		this.progreso = progreso;
 	}
-
-
-
 
 	public String getId() {
 		return id;
@@ -141,26 +138,16 @@ public class Users {
 	public LocalDateTime getFechaCreado() {
 		return fechaCreado;
 	}
-	
 
 	public LocalDateTime getFechaActualizado() {
 		return fechaActualizado;
 	}
 
-
-
 	public List<CourseProgress> getProgreso() {
 		return progreso;
 	}
 
-
-
 	public void setProgreso(List<CourseProgress> progreso) {
 		this.progreso = progreso;
 	}
-
-	
-	
-	
-	
 }

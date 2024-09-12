@@ -1,0 +1,18 @@
+.card-title {
+    position: relative;
+}
+
+.icon-thumbtack {
+    position: absolute;
+    top: 0;
+    right: 30px;
+    transform: rotate(40deg);
+}
+
+.icon-ellipsis {
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+    font-size: 20px;
+}

@@ -13,8 +13,6 @@ public class CourseProgress {
 	private String cursoId;
 	private List<String> completedLessons;
 	
-	
-
 	public CourseProgress() {
 		super();
 	}
@@ -32,7 +30,6 @@ public class CourseProgress {
 		this.completedLessons = completedLessons;
 	}
 	
-
 	public String getId() {
 		return id;
 	}
@@ -56,8 +53,4 @@ public class CourseProgress {
 	public void setCompletedLessons(List<String> completedLessons) {
 		this.completedLessons = completedLessons;
 	}
-	
-	
-	
-	
 }

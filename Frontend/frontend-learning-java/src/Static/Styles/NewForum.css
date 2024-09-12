@@ -1,0 +1,10 @@
+.forum-container {
+    max-width: 600px;
+    margin: auto;
+}
+
+.send-btn-dark {
+    width: 120px;
+    border-radius: 0.25rem;
+    padding: 10px;
+}

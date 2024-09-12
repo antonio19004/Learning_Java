@@ -112,7 +112,7 @@ const UpdatePassword = () => {
                 <header>
                     <NavMenu />
                 </header>
-                <div className='d-flex flex-column align-items-center justify-content-center' style={{ height: '60vh' }}>
+                <div className='d-flex flex-column align-items-center justify-content-center'>
                     {errorMessage && (
                         <div className="alert alert-danger w-50 p-1 mx-auto mt-4"  role="alert">
                             <p className="text-danger text-center">{errorMessage}</p>

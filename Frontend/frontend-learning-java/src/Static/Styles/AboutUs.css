@@ -1,0 +1,104 @@
+.content {
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 1200px;
+}
+
+.list, p {
+    font-family: Arial, sans-serif;
+}
+
+.about {
+    text-align: justify;
+    margin-bottom: 40px;
+}
+
+.img-container img {
+    width: 100%;
+    max-width: 250px;
+    height: auto;
+    border-radius: 10px;
+}
+
+.info-container {
+    flex-grow: 1;
+    text-align: justify;
+    padding: 10px;
+}
+
+.university, .history, .valores {
+    text-align: justify;
+    margin-bottom: 40px;
+}
+
+.university ul, .valores ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.start {
+    text-align: center;
+    margin-top: 80px;
+}
+
+.btn-courses {
+    width: 200px;
+    height: 50px;
+    border-radius: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (max-width: 768px) {
+    .content {
+        margin: 10px;
+        padding: 10px;
+    }
+
+    .about, .university, .history, .valores {
+        margin: 0;
+    }
+
+    .img-container img {
+        max-width: 200px;
+    }
+
+    .card-container, .card-container-reverse {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .info-container {
+        padding: 0;
+    }
+}
+
+@media (max-width: 576px) {
+    .img-container img {
+        max-width: 150px;
+    }
+
+    .btn-courses {
+        width: 160px;
+        height: auto;
+        border-radius: 20px;
+    }
+}
+
+.card-container {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    margin: 20px 0;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.img-container {
+    flex-shrink: 0;
+    padding: 10px;
+}
+

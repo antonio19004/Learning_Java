@@ -2,10 +2,16 @@
     background-image: url('../Img/Programacion.jpg');
     background-size: cover;
     background-position: center;
-    height: 400px;
+    height: 500px;
     width: 100%;
     position: relative;
     z-index: 1;
+}
+
+@media only screen and (max-width: 600px) {
+    .header-image {
+        height: 300px;
+    }
 }
 
 .alert {
@@ -16,7 +22,7 @@
     margin-top: 20px;
     z-index: 2;
     position: relative;
-    padding: 50px;
+    padding: 30px;
 }
 
 .form-group {
@@ -33,5 +39,12 @@ textarea {
     width: 130px;
     height: 40px;
     margin-top: -10%;
-    margin-left: 70%;
+    margin-left: 80%;
+}
+
+@media only screen and (max-width: 600px) {
+    .send-btn {
+        margin-top: 20px;
+        margin-left: 60%;
+    }
 }

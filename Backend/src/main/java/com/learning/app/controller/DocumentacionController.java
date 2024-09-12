@@ -17,40 +17,40 @@ import com.learning.app.service.DocumentacionService;
 public class DocumentacionController {
 
 	private DocumentacionService documentacionService;
-
+	
 	public DocumentacionController(DocumentacionService documentacionService) {
 		super();
 		this.documentacionService = documentacionService;
 	}
 	
-    
-    
-    @GetMapping("/{id}")
-    public ResponseEntity<byte[]> verArchivo(@PathVariable String id) {
-    	Documentacion archivo = documentacionService.obtenerArchivoPorId(id);
-        if (archivo != null) {
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + archivo.getTitulo() + "\"")
-                    .header(HttpHeaders.CONTENT_TYPE, archivo.getTipo())
-                    .body(archivo.getContenido());
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-    
-    @GetMapping("/descargar/{id}")
-    public ResponseEntity<byte[]> descargarArchivo(@PathVariable String id) {
-    	Documentacion archivo = documentacionService.obtenerArchivoPorId(id);
-        if (archivo != null) {
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + archivo.getTitulo() + "\"")
-                    .header(HttpHeaders.CONTENT_TYPE, archivo.getTipo())
-                    .body(archivo.getContenido());
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @GetMapping("/listar")
-    public List<Documentacion> listarArchivos() {
-        return documentacionService.listarArchivos();
-    }
+	@GetMapping("/{id}")
+	public ResponseEntity<byte[]> verArchivo(@PathVariable String id) {
+		Documentacion archivo = documentacionService.obtenerArchivoPorId(id);
+		
+		if (archivo != null) {
+			return ResponseEntity.ok()
+					.header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + archivo.getTitulo() + "\"")
+					.header(HttpHeaders.CONTENT_TYPE, archivo.getTipo())
+					.body(archivo.getContenido());
+		}
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	}
+	
+	@GetMapping("/descargar/{id}")
+	public ResponseEntity<byte[]> descargarArchivo(@PathVariable String id) {
+		Documentacion archivo = documentacionService.obtenerArchivoPorId(id);
+		
+		if (archivo != null) {
+			return ResponseEntity.ok()
+					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + archivo.getTitulo() + "\"")
+					.header(HttpHeaders.CONTENT_TYPE, archivo.getTipo())
+					.body(archivo.getContenido());
+		}
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	}
+	
+	@GetMapping("/listar")
+	public List<Documentacion> listarArchivos() {
+		return documentacionService.listarArchivos();
+	}
 }

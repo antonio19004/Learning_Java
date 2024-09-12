@@ -1,7 +1,8 @@
 package com.learning.app.entity;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -11,24 +12,33 @@ public class Comentarios {
 
 	@Id
 	private String id;
-	private String contenido;
-	private Date fechaPublicacion;
+	private int stars;
+	private String comentario;
+	
+	@CreatedDate
+	private LocalDateTime fechaPublicacion;
+	
+	@DBRef
+	private Course course;
 	
 	@DBRef
 	private Users user;
 	
 	@DBRef
-	private Course curso;
+	private Admin admin;
 
 	public Comentarios() {
 	}
 
-	public Comentarios(String id, String contenido, Date fechaPublicacion, Users user, Course curso) {
+	public Comentarios(String id, int stars, String comentario, LocalDateTime fechaPublicacion, Course course,
+			Users user, Admin admin) {
 		this.id = id;
-		this.contenido = contenido;
+		this.stars = stars;
+		this.comentario = comentario;
 		this.fechaPublicacion = fechaPublicacion;
+		this.course = course;
 		this.user = user;
-		this.curso = curso;
+		this.admin = admin;
 	}
 
 	public String getId() {
@@ -39,20 +49,36 @@ public class Comentarios {
 		this.id = id;
 	}
 
-	public String getContenido() {
-		return contenido;
+	public int getStars() {
+		return stars;
 	}
 
-	public void setContenido(String contenido) {
-		this.contenido = contenido;
+	public void setStars(int stars) {
+		this.stars = stars;
 	}
 
-	public Date getFechaPublicacion() {
+	public String getComentario() {
+		return comentario;
+	}
+
+	public void setComentario(String comentario) {
+		this.comentario = comentario;
+	}
+
+	public LocalDateTime getFechaPublicacion() {
 		return fechaPublicacion;
 	}
 
-	public void setFechaPublicacion(Date fechaPublicacion) {
+	public void setFechaPublicacion(LocalDateTime fechaPublicacion) {
 		this.fechaPublicacion = fechaPublicacion;
+	}
+
+	public Course getCourse() {
+		return course;
+	}
+
+	public void setCourse(Course course) {
+		this.course = course;
 	}
 
 	public Users getUser() {
@@ -63,11 +89,11 @@ public class Comentarios {
 		this.user = user;
 	}
 
-	public Course getCurso() {
-		return curso;
+	public Admin getAdmin() {
+		return admin;
 	}
 
-	public void setCurso(Course curso) {
-		this.curso = curso;
+	public void setAdmin(Admin admin) {
+		this.admin = admin;
 	}
 }

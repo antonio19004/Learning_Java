@@ -17,5 +17,4 @@ public interface UsersRepository extends MongoRepository<Users, String>{
 
 	Optional<Users> findById(ObjectId objectId);
 	
-
 }

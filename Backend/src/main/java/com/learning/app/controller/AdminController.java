@@ -38,6 +38,7 @@ import com.learning.app.entity.Users;
 import com.learning.app.repository.AdminRepository;
 import com.learning.app.repository.CoursesRepository;
 import com.learning.app.repository.DocumentosRepository;
+import com.learning.app.repository.UsersRepository;
 import com.learning.app.service.DocumentacionService;
 
 @RestController
@@ -53,18 +54,20 @@ public class AdminController {
 		super();
 		this.documentacionService = documentacionService;
 	}
-	
 
 	@Autowired
 	private AdminRepository adminRepository;
 	
 	@Autowired
-	private PasswordEncoder passwordEncoder;
+	private UsersRepository usersRepository;
 	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	@Autowired
 	private CoursesRepository courseRepository;
 	
+	//Obtener datos del administrador
 	@GetMapping("/details")
 	public AdminDto getAuthenticatedUser() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -86,6 +89,7 @@ public class AdminController {
 		return adminDto;
 	}
 	
+	//Actualizar los datos de perfil
 	@PutMapping("/update-profile")
 	public ResponseEntity<String> updateProfile(@RequestParam(value = "imagenPerfil", required = false) MultipartFile file,
 			@RequestParam("nombre") String nombre, @RequestParam("apellido") String apellido,
@@ -124,6 +128,7 @@ public class AdminController {
 		}
 	}
 	
+	//Actualizar contraseña
 	@PostMapping("/update-password")
 	public ResponseEntity<?> updatePassword(@RequestBody PasswordDto passwordDto) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -143,422 +148,266 @@ public class AdminController {
 		}
 	}
 	
+	//Obtener todos los usuarios
+	@GetMapping("/users")
+	public List<Users> getAllUsers() {
+		return usersRepository.findAll();
+	}
 	
 	//DOCUMENTACION//
 	
 	@PostMapping("/documentacion/subir")
 	public ResponseEntity<Documentacion> subirArchivo(@RequestParam("file") MultipartFile file, @RequestParam("titulo") String titulo) {
-	        try {
-	            Documentacion archivo = new Documentacion();
-	            archivo.setTitulo(titulo);
-	            archivo.setTipo(file.getContentType());
-	            archivo.setContenido(file.getBytes());
+		try {
+			Documentacion archivo = new Documentacion();
+			archivo.setTitulo(titulo);
+			archivo.setTipo(file.getContentType());
+			archivo.setContenido(file.getBytes());
+			
+			archivo = documentosRepository.save(archivo);
+			return new ResponseEntity<>(archivo, HttpStatus.CREATED);
+		} catch (IOException e) {
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
-	            archivo = documentosRepository.save(archivo);
-	            return new ResponseEntity<>(archivo, HttpStatus.CREATED);
-	        } catch (IOException e) {
-	            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-	        }
-	    }
-
+	@GetMapping("/documentacion/{id}")
+	public ResponseEntity<byte[]> verArchivo(@PathVariable String id) {
+		Documentacion archivo = documentacionService.obtenerArchivoPorId(id);
+		if (archivo != null) {
+			return ResponseEntity.ok()
+					.header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + archivo.getTitulo() + "\"")
+					.header(HttpHeaders.CONTENT_TYPE, archivo.getTipo())
+					.body(archivo.getContenido());
+		}
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	}
 	
-    @GetMapping("/documentacion/{id}")
-    public ResponseEntity<byte[]> verArchivo(@PathVariable String id) {
-    	Documentacion archivo = documentacionService.obtenerArchivoPorId(id);
-        if (archivo != null) {
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + archivo.getTitulo() + "\"")
-                    .header(HttpHeaders.CONTENT_TYPE, archivo.getTipo())
-                    .body(archivo.getContenido());
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-    
-    @GetMapping("/documentacion/descargar/{id}")
-    public ResponseEntity<byte[]> descargarArchivo(@PathVariable String id) {
-    	Documentacion archivo = documentacionService.obtenerArchivoPorId(id);
-        if (archivo != null) {
+	@GetMapping("/documentacion/descargar/{id}")
+	public ResponseEntity<byte[]> descargarArchivo(@PathVariable String id) {
+		Documentacion archivo = documentacionService.obtenerArchivoPorId(id);
+		
+		if (archivo != null) {
+        	String extension = obtenerExtension(archivo.getTipo());
+        	String nombreArchivo = archivo.getTitulo();
         	
-            String extension = obtenerExtension(archivo.getTipo());
-            String nombreArchivo = archivo.getTitulo();
-            
-            if (!nombreArchivo.endsWith(extension)) {
-                nombreArchivo += extension;
-            }
-            System.out.println("Tipo MIME: " + archivo.getTipo());
-            System.out.println("Nombre del archivo: " + nombreArchivo);
-            
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + nombreArchivo + "\"")
-                    .header(HttpHeaders.CONTENT_TYPE, archivo.getTipo())
-                    .body(archivo.getContenido());
-            
-       
-
+        	if (!nombreArchivo.endsWith(extension)) {
+        		nombreArchivo += extension;
+        	}
+        	
+        	System.out.println("Tipo MIME: " + archivo.getTipo());
+        	System.out.println("Nombre del archivo: " + nombreArchivo);
+        	
+        	return ResponseEntity.ok()
+        			.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + nombreArchivo + "\"")
+        			.header(HttpHeaders.CONTENT_TYPE, archivo.getTipo())
+        			.body(archivo.getContenido());
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-    
-
-    @GetMapping("/documentacion/listar")
-    public List<Documentacion> listarArchivos() {
-        System.out.println("Entrando al método listarArchivos...");
-
-        List<Documentacion> archivos = documentacionService.listarArchivos();
-        System.out.println("Número de archivos recuperados: " + (archivos != null ? archivos.size() : "null"));
-
-        if (archivos != null) {
-            for (Documentacion archivo : archivos) {
-                System.out.println("Archivo: " + archivo.getTitulo() + ", ID: " + archivo.getId());
-            }
-        } else {
-            System.out.println("La lista de archivos es nula.");
-        }
-
-        return archivos;
-    }
-	
-    
-    private String obtenerExtension(String mimeType) {
-        switch (mimeType) {
-            case "application/pdf":
-                return ".pdf";
-            case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-                return ".docx";
-            case "application/msword":
-                return ".doc";
-            default:
-                return "";
-        }
-    }
-	
-    
-    @GetMapping("/documentacion/Search")
-    public ResponseEntity<List<Documentacion>> searchDocuments(@RequestParam String titulo){
-    	List<Documentacion> documents = documentosRepository.findByTitulo(titulo);
-    	return ResponseEntity.ok(documents);
-    }
-	    
-
-    @PutMapping("/documentacion/edit/{id}")
-    public ResponseEntity<String> updateDocumento(
-            @PathVariable("id") String id,
-            @RequestParam("titulo") String titulo,
-            @RequestParam(value = "file", required = false) MultipartFile file) {
-        try {
-        	Documentacion documento = documentacionService.obtenerArchivoPorId(id);
-            if (documento == null) {
-                return new ResponseEntity<>("Documento no encontrado", HttpStatus.NOT_FOUND);
-            }
-
-            documento.setTitulo(titulo);
-
-            // Si se ha subido un nuevo archivo, actualizar el archivo en el documento
-            if (file != null && !file.isEmpty()) {
-                documento.setContenido(file.getBytes());
-            }
-
-            documentosRepository.save(documento);
-            return new ResponseEntity<>("Documento actualizado con éxito", HttpStatus.OK);
-
-        } catch (IOException e) {
-            return new ResponseEntity<>("Error al procesar el archivo", HttpStatus.INTERNAL_SERVER_ERROR);
-        } catch (Exception e) {
-            return new ResponseEntity<>("Error al actualizar el documento", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-   
-    @GetMapping("/documentacion/get/{id}")
-    public ResponseEntity<Documentacion> getDocumento(@PathVariable("id") String id) {
-        try {
-            Documentacion documento = documentacionService.obtenerArchivoPorId(id);
-            if (documento != null) {
-                return new ResponseEntity<>(documento, HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            }
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    
-    @DeleteMapping("/documentacion/delete/{id}")
-    public ResponseEntity<String> eliminarDocumento(@PathVariable String id) {
-        try {
-            documentosRepository.deleteById(id);
-            return ResponseEntity.ok("Documento eliminado con éxito");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar el documento");
-        }
-    }
-    
-    
-  
-    
-    //PROGRESS
-    
-    
-    @GetMapping("/curso/{cursoId}/progreso")
-    public ResponseEntity<Double> obtenerProgreso(@PathVariable String cursoId) {
-        // Obtener el usuario autenticado
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        
-        // Obtener el usuario desde el repositorio
-        Admin usuario = adminRepository.findByUser(username);
-        if (usuario == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Usuario no encontrado
-        }
-
-        // Buscar el curso en el repositorio
-        Optional<Course> cursoOpt = courseRepository.findById(cursoId);
-        if (!cursoOpt.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Curso no encontrado
-        }
-
-        Course curso = cursoOpt.get();
-        long totalLecciones = curso.getLesson().size();
-        if (totalLecciones == 0) {
-            return ResponseEntity.badRequest().body(null); // No hay lecciones en el curso
-        }
-
-        // Buscar progreso en el curso
-        Optional<CourseProgress> progresoOpt = usuario.getProgreso().stream()
-                .filter(progreso -> progreso.getCursoId().equals(cursoId))
-                .findFirst();
-        
-        if (progresoOpt.isPresent()) {
-            CourseProgress progresoCurso = progresoOpt.get();
-            long leccionesCompletadas = progresoCurso.getCompletedLessons().size();
-            double porcentajeCompletado = (leccionesCompletadas / (double) totalLecciones) * 100;
-
-            return ResponseEntity.ok(porcentajeCompletado);
-        }
-
-        return ResponseEntity.notFound().build(); // Progreso no encontrado para el curso
-    }
-
-    @PostMapping("/completados/{cursoId}/leccion/{leccionId}")
-    public ResponseEntity<Void> completarLeccion(@PathVariable String cursoId, @PathVariable String leccionId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-
-        Admin usuario = adminRepository.findByUser(username);
-        if (usuario == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
-        if (usuario.getProgreso() == null) {
-            usuario.setProgreso(new ArrayList<>());
-        }
-
-        Optional<CourseProgress> progresoOpt = usuario.getProgreso().stream()
-                .filter(progreso -> progreso.getCursoId().equals(cursoId))
-                .findFirst();
-
-        if (progresoOpt.isPresent()) {
-            CourseProgress progresoCurso = progresoOpt.get();
-            List<String> completedLessons = progresoCurso.getCompletedLessons();
-            if (completedLessons.contains(leccionId)) {
-                completedLessons.remove(leccionId);
-            } else {
-                completedLessons.add(leccionId);
-            }
-        } else {
-            CourseProgress nuevoProgreso = new CourseProgress(cursoId, List.of(leccionId));
-            usuario.getProgreso().add(nuevoProgreso);
-        }
-
-        try {
-            adminRepository.save(usuario);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-
-        return ResponseEntity.ok().build();
-    }
-
-
-    
-    @GetMapping("/curso/{cursoId}/lecciones-completadas")
-    public ResponseEntity<Set<String>> obtenerLeccionesCompletadas(@PathVariable String cursoId) {
-        // Obtener el usuario autenticado
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        
-        // Obtener el usuario desde el repositorio
-        Admin usuario =adminRepository.findByUser(username);
-        if (usuario == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Usuario no encontrado
-        }
-
-        // Buscar el curso en el repositorio
-        Optional<Course> cursoOpt = courseRepository.findById(cursoId);
-        if (!cursoOpt.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Curso no encontrado
-        }
-
-        // Buscar progreso en el curso
-        Optional<CourseProgress> progresoOpt = usuario.getProgreso().stream()
-                .filter(progreso -> progreso.getCursoId().equals(cursoId))
-                .findFirst();
-        
-        if (progresoOpt.isPresent()) {
-            CourseProgress progresoCurso = progresoOpt.get();
-            Set<String> leccionesCompletadas = new HashSet<>(progresoCurso.getCompletedLessons());
-            return ResponseEntity.ok(leccionesCompletadas);
-        }
-
-        return ResponseEntity.ok(new HashSet<>()); // No hay lecciones completadas para el curso
-    }
-
-  
-    
-    
-  
-	/*	
-	@GetMapping("/")
-	public String index(Model model) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String userName = auth.getName();
-		Admin admin = adminRepository.findByUser(userName);
-		model.addAttribute("admin", admin);
-		return "admin/index";
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 	
-	@GetMapping("/list")
-	public String getAllAdmin(Model model) {
-		model.addAttribute("admin", adminRepository.findAll());
-		return "admin/list";
-	}
-	
-	@GetMapping("/{id}")
-	public String getAdminById(@PathVariable("id") String id, Model model) {
-		Admin admin = adminRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("El usuario no ha sido encontrado"));
-		model.addAttribute("admin", admin);
-		return "admin/details";
-	}
-	
-	@GetMapping("/new")
-	public String newAdmin(Model model) {
-		model.addAttribute("admin", new Admin());
-		return "admin/add";
-	}
-	
-	@PostMapping("/add")
-	public String addAdmin(@ModelAttribute("admin") Admin admin, Model model) {
-		boolean error = false;
-		String errorMessage = null;
+	@GetMapping("/documentacion/listar")
+	public List<Documentacion> listarArchivos() {
+		System.out.println("Entrando al método listarArchivos...");
 		
-		if (adminRepository.findByUser(admin.getUser()) != null) {
-			errorMessage = "El nombre de usurio " + admin.getUser() + " ya está en uso";
-			error = true;
-		}
-		if (adminRepository.findByEmail(admin.getEmail()) != null) {
-			errorMessage = "El correo electrónico " + admin.getEmail() + " ya está vinculado a otra cuenta";
-			error = true;
-		}
-		if (error) {
-			model.addAttribute("error", errorMessage);
-			model.addAttribute("admin", admin);
-			return "admin/add";
-		}
-		admin.setId(null);
-		admin.setPassword(passwordEncoder.encode(admin.getPassword()));
-		adminRepository.save(admin);
-		return "redirect:/admin/";
-	}
-	
-	@GetMapping("/edit/{id}")
-	public String editAdmin(@PathVariable("id") String id, Model model) {
-		Admin admin = adminRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("El usuario no ha sido encontrado"));
-		model.addAttribute("admin", admin);
-		return "admin/edit";
-	}
-	
-	@PostMapping("/{id}")
-	public String updateAdmin(@PathVariable("id") String id, @ModelAttribute("admin") Admin admin) {
-		Admin administrador = adminRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("El usuario no ha sido encontrado"));
-		admin.setPassword(administrador.getPassword());
-		admin.setId(id);
-		adminRepository.save(admin);
-		return "redirect:/admin/";
-	}
-	
-	@GetMapping("/delete/{id}")
-	public String deleteAdmin(@PathVariable("id") String id) {
-		Admin admin = adminRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("El usuario no ha sido encontrado"));
-		adminRepository.delete(admin);
-		return "redirect:/admin/";
-	}
-	
-	@GetMapping("/user-list")
-	public String getAllUsers(Model model) {
-		model.addAttribute("users", usersRepository.findAll());
-		return "users/list";
-	}
-	
-	@GetMapping("/user-details/{id}")
-	public String getUserById(@PathVariable("id") String id, Model model) {
-		Users users = usersRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("El usuario no ha sido encontrado"));
-		model.addAttribute("users", users);
-		return "admin/userDetails";
-	}
-	
-	@GetMapping("/new-user")
-	public String newUser(Model model) {
-		model.addAttribute("users", new Users());
-		return "admin/addUser";
-	}
-	
-	@PostMapping("/add-user")
-	public String addUser(@ModelAttribute("users") Users user, Model model) {
-		boolean error = false;
-		String errorMessage = null;
+		List<Documentacion> archivos = documentacionService.listarArchivos();
+		System.out.println("Número de archivos recuperados: " + (archivos != null ? archivos.size() : "null"));
 		
-		if (usersRepository.findByUser(user.getUser()) != null) {
-			errorMessage = "El nombre de usurio " + user.getUser() + " ya está en uso";
-			error = true;
+		if (archivos != null) {
+			for (Documentacion archivo : archivos) {
+				System.out.println("Archivo: " + archivo.getTitulo() + ", ID: " + archivo.getId());
+			}
+		} else {
+			System.out.println("La lista de archivos es nula.");
 		}
-		if (usersRepository.findByEmail(user.getEmail()) != null) {
-			errorMessage = "El correo electrónico " + user.getEmail() + " ya está vinculado a otra cuenta";
-			error = true;
+		
+		return archivos;
+	}
+	
+	private String obtenerExtension(String mimeType) {
+		switch (mimeType) {
+			case "application/pdf":
+				return ".pdf";
+			case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+				return ".docx";
+			case "application/msword":
+				return ".doc";
+			default:
+				return "";
+			}
+	}
+	
+	@GetMapping("/documentacion/Search")
+	public ResponseEntity<List<Documentacion>> searchDocuments(@RequestParam String titulo){
+		List<Documentacion> documents = documentosRepository.findByTitulo(titulo);
+		return ResponseEntity.ok(documents);
+	}
+	
+	@PutMapping("/documentacion/edit/{id}")
+	public ResponseEntity<String> updateDocumento(@PathVariable("id") String id, @RequestParam("titulo") String titulo,
+			@RequestParam(value = "file", required = false) MultipartFile file) {
+		
+		try {
+			Documentacion documento = documentacionService.obtenerArchivoPorId(id);
+			if (documento == null) {
+				return new ResponseEntity<>("Documento no encontrado", HttpStatus.NOT_FOUND);
+			}
+			
+			documento.setTitulo(titulo);
+			
+			// Si se ha subido un nuevo archivo, actualizar el archivo en el documento
+			if (file != null && !file.isEmpty()) {
+				documento.setContenido(file.getBytes());
+			}
+			
+			documentosRepository.save(documento);
+			return new ResponseEntity<>("Documento actualizado con éxito", HttpStatus.OK);
+			
+		} catch (IOException e) {
+			return new ResponseEntity<>("Error al procesar el archivo", HttpStatus.INTERNAL_SERVER_ERROR);
+		} catch (Exception e) {
+			return new ResponseEntity<>("Error al actualizar el documento", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		if (error) {
-			model.addAttribute("error", errorMessage);
-			model.addAttribute("users", user);
-			return "admin/addUser";
+	}
+	
+	@GetMapping("/documentacion/get/{id}")
+	public ResponseEntity<Documentacion> getDocumento(@PathVariable("id") String id) {
+		try {
+			Documentacion documento = documentacionService.obtenerArchivoPorId(id);
+			if (documento != null) {
+				return new ResponseEntity<>(documento, HttpStatus.OK);
+			} else {
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
+		} catch (Exception e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		user.setId(null);
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		usersRepository.save(user);
-		return "redirect:/admin/";
 	}
 	
-	@GetMapping("/edit-user/{id}")
-	public String editUser(@PathVariable("id") String id, Model model) {
-		Users users = usersRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("El usuario no ha sido encontrado"));
-		model.addAttribute("users", users);
-		return "admin/editUser";
+	@DeleteMapping("/documentacion/delete/{id}")
+	public ResponseEntity<String> eliminarDocumento(@PathVariable String id) {
+		try {
+			documentosRepository.deleteById(id);
+			return ResponseEntity.ok("Documento eliminado con éxito");
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al eliminar el documento");
+		}
 	}
 	
-	@PostMapping("/update-user/{id}")
-	public String updateUser(@PathVariable("id") String id, @ModelAttribute("users") Users users) {
-		Users user = usersRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("El usuario no ha sido encontrado"));
-		users.setPassword(user.getPassword());
-		users.setCursosCompletados(user.getCursosCompletados());
-		users.setId(id);
-		usersRepository.save(users);
-		return "redirect:/admin/";
+	//PROGRESS
+	
+	@GetMapping("/curso/{cursoId}/progreso")
+	public ResponseEntity<Double> obtenerProgreso(@PathVariable String cursoId) {
+		
+		// Obtener el usuario autenticado
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String username = authentication.getName();
+		
+		// Obtener el usuario desde el repositorio
+		Admin usuario = adminRepository.findByUser(username);
+		if (usuario == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Usuario no encontrado
+		}
+		
+		// Buscar el curso en el repositorio
+		Optional<Course> cursoOpt = courseRepository.findById(cursoId);
+		if (!cursoOpt.isPresent()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Curso no encontrado
+		}
+		
+		Course curso = cursoOpt.get();
+		long totalLecciones = curso.getLesson().size();
+		if (totalLecciones == 0) {
+			return ResponseEntity.badRequest().body(null); // No hay lecciones en el curso
+		}
+		
+		// Buscar progreso en el curso
+		Optional<CourseProgress> progresoOpt = usuario.getProgreso().stream()
+				.filter(progreso -> progreso.getCursoId().equals(cursoId))
+				.findFirst();
+		
+		if (progresoOpt.isPresent()) {
+			CourseProgress progresoCurso = progresoOpt.get();
+			long leccionesCompletadas = progresoCurso.getCompletedLessons().size();
+			double porcentajeCompletado = (leccionesCompletadas / (double) totalLecciones) * 100;
+			
+			return ResponseEntity.ok(porcentajeCompletado);
+		}
+		
+		return ResponseEntity.notFound().build(); // Progreso no encontrado para el curso
 	}
 	
-	@GetMapping("/delete-user/{id}")
-	public String deleteUser(@PathVariable("id") String id) {
-		Users users = usersRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("El usuario no ha sido encontrado"));
-		usersRepository.delete(users);
-		return "redirect:/admin/";
+	@PostMapping("/completados/{cursoId}/leccion/{leccionId}")
+	public ResponseEntity<Void> completarLeccion(@PathVariable String cursoId, @PathVariable String leccionId) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String username = authentication.getName();
+		
+		Admin usuario = adminRepository.findByUser(username);
+		if (usuario == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+		
+		if (usuario.getProgreso() == null) {
+			usuario.setProgreso(new ArrayList<>());
+		}
+		
+		Optional<CourseProgress> progresoOpt = usuario.getProgreso().stream()
+				.filter(progreso -> progreso.getCursoId().equals(cursoId))
+				.findFirst();
+		
+		if (progresoOpt.isPresent()) {
+			CourseProgress progresoCurso = progresoOpt.get();
+			List<String> completedLessons = progresoCurso.getCompletedLessons();
+			
+			if (completedLessons.contains(leccionId)) {
+				completedLessons.remove(leccionId);
+			} else {
+				completedLessons.add(leccionId);
+			}
+		} else {
+			CourseProgress nuevoProgreso = new CourseProgress(cursoId, List.of(leccionId));
+			usuario.getProgreso().add(nuevoProgreso);
+		}
+		
+		try {
+			adminRepository.save(usuario);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+		
+		return ResponseEntity.ok().build();
 	}
 	
-	*/
+	@GetMapping("/curso/{cursoId}/lecciones-completadas")
+	public ResponseEntity<Set<String>> obtenerLeccionesCompletadas(@PathVariable String cursoId) {
+		
+		// Obtener el usuario autenticado
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String username = authentication.getName();
+		
+		// Obtener el usuario desde el repositorio
+		Admin usuario =adminRepository.findByUser(username);
+		if (usuario == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Usuario no encontrado
+		}
+		
+		// Buscar el curso en el repositorio
+		Optional<Course> cursoOpt = courseRepository.findById(cursoId);
+		if (!cursoOpt.isPresent()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Curso no encontrado
+		}
+		
+		// Buscar progreso en el curso
+		Optional<CourseProgress> progresoOpt = usuario.getProgreso().stream()
+				.filter(progreso -> progreso.getCursoId().equals(cursoId))
+				.findFirst();
+		
+		if (progresoOpt.isPresent()) {
+			CourseProgress progresoCurso = progresoOpt.get();
+			Set<String> leccionesCompletadas = new HashSet<>(progresoCurso.getCompletedLessons());
+			return ResponseEntity.ok(leccionesCompletadas);
+		}
+		
+		return ResponseEntity.ok(new HashSet<>()); // No hay lecciones completadas para el curso
+	}
 }

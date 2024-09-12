@@ -21,9 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.learning.app.entity.Admin;
 import com.learning.app.entity.Users;
 import com.learning.app.repository.AdminRepository;
-import com.learning.app.repository.DocumentosRepository;
 import com.learning.app.repository.UsersRepository;
-import com.learning.app.service.DocumentacionService;
 
 @RestController
 @RequestMapping("/register")
@@ -38,7 +36,7 @@ public class RegistController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
-	
+	//Añadir nuevo usuario
 	@PostMapping("/add-user")
 	public ResponseEntity<?> addUser(@RequestParam(value = "imagenPerfil", required = false) MultipartFile file,
 			@RequestParam("nombre") String nombre, @RequestParam("apellido") String apellido,
@@ -77,51 +75,46 @@ public class RegistController {
 	
 	@GetMapping("/ver-imagen")
 	public ResponseEntity<byte[]> verImagen() {
-	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	    String username = authentication.getName();
-
-	    // Primero, intenta encontrar el usuario en el repositorio Users
-	    Users user = usersRepository.findByUser(username);
-
-	    // Si el usuario no se encuentra en Users, intenta encontrarlo en Admin
-	    if (user == null) {
-	        Admin admin = adminRepository.findByUser(username);
-	        if (admin != null) {
-	            byte[] imagenBytes = admin.getImagenPerfil();
-	            
-	            if (imagenBytes != null && imagenBytes.length > 0) {
-	                System.out.println("Tamaño de la imagen (Admin): " + imagenBytes.length);
-
-	                HttpHeaders headers = new HttpHeaders();
-	                headers.setContentType(MediaType.IMAGE_JPEG);
-
-	                return new ResponseEntity<>(imagenBytes, headers, HttpStatus.OK);
-	            } else {
-	                System.out.println("No se encontró imagen para el administrador: " + username);
-	            }
-	        } else {
-	            System.out.println("Administrador no encontrado: " + username);
-	        }
-	    } else {
-	        byte[] imagenBytes = user.getImagenPerfil();
-
-	        if (imagenBytes != null && imagenBytes.length > 0) {
-	            System.out.println("Tamaño de la imagen (User): " + imagenBytes.length);
-
-	            HttpHeaders headers = new HttpHeaders();
-	            headers.setContentType(MediaType.IMAGE_JPEG);
-
-	            return new ResponseEntity<>(imagenBytes, headers, HttpStatus.OK);
-	        } else {
-	            System.out.println("No se encontró imagen para el usuario: " + username);
-	        }
-	    }
-
-	    return ResponseEntity.notFound().build();
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String username = authentication.getName();
+		
+		// Primero, intenta encontrar el usuario en el repositorio Users
+		Users user = usersRepository.findByUser(username);
+		
+		// Si el usuario no se encuentra en Users, intenta encontrarlo en Admin
+		if (user == null) {
+			Admin admin = adminRepository.findByUser(username);
+			if (admin != null) {
+				byte[] imagenBytes = admin.getImagenPerfil();
+				
+				if (imagenBytes != null && imagenBytes.length > 0) {
+					System.out.println("Tamaño de la imagen (Admin): " + imagenBytes.length);
+					
+					HttpHeaders headers = new HttpHeaders();
+					headers.setContentType(MediaType.IMAGE_JPEG);
+					
+					return new ResponseEntity<>(imagenBytes, headers, HttpStatus.OK);
+				} else {
+					System.out.println("No se encontró imagen para el administrador: " + username);
+				}
+			} else {
+				System.out.println("Administrador no encontrado: " + username);
+			}
+		} else {
+			byte[] imagenBytes = user.getImagenPerfil();
+			
+			if (imagenBytes != null && imagenBytes.length > 0) {
+				System.out.println("Tamaño de la imagen (User): " + imagenBytes.length);
+				
+				HttpHeaders headers = new HttpHeaders();
+				headers.setContentType(MediaType.IMAGE_JPEG);
+				
+				return new ResponseEntity<>(imagenBytes, headers, HttpStatus.OK);
+			} else {
+				System.out.println("No se encontró imagen para el usuario: " + username);
+			}
+		}
+		
+		return ResponseEntity.notFound().build();
 	}
-
-	 //const img = details.imagenPerfil ? `data:image/jpeg;base64,${details.imagenPerfil}` : profileImage;
-	//PRUEBAS//
-	
-	
 }

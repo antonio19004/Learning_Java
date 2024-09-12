@@ -17,7 +17,7 @@ import com.learning.app.entity.AuthenticationResponse;
 public class AuthController {
 
 	@Autowired
-    private AuthenticationManager authManager;
+	private AuthenticationManager authManager;
 	
 	@PostMapping("/auth")
 	private ResponseEntity<?> authentication(@RequestBody AuthenticationRequest authRequest){

@@ -7,7 +7,7 @@ import { faUser, faEnvelope, faCalendar, faImage } from '@fortawesome/free-solid
 import '../Static/Styles/Profile.css';
 import UserImg from '../Static/Img/User.png';
 
-const Profile = ({ showModal, handleClose }) =>{
+const Profile = ({ showModal, handleClose }) => {
     
     const [adminDetails, setAdminDetails] = useState(null);
     const [usersDetails, setUsersDetails] = useState(null);
@@ -22,14 +22,12 @@ const Profile = ({ showModal, handleClose }) =>{
     const [profileImage, setProfileImage] = useState(UserImg);
 
     useEffect(() => {
-        if (!username) {
-            navigate('/login');
-        } else if (rol === 'ROLE_ADMIN') {
+        if (rol === 'ROLE_ADMIN') {
             fetchAdminDetails();
         } else if (rol === 'ROLE_USER') {
             fetchUsersDetails();
         }
-    }, [username, rol, navigate]);
+    }, [rol, navigate]);
 
     const fetchAdminDetails = async () => {
         try {
@@ -70,32 +68,36 @@ const Profile = ({ showModal, handleClose }) =>{
     
         return (
             rol === 'ROLE_ADMIN' ? (
-                <div className="d-flex">
-                    <div className="me-3">
-                        <img src={img} alt="Perfil" style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '50px', marginLeft: '30%' }} />
+                <div className="row align-items-center">
+                    <div className="col-12 col-md-4 text-center mb-3 mb-md-0">
+                        <img src={img} alt="Perfil" className="img-fluid rounded-circle" style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '50px', marginLeft: '30%' }} />
                     </div>
-                    <div className="profile-content" style={{ marginLeft: '15%' }}>
-                        <p><strong>Nombre:</strong> {details.nombre} {details.apellido}</p>
-                        <p><strong>Fecha de Nacimiento:</strong> {formattedDate}</p>
-                        <p><strong>Edad:</strong> {details.edad}</p>
-                        <p><strong>Email:</strong> {details.email}</p>
-                        <p><strong>Nombre de Usuario:</strong> {details.user}</p>
+                    <div className="col-12 col-md-8">
+                        <div style={{ marginLeft: '20px' }}>
+                            <p><strong>Nombre:</strong> {details.nombre} {details.apellido}</p>
+                            <p><strong>Fecha de Nacimiento:</strong> {formattedDate}</p>
+                            <p><strong>Edad:</strong> {details.edad}</p>
+                            <p><strong>Email:</strong> {details.email}</p>
+                            <p><strong>Nombre de Usuario:</strong> {details.user}</p>
+                        </div>
                     </div>
                 </div>
             ) : (
-            <div className="d-flex">
-                <div className="me-3">
-                    <img src={img} alt="Perfil" style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '50px', marginLeft: '30%' }} />
+                <div className="row align-items-center">
+                    <div className="col-12 col-md-4 text-center mb-3 mb-md-0">
+                        <img src={img} alt="Perfil" className="img-fluid rounded-circle" style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '50px', marginLeft: '30%' }} />
+                    </div>
+                    <div className="col-12 col-md-8">
+                        <div style={{ marginLeft: '20px' }}>
+                            <p><strong>Nombre:</strong> {details.nombre} {details.apellido}</p>
+                            <p><strong>Fecha de Nacimiento:</strong> {formattedDate}</p>
+                            <p><strong>Edad:</strong> {details.edad}</p>
+                            <p><strong>Email:</strong> {details.email}</p>
+                            <p><strong>Nombre de Usuario:</strong> {details.user}</p>
+                            <p><strong>Cursos Completados:</strong> {details.cursosCompletados}</p>
+                        </div>
+                    </div>
                 </div>
-                <div className="profile-content" style={{ marginLeft: '15%' }}>
-                    <p><strong>Nombre:</strong> {details.nombre} {details.apellido}</p>
-                    <p><strong>Fecha de Nacimiento:</strong> {formattedDate}</p>
-                    <p><strong>Edad:</strong> {details.edad}</p>
-                    <p><strong>Email:</strong> {details.email}</p>
-                    <p><strong>Nombre de Usuario:</strong> {details.user}</p>
-                    <p><strong>Cursos Completados:</strong> {details.cursosCompletados}</p>
-                </div>
-            </div>
             )
         );
     };
@@ -180,29 +182,29 @@ const Profile = ({ showModal, handleClose }) =>{
                 <Button variant="close" onClick={close}></Button>
             </Modal.Header>
             <Modal.Body>
-                <div className="d-flex align-items-center mb-3" style={{ marginLeft: '7.5%' }}>
+                <div className="d-flex align-items-center mb-3">
                     <span>Editar</span>
                     <Form.Check type="switch" id="edit-switch" className="ms-2" checked={isEditEnabled} onChange={handleToggleEdit} />
                 </div>
                 {isEditEnabled ? (
                     <form onSubmit={handleUpdate} className="row g-3">
-                        <div className="col-12 mb-3">
+                        <div className="col-12 mb-3 text-center">
                             <center>
                                 {imagePreview ? (
-                                    <img src={UserImg} alt="Imagen de Perfil" style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '50px' }} />
+                                    <img src={imagePreview} alt="Imagen de Perfil" className="img-fluid rounded-circle" style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '50px' }} />
                                 ) : (
                                     rol === 'ROLE_ADMIN' ? (
                                         adminDetails?.imagenPerfil && (
-                                            <img src={`data:image/jpeg;base64,${adminDetails.imagenPerfil}`} alt="Imagen de Perfil" style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '50px' }} />
+                                            <img src={`data:image/jpeg;base64,${adminDetails.imagenPerfil}`} alt="Imagen de Perfil" className="img-fluid rounded-circle" style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '50px' }} />
                                         )
                                     ) : (
                                         usersDetails?.imagenPerfil && (
-                                            <img src={`data:image/jpeg;base64,${usersDetails.imagenPerfil}`} alt="Imagen de Perfil" style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '50px' }} />
+                                            <img src={`data:image/jpeg;base64,${usersDetails.imagenPerfil}`} alt="Imagen de Perfil" className="img-fluid rounded-circle" style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '50px' }} />
                                         )
                                     )
                                 )}
                             </center><br />
-                            <div className="input-group">
+                            <div className="input-group mt-3">
                                 <span className="input-group-text">
                                     <FontAwesomeIcon icon={faImage} />
                                 </span>

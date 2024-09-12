@@ -10,6 +10,7 @@ import com.learning.app.entity.Course;
 
 @Repository
 public interface CoursesRepository extends MongoRepository<Course, String> {
+	
 	Optional<Course> findByTitle(String title);
 	
 	List<Course> findTop3ByOrderByCreatedDateDesc();

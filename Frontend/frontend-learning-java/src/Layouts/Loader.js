@@ -4,11 +4,10 @@ import gif from '../Static/Img/GIFLOGO.gif'
 import '../Static/Styles/Style.css'
 
 const Loader =()=>{
-
     return(
         <div>
-        <img className='gifloader' src={gif}/>
-            </div>
+            <img className='gifloader' src={gif}/>
+        </div>
     );
 }
 

@@ -33,6 +33,7 @@ public class PasswordController {
 	@Autowired
 	private JavaMailSender mail;
 	
+	//Restablecer contraseña
 	@PostMapping("/reset")
 	public ResponseEntity<?> requestPassword(@RequestBody String username) {
 		Users user = usersRepository.findByUser(username);
@@ -56,10 +57,12 @@ public class PasswordController {
 		return ResponseEntity.ok("La contraseña generada ha sido enviada al Email");
 	}
 	
+	//Generar aleatoriamente una contraseña de 8 caracteres
 	private String generatePassword() {
 		return UUID.randomUUID().toString().substring(0, 8);
 	}
 	
+	//Enviar la contraseña generada al email del usuario
 	private void sendEmail(String nombre, String email, String newPassword) {
 		SimpleMailMessage message = new SimpleMailMessage();
 		message.setFrom("pruebastrabajos25@gmail.com");

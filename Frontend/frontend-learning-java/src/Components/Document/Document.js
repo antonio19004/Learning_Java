@@ -12,10 +12,9 @@ import { formatDistanceToNow, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale'; 
 import Loader from '../../Layouts/Loader';
 
+const Document = () => {
+    document.title = 'Documentación';
 
-
-
-const Document =()=>{
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
     const [archivos, setArchivos] = useState([]);
@@ -55,26 +54,23 @@ const Document =()=>{
         }
     };
 
-
     const handleVerArchivo = async (id) => {
         window.open(`http://localhost:8080/${baseUrl}/documentacion/${id}`, '_blank');
     };
     
-
     const handleDescargarArchivo = async (id) => {
         window.location.href =  `http://localhost:8080/${baseUrl}/documentacion/descargar/${id}`;
     };
-
     
     console.log('Valor de archivos:', archivos);
 
     const handleAddDocument = () => {
         navigate('/panel/add-document');
-      };
-
-      const handleEditDocument = (id) => {
+    };
+    
+    const handleEditDocument = (id) => {
         navigate(`/panel/edit-document/${id}`);
-      };
+    };
 
     const handleDeleteDocument = async (id) => {
         const result = await Swal.fire({
@@ -108,7 +104,6 @@ const Document =()=>{
             }
         }
     };
-
 
     const formatRelativeDate = (date) => {
         const distance = formatDistanceToNow(date, { addSuffix: true, locale: es });
@@ -230,9 +225,11 @@ const Document =()=>{
                 </div>
             )}
             </div>
+
             </div>
         </div>
-    </div>
+        </div>
     );
 }
+
 export default Document;

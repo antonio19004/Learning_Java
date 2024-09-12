@@ -29,5 +29,4 @@ public class ContactDto {
 	public void setContenido(String contenido) {
 		this.contenido = contenido;
 	}
-	
 }

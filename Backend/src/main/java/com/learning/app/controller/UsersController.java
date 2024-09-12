@@ -50,8 +50,7 @@ public class UsersController {
 	public UsersController(DocumentacionService documentacionService) {
 		super();
 		this.documentacionService = documentacionService;
-	}
-	
+	}	
 	
 	@Autowired
 	private UsersRepository usersRepository;
@@ -62,6 +61,7 @@ public class UsersController {
 	@Autowired
 	private CoursesRepository courseRepository;
 	
+	//Obtener datos del usuario
 	@GetMapping("/details")
 	public UsersDto getAuthenticatedUser() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -84,6 +84,7 @@ public class UsersController {
 		return usersDto;
 	}
 	
+	//Actualizar los datos del perfil
 	@PutMapping("/update-profile")
 	public ResponseEntity<String> updateProfile(@RequestParam(value = "imagenPerfil", required = false) MultipartFile file,
 			@RequestParam("nombre") String nombre, @RequestParam("apellido") String apellido,
@@ -122,12 +123,13 @@ public class UsersController {
 		}
 	}
 	
+	//Actualizar contraseña
 	@PostMapping("/update-password")
 	public ResponseEntity<?> updatePassword(@RequestBody PasswordDto passwordDto) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String username = authentication.getName();
 		Users user = usersRepository.findByUser(username);
-
+		
 		if (user != null) {
 			if (passwordEncoder.matches(passwordDto.getPassword(), user.getPassword())) {
 				user.setPassword(passwordEncoder.encode(passwordDto.getNewPassword()));
@@ -141,243 +143,195 @@ public class UsersController {
 		}
 	}
 	
-	
-	
-	
 	//Documentacion users//
 	
-	  
-    @GetMapping("/documentacion/{id}")
-    public ResponseEntity<byte[]> verArchivo(@PathVariable String id) {
-    	Documentacion archivo = documentacionService.obtenerArchivoPorId(id);
-        if (archivo != null) {
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + archivo.getTitulo() + "\"")
-                    .header(HttpHeaders.CONTENT_TYPE, archivo.getTipo())
-                    .body(archivo.getContenido());
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-    
-    @GetMapping("/documentacion/descargar/{id}")
-    public ResponseEntity<byte[]> descargarArchivo(@PathVariable String id) {
-    	Documentacion archivo = documentacionService.obtenerArchivoPorId(id);
-        if (archivo != null) {
-        	
-            String extension = obtenerExtension(archivo.getTipo());
-            String nombreArchivo = archivo.getTitulo();
-            
-            if (!nombreArchivo.endsWith(extension)) {
-                nombreArchivo += extension;
-            }
-            System.out.println("Tipo MIME: " + archivo.getTipo());
-            System.out.println("Nombre del archivo: " + nombreArchivo);
-            
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + nombreArchivo + "\"")
-                    .header(HttpHeaders.CONTENT_TYPE, archivo.getTipo())
-                    .body(archivo.getContenido());
-            
-       
-
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-    
-
-    @GetMapping("/documentacion/listar")
-    public List<Documentacion> listarArchivos() {
-        System.out.println("Entrando al método listarArchivos...");
-
-        List<Documentacion> archivos = documentacionService.listarArchivos();
-        System.out.println("Número de archivos recuperados: " + (archivos != null ? archivos.size() : "null"));
-
-        if (archivos != null) {
-            for (Documentacion archivo : archivos) {
-                System.out.println("Archivo: " + archivo.getTitulo() + ", ID: " + archivo.getId());
-            }
-        } else {
-            System.out.println("La lista de archivos es nula.");
-        }
-
-        return archivos;
-    }
-	
-    
-    private String obtenerExtension(String mimeType) {
-        switch (mimeType) {
-            case "application/pdf":
-                return ".pdf";
-            case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-                return ".docx";
-            case "application/msword":
-                return ".doc";
-            default:
-                return "";
-        }
-    }
-	
-	
-    @GetMapping("/documentacion/Search")
-    public ResponseEntity<List<Documentacion>> searchDocuments(@RequestParam String titulo){
-    	List<Documentacion> documents = documentosRepository.findByTitulo(titulo);
-    	return ResponseEntity.ok(documents);
-    }
-    
-    
-    
-    //PROGRESS
-    
-    
-    @GetMapping("/curso/{cursoId}/progreso")
-    public ResponseEntity<Double> obtenerProgreso(@PathVariable String cursoId) {
-        // Obtener el usuario autenticado
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        
-        // Obtener el usuario desde el repositorio
-        Users usuario = usersRepository.findByUser(username);
-        if (usuario == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Usuario no encontrado
-        }
-
-        // Buscar el curso en el repositorio
-        Optional<Course> cursoOpt = courseRepository.findById(cursoId);
-        if (!cursoOpt.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Curso no encontrado
-        }
-
-        Course curso = cursoOpt.get();
-        long totalLecciones = curso.getLesson().size();
-        if (totalLecciones == 0) {
-            return ResponseEntity.badRequest().body(null); // No hay lecciones en el curso
-        }
-
-        // Buscar progreso en el curso
-        Optional<CourseProgress> progresoOpt = usuario.getProgreso().stream()
-                .filter(progreso -> progreso.getCursoId().equals(cursoId))
-                .findFirst();
-        
-        if (progresoOpt.isPresent()) {
-            CourseProgress progresoCurso = progresoOpt.get();
-            long leccionesCompletadas = progresoCurso.getCompletedLessons().size();
-            double porcentajeCompletado = (leccionesCompletadas / (double) totalLecciones) * 100;
-
-            return ResponseEntity.ok(porcentajeCompletado);
-        }
-
-        return ResponseEntity.notFound().build(); // Progreso no encontrado para el curso
-    }
-
-    @PostMapping("/completados/{cursoId}/leccion/{leccionId}")
-    public ResponseEntity<Void> completarLeccion(@PathVariable String cursoId, @PathVariable String leccionId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-
-        Users usuario = usersRepository.findByUser(username);
-        if (usuario == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
-        if (usuario.getProgreso() == null) {
-            usuario.setProgreso(new ArrayList<>());
-        }
-
-        Optional<CourseProgress> progresoOpt = usuario.getProgreso().stream()
-                .filter(progreso -> progreso.getCursoId().equals(cursoId))
-                .findFirst();
-
-        if (progresoOpt.isPresent()) {
-            CourseProgress progresoCurso = progresoOpt.get();
-            List<String> completedLessons = progresoCurso.getCompletedLessons();
-            if (completedLessons.contains(leccionId)) {
-                completedLessons.remove(leccionId);
-            } else {
-                completedLessons.add(leccionId);
-            }
-        } else {
-            CourseProgress nuevoProgreso = new CourseProgress(cursoId, List.of(leccionId));
-            usuario.getProgreso().add(nuevoProgreso);
-        }
-
-        try {
-            usersRepository.save(usuario);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-
-        return ResponseEntity.ok().build();
-    }
-
-
-    
-    @GetMapping("/curso/{cursoId}/lecciones-completadas")
-    public ResponseEntity<Set<String>> obtenerLeccionesCompletadas(@PathVariable String cursoId) {
-        // Obtener el usuario autenticado
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        
-        // Obtener el usuario desde el repositorio
-        Users usuario = usersRepository.findByUser(username);
-        if (usuario == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Usuario no encontrado
-        }
-
-        // Buscar el curso en el repositorio
-        Optional<Course> cursoOpt = courseRepository.findById(cursoId);
-        if (!cursoOpt.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Curso no encontrado
-        }
-
-        // Buscar progreso en el curso
-        Optional<CourseProgress> progresoOpt = usuario.getProgreso().stream()
-                .filter(progreso -> progreso.getCursoId().equals(cursoId))
-                .findFirst();
-        
-        if (progresoOpt.isPresent()) {
-            CourseProgress progresoCurso = progresoOpt.get();
-            Set<String> leccionesCompletadas = new HashSet<>(progresoCurso.getCompletedLessons());
-            return ResponseEntity.ok(leccionesCompletadas);
-        }
-
-        return ResponseEntity.ok(new HashSet<>()); // No hay lecciones completadas para el curso
-    }
-
-  
-    
-    
-/*	
-	@GetMapping("/")
-	public String index(Model model) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		String userName = auth.getName();
-		Users user = usersRepository.findByUser(userName);
-		model.addAttribute("user", user);
-		return "users/index";
+	@GetMapping("/documentacion/{id}")
+	public ResponseEntity<byte[]> verArchivo(@PathVariable String id) {
+		Documentacion archivo = documentacionService.obtenerArchivoPorId(id);
+		
+		if (archivo != null) {
+			return ResponseEntity.ok()
+					.header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + archivo.getTitulo() + "\"")
+					.header(HttpHeaders.CONTENT_TYPE, archivo.getTipo())
+					.body(archivo.getContenido());
+		}
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 	
-	@GetMapping("/{id}")
-	public String getUserById(@PathVariable("id") String id, Model model) {
-		Users users = usersRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("El usuario no ha sido encontrado"));
-		model.addAttribute("users", users);
-		return "users/details";
+	@GetMapping("/documentacion/descargar/{id}")
+	public ResponseEntity<byte[]> descargarArchivo(@PathVariable String id) {
+		Documentacion archivo = documentacionService.obtenerArchivoPorId(id);
+		
+		if (archivo != null) {
+			String extension = obtenerExtension(archivo.getTipo());
+			String nombreArchivo = archivo.getTitulo();
+			
+			if (!nombreArchivo.endsWith(extension)) {
+				nombreArchivo += extension;
+			}
+			
+			System.out.println("Tipo MIME: " + archivo.getTipo());
+			System.out.println("Nombre del archivo: " + nombreArchivo);
+			
+			return ResponseEntity.ok()
+					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + nombreArchivo + "\"")
+					.header(HttpHeaders.CONTENT_TYPE, archivo.getTipo())
+					.body(archivo.getContenido());
+		}
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 	
-	@GetMapping("/edit/{id}")
-	public String editUser(@PathVariable("id") String id, Model model) {
-		Users users = usersRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("El usuario no ha sido encontrado"));
-		model.addAttribute("users", users);
-		return "users/edit";
+	@GetMapping("/documentacion/listar")
+	public List<Documentacion> listarArchivos() {
+		System.out.println("Entrando al método listarArchivos...");
+		
+		List<Documentacion> archivos = documentacionService.listarArchivos();
+		System.out.println("Número de archivos recuperados: " + (archivos != null ? archivos.size() : "null"));
+		
+		if (archivos != null) {
+			for (Documentacion archivo : archivos) {
+				System.out.println("Archivo: " + archivo.getTitulo() + ", ID: " + archivo.getId());
+			}
+		} else {
+			System.out.println("La lista de archivos es nula.");
+		}
+		
+		return archivos;
 	}
 	
-	@PostMapping("/{id}")
-	public String updateUser(@PathVariable("id") String id, @ModelAttribute("users") Users users) {
-		Users user = usersRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("El usuario no ha sido encontrado"));
-		users.setPassword(user.getPassword());
-		users.setCursosCompletados(user.getCursosCompletados());
-		users.setId(id);
-		usersRepository.save(users);
-		return "redirect:/users/";
+	private String obtenerExtension(String mimeType) {
+		switch (mimeType) {
+			case "application/pdf":
+				return ".pdf";
+			case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+				return ".docx";
+			case "application/msword":
+				return ".doc";
+			default:
+				return "";
+		}
 	}
-	*/
+	
+	@GetMapping("/documentacion/Search")
+	public ResponseEntity<List<Documentacion>> searchDocuments(@RequestParam String titulo){
+		List<Documentacion> documents = documentosRepository.findByTitulo(titulo);
+		return ResponseEntity.ok(documents);
+	}
+	
+	//PROGRESS
+	
+	@GetMapping("/curso/{cursoId}/progreso")
+	public ResponseEntity<Double> obtenerProgreso(@PathVariable String cursoId) {
+		
+		// Obtener el usuario autenticado
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String username = authentication.getName();
+		
+		// Obtener el usuario desde el repositorio
+		Users usuario = usersRepository.findByUser(username);
+		if (usuario == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Usuario no encontrado
+		}
+		
+		// Buscar el curso en el repositorio
+		Optional<Course> cursoOpt = courseRepository.findById(cursoId);
+		if (!cursoOpt.isPresent()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Curso no encontrado
+		}
+		
+		Course curso = cursoOpt.get();
+		long totalLecciones = curso.getLesson().size();
+		if (totalLecciones == 0) {
+			return ResponseEntity.badRequest().body(null); // No hay lecciones en el curso
+		}
+		
+		// Buscar progreso en el curso
+		Optional<CourseProgress> progresoOpt = usuario.getProgreso().stream()
+				.filter(progreso -> progreso.getCursoId().equals(cursoId))
+				.findFirst();
+		
+		if (progresoOpt.isPresent()) {
+			CourseProgress progresoCurso = progresoOpt.get();
+			long leccionesCompletadas = progresoCurso.getCompletedLessons().size();
+			double porcentajeCompletado = (leccionesCompletadas / (double) totalLecciones) * 100;
+			
+			return ResponseEntity.ok(porcentajeCompletado);
+		}
+		
+		return ResponseEntity.notFound().build(); // Progreso no encontrado para el curso
+	}
+	
+	@PostMapping("/completados/{cursoId}/leccion/{leccionId}")
+	public ResponseEntity<Void> completarLeccion(@PathVariable String cursoId, @PathVariable String leccionId) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String username = authentication.getName();
+		
+		Users usuario = usersRepository.findByUser(username);
+		if (usuario == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+		
+		if (usuario.getProgreso() == null) {
+			usuario.setProgreso(new ArrayList<>());
+		}
+		
+		Optional<CourseProgress> progresoOpt = usuario.getProgreso().stream()
+				.filter(progreso -> progreso.getCursoId().equals(cursoId))
+				.findFirst();
+		
+		if (progresoOpt.isPresent()) {
+			CourseProgress progresoCurso = progresoOpt.get();
+			List<String> completedLessons = progresoCurso.getCompletedLessons();
+			
+			if (completedLessons.contains(leccionId)) {
+				completedLessons.remove(leccionId);
+			} else {
+				completedLessons.add(leccionId);
+			}
+		} else {
+			CourseProgress nuevoProgreso = new CourseProgress(cursoId, List.of(leccionId));
+			usuario.getProgreso().add(nuevoProgreso);
+		}
+		
+		try {
+			usersRepository.save(usuario);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+		
+		return ResponseEntity.ok().build();
+	}
+	
+	@GetMapping("/curso/{cursoId}/lecciones-completadas")
+	public ResponseEntity<Set<String>> obtenerLeccionesCompletadas(@PathVariable String cursoId) {
+		
+		// Obtener el usuario autenticado
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String username = authentication.getName();
+		
+		// Obtener el usuario desde el repositorio
+		Users usuario = usersRepository.findByUser(username);
+		if (usuario == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Usuario no encontrado
+		}
+		
+		// Buscar el curso en el repositorio
+		Optional<Course> cursoOpt = courseRepository.findById(cursoId);
+		if (!cursoOpt.isPresent()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Curso no encontrado
+		}
+		
+		// Buscar progreso en el curso
+		Optional<CourseProgress> progresoOpt = usuario.getProgreso().stream()
+				.filter(progreso -> progreso.getCursoId().equals(cursoId))
+				.findFirst();
+		
+		if (progresoOpt.isPresent()) {
+			CourseProgress progresoCurso = progresoOpt.get();
+			Set<String> leccionesCompletadas = new HashSet<>(progresoCurso.getCompletedLessons());
+			return ResponseEntity.ok(leccionesCompletadas);
+		}
+		
+		return ResponseEntity.ok(new HashSet<>()); // No hay lecciones completadas para el curso
+	}
 }

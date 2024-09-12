@@ -34,14 +34,14 @@ const Footer = () => {
 
             <div className="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-scrollable">
-                    <div className="modal-content">
+                    <div className="modal-content" style={{ width: '110%' }}>
                         <div className="modal-header">
                             <div>
                                 <img src={Logo} className='NavLogo' alt='Logo...' />
                             </div>
-                            <h5 className="modal-title" id="exampleModalLabel">Términos y Condiciones de Uso para LEARNING JAVA<br></br>
+                            <h5 className="modal-title" id="exampleModalLabel" style={{ marginLeft: '20px' }}>Términos y Condiciones de Uso para LEARNING JAVA<br></br>
                             <p className='text-muted fs-6 fw-normal'>Última actualización: 08 Abril 2024</p></h5>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" style={{ marginRight: '20px' }}></button>
                         </div>
                         <div className="modal-body">
                             <div className="mb-3 mt-3">
@@ -50,47 +50,47 @@ const Footer = () => {
                             </div>
                             
                             <div className="mb-3">
-                                <h2>Propósito del Sitio Web</h2>
+                                <h4>Propósito del Sitio Web</h4>
                                 <p>LEARNING JAVA es una plataforma educativa diseñada para ayudar a los estudiantes a aprender programación en Java. Ofrece tutoriales, foros de discusión, documentación y otros recursos para facilitar el aprendizaje de Java.</p>
                             </div>
                             
                             <div className="mb-3">
-                                <h2>Registro y Cuenta de Usuario</h2>
+                                <h4>Registro y Cuenta de Usuario</h4>
                                 <p>Para acceder a ciertas funcionalidades del Sitio Web, como participar en foros o descargar materiales, es posible que necesites crear una cuenta. Al registrarte, proporcionarás información verdadera y precisa. Mantén actualizada tu información de perfil.</p>
                             </div>
                             
                             <div className="mb-3">
-                                <h2>Uso Responsable</h2>
+                                <h4>Uso Responsable</h4>
                                 <p>Reserva el derecho de utilizar el Sitio Web de manera responsable y respetando las leyes aplicables. No autorizamos el uso del Sitio Web para fines ilegales o dañinos.</p>
                             </div>
                             
                             <div className="mb-3">
-                                <h2>Contenido del Sitio Web</h2>
+                                <h4>Contenido del Sitio Web</h4>
                                 <p>Todas las obras literarias, gráficas, audiovisuales y otras creaciones contenidas en el Sitio Web están sujetas a derechos de autor. Su uso no autorizado puede resultar en acciones legales.</p>
                             </div>
                             
                             <div className="mb-3">
-                                <h2>Foro y Comunicación</h2>
+                                <h4>Foro y Comunicación</h4>
                                 <p>El foro y otras áreas de comunicación dentro del Sitio Web están destinadas a fomentar el debate constructivo y el intercambio de ideas. Reserva el derecho de moderar y eliminar contenido inapropiado.</p>
                             </div>
                             
                             <div className="mb-3">
-                                <h2>Limitación de Responsabilidad</h2>
+                                <h4>Limitación de Responsabilidad</h4>
                                 <p>No somos responsables de errores, omisiones, o retrasos en el funcionamiento del Sitio Web, ni de daños resultantes del acceso o uso del mismo. El uso del Sitio Web es bajo tu propio riesgo.</p>
                             </div>
                             
                             <div className="mb-3">
-                                <h2>Cambios en los Términos y Condiciones</h2>
+                                <h4>Cambios en los Términos y Condiciones</h4>
                                 <p>Reserva el derecho de modificar estos términos y condiciones en cualquier momento. Te notificará de tales cambios a través de una actualización visible en el Sitio Web.</p>
                             </div>
                             
                             <div className="mb-3">
-                                <h2>Ley Aplicable</h2>
+                                <h4>Ley Aplicable</h4>
                                 <p>Estos términos y condiciones se rigen por las leyes de Colombia CO. En caso de disputa, acudirá ante los tribunales competentes en Bucaramanga/Colombia.</p>
                             </div>
                             
                             <div className="mb-3">
-                                <h2>Contacto</h2>
+                                <h4>Contacto</h4>
                                 <p>Para cualquier consulta o problema relacionado con estos términos y condiciones, ponte en contacto con nosotros a través de <strong>pruebastrabajos25@gmail.com.</strong></p>
                             </div>
                         </div>
