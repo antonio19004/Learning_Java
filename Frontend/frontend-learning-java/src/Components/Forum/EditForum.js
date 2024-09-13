@@ -12,7 +12,7 @@ const EditForum = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/forum/${id}`, { withCredentials: true })
+        axios.get(`https://backend-learning-java.onrender.com/forum/${id}`, { withCredentials: true })
             .then(response => { 
                 setForo(response.data);
             })
@@ -32,7 +32,7 @@ const EditForum = () => {
         try {
             setError(null);
 
-            const response = await axios.put(`http://localhost:8080/forum/${id}`, foro, { withCredentials: true });
+            const response = await axios.put(`https://backend-learning-java.onrender.com/forum/${id}`, foro, { withCredentials: true });
             
             if (response.status === 200) {
                 navigate('/panel/forum-settings');

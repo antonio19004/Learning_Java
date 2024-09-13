@@ -48,7 +48,7 @@ function CreateExercise() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8080/exercise/create',Exercises,{withCredentials:true});
+            const response = await axios.post('https://backend-learning-java.onrender.com/exercise/create',Exercises,{withCredentials:true});
             console.log(response.data);
             alert('Ejercicio creado con exito');
             navigate('/panel/exercises');

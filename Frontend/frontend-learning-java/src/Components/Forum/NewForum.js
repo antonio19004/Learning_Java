@@ -28,7 +28,7 @@ const NewForum = () => {
         };
 
         try {
-            const response = await axios.post('http://localhost:8080/forum', data, {
+            const response = await axios.post('https://backend-learning-java.onrender.com/forum', data, {
                 headers: {
                     'Content-Type': 'application/json'
                 },

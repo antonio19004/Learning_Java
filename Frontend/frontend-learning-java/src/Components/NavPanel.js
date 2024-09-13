@@ -21,7 +21,7 @@ const NavPanel = () => {
     useEffect(() => {
         const fetchProfileImage = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/register/ver-imagen', {
+                const response = await axios.get('https://backend-learning-java.onrender.com/register/ver-imagen', {
                     responseType: 'arraybuffer',
                     withCredentials: true
                 });
@@ -48,7 +48,7 @@ const NavPanel = () => {
     const handleLogout = async () => {
         console.log('Logging out...');
         try {
-            await axios.post('http://localhost:8080/logout', {}, { withCredentials: true });
+            await axios.post('https://backend-learning-java.onrender.com/logout', {}, { withCredentials: true });
             localStorage.removeItem('username');
             localStorage.removeItem('role');
             navigate('/login');

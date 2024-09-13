@@ -48,7 +48,7 @@ const UpdatePassword = () => {
         };
 
         try {
-            const response = await axios.post('http://localhost:8080/admin/update-password', data, {
+            const response = await axios.post('https://backend-learning-java.onrender.com/admin/update-password', data, {
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -86,7 +86,7 @@ const UpdatePassword = () => {
         };
 
         try {
-            const response = await axios.post('http://localhost:8080/users/update-password', data, {
+            const response = await axios.post('https://backend-learning-java.onrender.com/users/update-password', data, {
                 headers: {
                     'Content-Type': 'application/json'
                 },

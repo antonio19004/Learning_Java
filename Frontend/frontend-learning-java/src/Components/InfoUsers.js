@@ -14,7 +14,7 @@ const InfoUsers = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        axios.get('http://localhost:8080/admin/users', { withCredentials: true })
+        axios.get('https://backend-learning-java.onrender.com/admin/users', { withCredentials: true })
         .then(response => {
             setUsers(response.data);
             setLoading(false);

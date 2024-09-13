@@ -29,7 +29,7 @@ function Contact() {
         };
 
         try {
-            const response = await axios.post('http://localhost:8080/contact', data, {
+            const response = await axios.post('https://backend-learning-java.onrender.com/contact', data, {
                 headers: {
                     'Content-Type': 'application/json'
                 },

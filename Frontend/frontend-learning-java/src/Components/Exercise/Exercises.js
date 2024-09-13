@@ -22,7 +22,7 @@ function Exercises() {
 
 const fecthExercises = async () => {
     try {
-        const response = await axios.get(`http://localhost:8080/exercise/list`, { withCredentials: true });
+        const response = await axios.get(`https://backend-learning-java.onrender.com/exercise/list`, { withCredentials: true });
         setExercises(response.data);
         setLoading(false);
     } catch (error) {
@@ -52,7 +52,7 @@ const handleDeleteExercise = async (id) => {
 
     if (result.isConfirmed) {
         try {
-            await axios.delete(`http://localhost:8080/exercise/delete/${id}`, { withCredentials: true });
+            await axios.delete(`https://backend-learning-java.onrender.com/exercise/delete/${id}`, { withCredentials: true });
             Swal.fire(
                 'Eliminado!',
                 'El ejercicio ha sido eliminado.',

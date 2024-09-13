@@ -21,7 +21,7 @@ function CourseList() {
     useEffect(() => {
         const fetchCourses = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/course/list',{withCredentials:true});
+                const response = await axios.get('https://backend-learning-java.onrender.com/course/list',{withCredentials:true});
                 setCourses(response.data);
                 setResults(response.data);
                 setLoading(false);

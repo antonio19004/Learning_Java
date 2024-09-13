@@ -22,7 +22,7 @@ function Courses() {
     useEffect(() => {
         const fetchCourses = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/course/list',{withCredentials:true});
+                const response = await axios.get('https://backend-learning-java.onrender.com/course/list',{withCredentials:true});
                 setCourses(response.data);
                 setLoading(false);
             } catch (error) {
@@ -37,7 +37,7 @@ function Courses() {
 
     const handleCardClick = async (courseId) => {
         try {
-            const response = await axios.get(`http://localhost:8080/course/${courseId}/lessons`, { withCredentials: true });
+            const response = await axios.get(`https://backend-learning-java.onrender.com/course/${courseId}/lessons`, { withCredentials: true });
             setSelectedCourse(response.data.course);
             setLessons(response.data.lessons); 
             setShowModal(true);
@@ -60,7 +60,7 @@ function Courses() {
 
         if (result.isConfirmed) {
             try {
-                await axios.delete(`http://localhost:8080/course/delete/${courseId}`, { withCredentials: true });
+                await axios.delete(`https://backend-learning-java.onrender.com/course/delete/${courseId}`, { withCredentials: true });
                 Swal.fire(
                     'Eliminado!',
                     'El curso ha sido eliminado.',

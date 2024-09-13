@@ -40,7 +40,7 @@ function EditExercise() {
     useEffect(() => {
         const fetchLessonDetails = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/exercise/select/${id}`, { withCredentials: true });
+                const response = await axios.get(`https://backend-learning-java.onrender.com/exercise/select/${id}`, { withCredentials: true });
                 setExercises(response.data);
             } catch (error) {
                 console.error("Error al obtener los datos de ejercicio:", error);
@@ -64,7 +64,7 @@ function EditExercise() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.put(`http://localhost:8080/exercise/update/${id}`,Exercises,{withCredentials:true});
+            const response = await axios.put(`https://backend-learning-java.onrender.com/exercise/update/${id}`,Exercises,{withCredentials:true});
             console.log(response.data);
             alert('Ejercicio Actualizado con exito');
             navigate('/panel/exercises');

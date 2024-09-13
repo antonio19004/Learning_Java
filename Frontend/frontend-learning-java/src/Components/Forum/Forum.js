@@ -21,7 +21,7 @@ const Forum = () => {
     const navigate = useNavigate();
 
     const fetchForo = () => {
-        axios.get('http://localhost:8080/forum', { withCredentials: true })
+        axios.get('https://backend-learning-java.onrender.com/forum', { withCredentials: true })
             .then(response => {
                 setForo(response.data);
                 setResults(response.data);

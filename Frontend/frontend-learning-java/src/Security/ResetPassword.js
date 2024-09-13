@@ -18,7 +18,7 @@ const ResetPassword = () => {
         }
 
         try {
-            const response = await axios.post('http://localhost:8080/password/reset',  username, {
+            const response = await axios.post('https://backend-learning-java.onrender.com/password/reset',  username, {
                 headers: {
                     'Content-Type': 'text/plain'
                 },

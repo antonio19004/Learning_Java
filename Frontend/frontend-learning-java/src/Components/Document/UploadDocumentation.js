@@ -31,7 +31,7 @@ const UploadDocument =()=>{
         formData.append('titulo', titulo);
 
         try {
-            const response = await axios.post('http://localhost:8080/admin/documentacion/subir', formData,{withCredentials:true}, {
+            const response = await axios.post('https://backend-learning-java.onrender.com/admin/documentacion/subir', formData,{withCredentials:true}, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }

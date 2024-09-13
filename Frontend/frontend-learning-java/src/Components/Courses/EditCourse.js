@@ -49,7 +49,7 @@ const availableTopic = [
     useEffect(() => {
         const fetchCourseDetails = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/course/${id}/lessons`, { withCredentials: true });
+                const response = await axios.get(`https://backend-learning-java.onrender.com/course/${id}/lessons`, { withCredentials: true });
                 setCourse({...response.data.course,
                  imagePreview: response.data.course.coverImage ? `data:image/jpeg;base64,${response.data.course.coverImage}` : ''});
                 setLessons(response.data.lessons); 
@@ -146,7 +146,7 @@ const availableTopic = [
                 formData.append('coverImage', '');
             }
     
-            await axios.put(`http://localhost:8080/course/update/${id}`, formData, {
+            await axios.put(`https://backend-learning-java.onrender.com/course/update/${id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

@@ -29,7 +29,7 @@ const Comment = ({id}) => {
 
     const fetchAverageSource = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/comment/view/average-score/${id}`);
+            const response = await axios.get(`https://backend-learning-java.onrender.com/http://localhost:8080/comment/view/average-score/${id}`);
             if (response.status === 200) {
                 setAverageSource(response.data);
             }
@@ -40,7 +40,7 @@ const Comment = ({id}) => {
 
     const fetchHighestScoreComment = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/comment/view/highest-score-comment/${id}`);
+            const response = await axios.get(`https://backend-learning-java.onrender.com/comment/view/highest-score-comment/${id}`);
             if (response.status === 200) {
                 setHighest(response.data);
             }
@@ -51,7 +51,7 @@ const Comment = ({id}) => {
 
     const fetchLowestScoreComment = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/comment/view/lowest-score-comment/${id}`);
+            const response = await axios.get(`https://backend-learning-java.onrender.com/comment/view/lowest-score-comment/${id}`);
             if (response.status === 200) {
                 setLowest(response.data);
             }
@@ -62,7 +62,7 @@ const Comment = ({id}) => {
 
     const fetchAllComments = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/comment/view/${id}`);
+            const response = await axios.get(`https://backend-learning-java.onrender.com/comment/view/${id}`);
             if (response.status === 200) {
                 setComments(response.data);
             }
@@ -81,7 +81,7 @@ const Comment = ({id}) => {
         };
 
         try {
-            const response = await axios.post('http://localhost:8080/comment/score', data, {
+            const response = await axios.post('https://backend-learning-java.onrender.com/comment/score', data, {
                 headers: { 'Content-Type': 'application/json' },
                 withCredentials: true
             });

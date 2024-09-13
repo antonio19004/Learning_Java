@@ -31,7 +31,7 @@ const Profile = ({ showModal, handleClose }) => {
 
     const fetchAdminDetails = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/admin/details', { withCredentials: true });
+            const response = await axios.get('https://backend-learning-java.onrender.com/admin/details', { withCredentials: true });
             setAdminDetails(response.data);
         } catch (error) {
             console.error('Error al obtener los detalles del administrador', error);
@@ -46,7 +46,7 @@ const Profile = ({ showModal, handleClose }) => {
 
     const fetchUsersDetails = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/users/details', { withCredentials: true });
+            const response = await axios.get('https://backend-learning-java.onrender.com/users/details', { withCredentials: true });
             setUsersDetails(response.data);
         } catch (error) {
             console.error('Error al obtener los detalles del Usuario', error);

@@ -21,13 +21,13 @@ const ForumDetail = () => {
     const [showReplies, setShowReplies] = useState({});
 
     useEffect(() => {
-        axios.get(`http://localhost:8080/forum/${id}`, { withCredentials: true })
+        axios.get(`https://backend-learning-java.onrender.com/forum/${id}`, { withCredentials: true })
             .then(response => { 
                 setForo(response.data);
             })
             .catch(error => console.error(error));
 
-        axios.get(`http://localhost:8080/forum/${id}/respuestas`, { withCredentials: true })
+        axios.get(`https://backend-learning-java.onrender.com/forum/${id}/respuestas`, { withCredentials: true })
             .then(response => setRespuestas(response.data))
             .catch(error => console.error(error));
     }, [id]);
@@ -38,7 +38,7 @@ const ForumDetail = () => {
         const data = { contenido: newRespuesta };
 
         try {
-            const response = await axios.post(`http://localhost:8080/forum/${id}/respuesta`, data, {
+            const response = await axios.post(`https://backend-learning-java.onrender.com/forum/${id}/respuesta`, data, {
                 headers: { 'Content-Type': 'application/json' },
                 withCredentials: true
             });
@@ -62,7 +62,7 @@ const ForumDetail = () => {
 
         if (!replies[responseId]) {
             try {
-                const response = await axios.get(`http://localhost:8080/forum/${responseId}/responses`, { withCredentials: true });
+                const response = await axios.get(`https://backend-learning-java.onrender.com/forum/${responseId}/responses`, { withCredentials: true });
                 setReplies(prevReplies => ({
                     ...prevReplies,
                     [responseId]: response.data
@@ -85,7 +85,7 @@ const ForumDetail = () => {
 
         try {
             if (!replies[replying] || replies[replying].length === 0) {
-                const previousResponses = await axios.get(`http://localhost:8080/forum/${replying}/responses`, {
+                const previousResponses = await axios.get(`https://backend-learning-java.onrender.com/forum/${replying}/responses`, {
                     withCredentials: true
                 });
                 setReplies(prevReplies => ({
@@ -94,7 +94,7 @@ const ForumDetail = () => {
                 }));
             }
             
-            const response = await axios.post(`http://localhost:8080/forum/${replying}/response`, responseData, {
+            const response = await axios.post(`https://backend-learning-java.onrender.com/forum/${replying}/response`, responseData, {
                 headers: { 'Content-Type': 'application/json' },
                 withCredentials: true
             });

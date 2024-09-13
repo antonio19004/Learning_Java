@@ -15,7 +15,7 @@ function CreateLesson() {
   const [courses, setCourses] = useState([]);
     
   useEffect(() => {
-    axios.get('http://localhost:8080/course/list',{withCredentials:true}) 
+    axios.get('https://backend-learning-java.onrender.com/course/list',{withCredentials:true}) 
       .then(response => { 
         setCourses(response.data);
       })
@@ -46,7 +46,7 @@ function CreateLesson() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8080/lesson/create',lesson,{withCredentials:true});
+      const response = await axios.post('https://backend-learning-java.onrender.com/lesson/create',lesson,{withCredentials:true});
       console.log(response.data);
       alert('Leccion creada con exito');
       navigate('/panel/courses');

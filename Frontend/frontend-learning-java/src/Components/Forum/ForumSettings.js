@@ -23,7 +23,7 @@ const ForumSettings = () => {
     const navigate = useNavigate();
 
     const fetchForo = () => {
-        axios.get('http://localhost:8080/forum', { withCredentials: true })
+        axios.get('https://backend-learning-java.onrender.com/forum', { withCredentials: true })
             .then(response => {
                 setForo(response.data);
                 setResults(response.data);
@@ -85,13 +85,13 @@ const ForumSettings = () => {
         let url = '';
 
         if (action === 'pin') {
-            url = `http://localhost:8080/forum/${id}/pin`;
+            url = `https://backend-learning-java.onrender.com/forum/${id}/pin`;
         } else if (action === 'unpin') {
-            url = `http://localhost:8080/forum/${id}/unpin`;
+            url = `https://backend-learning-java.onrender.com/forum/${id}/unpin`;
         } else if (action === 'hide') {
-            url = `http://localhost:8080/forum/${id}/hide`;
+            url = `https://backend-learning-java.onrender.com/forum/${id}/hide`;
         } else if (action === 'show') {
-            url = `http://localhost:8080/forum/${id}/show`;
+            url = `https://backend-learning-java.onrender.com/forum/${id}/show`;
         } else if (action === 'edit') {
             navigate(`/panel/edit-forum/${id}`);
             return;
@@ -129,7 +129,7 @@ const ForumSettings = () => {
         });
         if (result.isConfirmed) {
             try {
-                await axios.delete(`http://localhost:8080/forum/${id}`, { withCredentials: true });
+                await axios.delete(`https://backend-learning-java.onrender.com/forum/${id}`, { withCredentials: true });
                 Swal.fire(
                     'Eliminado!',
                     'El tema ha sido eliminado.',

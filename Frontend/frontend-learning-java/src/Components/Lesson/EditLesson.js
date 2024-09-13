@@ -29,7 +29,7 @@ function EditLessonForm() {
   useEffect(() => {
     const fetchLessonDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/lesson/select/${id}`, { withCredentials: true });
+        const response = await axios.get(`https://backend-learning-java.onrender.com/lesson/select/${id}`, { withCredentials: true });
         setLesson(response.data);
         setLoading(false);
       } catch (error) {
@@ -48,7 +48,7 @@ function EditLessonForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:8080/lesson/update/${id}`, lesson, {
+      await axios.put(`https://backend-learning-java.onrender.com/lesson/update/${id}`, lesson, {
         withCredentials: true,
       });
       goBack();

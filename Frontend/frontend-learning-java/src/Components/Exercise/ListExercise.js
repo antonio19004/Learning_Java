@@ -14,7 +14,7 @@ import Footer from '../../Layouts/Footer';
 
 
 function ExercisesList() {
-    document.title='Ejericios';
+    document.title='Ejercicios';
     const {id}= useParams();
     const [exercises, setExercises] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -23,7 +23,7 @@ function ExercisesList() {
 
 const fecthExercises = async () => {
     try {
-        const response = await axios.get(`http://localhost:8080/exercise/list`, { withCredentials: true });
+        const response = await axios.get(`https://backend-learning-java.onrender.com/exercise/list`, { withCredentials: true });
         setExercises(response.data);
         setResults(response.data);
         setLoading(false);

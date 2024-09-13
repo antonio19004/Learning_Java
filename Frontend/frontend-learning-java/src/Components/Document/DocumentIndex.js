@@ -28,7 +28,7 @@ const Document =()=>{
     useEffect(() => {
         const obtenerArchivos = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/${baseUrl}/documentacion/listar`, { withCredentials: true });
+                const response = await axios.get(`https://backend-learning-java.onrender.com/${baseUrl}/documentacion/listar`, { withCredentials: true });
                 setAllDocuments(response.data);
                 setResults(response.data);
                 setLoading(false);
@@ -54,11 +54,11 @@ const Document =()=>{
         }
     };
     const handleVerArchivo = async (id) => {
-        window.open(`http://localhost:8080/${baseUrl}/documentacion/${id}`, '_blank');
+        window.open(`https://backend-learning-java.onrender.com/${baseUrl}/documentacion/${id}`, '_blank');
     };
 
     const handleDescargarArchivo = async (id) => {
-        window.location.href =  `http://localhost:8080/${baseUrl}/documentacion/descargar/${id}`;
+        window.location.href =  `https://backend-learning-java.onrender.com/${baseUrl}/documentacion/descargar/${id}`;
     };
     console.log('Valor de archivos:', archivos);
 

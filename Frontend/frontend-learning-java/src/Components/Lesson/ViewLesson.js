@@ -38,16 +38,16 @@ function ViewLesson() {
     useEffect(() => {
         const fetchCourseDetails = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/course/${id}/lessons`,{withCredentials:true});
+                const response = await axios.get(`https://backend-learning-java.onrender.com/course/${id}/lessons`,{withCredentials:true});
                 setCourse(response.data.course);
                 setLessons(response.data.lessons);
                 setLoading(false);
 
-                const progressResponse = await axios.get(`http://localhost:8080/${baseUrl}/curso/${id}/progreso`,{withCredentials:true});
+                const progressResponse = await axios.get(`https://backend-learning-java.onrender.com/${baseUrl}/curso/${id}/progreso`,{withCredentials:true});
                 setProgress(progressResponse.data);
 
 
-                const completedLessonsResponse = await axios.get(`http://localhost:8080/${baseUrl}/curso/${id}/lecciones-completadas`, { withCredentials: true });
+                const completedLessonsResponse = await axios.get(`https://backend-learning-java.onrender.com/${baseUrl}/curso/${id}/lecciones-completadas`, { withCredentials: true });
                 setCompletedLessons(new Set(completedLessonsResponse.data));
 
             } catch (error) {
@@ -61,9 +61,9 @@ function ViewLesson() {
 
     const handleCheckboxChange = async (lessonId) => {
         try {
-            await axios.post(`http://localhost:8080/${baseUrl}/completados/${id}/leccion/${lessonId}`, {}, { withCredentials: true });
+            await axios.post(`https://backend-learning-java.onrender.com/${baseUrl}/completados/${id}/leccion/${lessonId}`, {}, { withCredentials: true });
             
-            const updatedProgressResponse = await axios.get(`http://localhost:8080/${baseUrl}/curso/${id}/progreso`,{withCredentials:true});
+            const updatedProgressResponse = await axios.get(`https://backend-learning-java.onrender.com/${baseUrl}/curso/${id}/progreso`,{withCredentials:true});
             setProgress(updatedProgressResponse.data);
             setCompletedLessons((prevCompleted) => {
                 const updatedCompleted = new Set(prevCompleted);

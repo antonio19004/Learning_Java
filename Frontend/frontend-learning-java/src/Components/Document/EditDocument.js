@@ -17,9 +17,9 @@ const EditDocument = () => {
     useEffect(() => {
         const fetchDocumentData = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/admin/documentacion/get/${id}`, { withCredentials: true });
+                const response = await axios.get(`https://backend-learning-java.onrender.com/admin/documentacion/get/${id}`, { withCredentials: true });
                 setTitulo(response.data.titulo);
-                // Aquí podrías manejar la carga del archivo si fuera necesario, pero normalmente los archivos no se prellenan
+           
             } catch (error) {
                 console.error('Error al obtener los datos del documento', error);
             }
@@ -43,7 +43,7 @@ const EditDocument = () => {
         formData.append('titulo', titulo);
 
         try {
-            const response = await axios.put(`http://localhost:8080/admin/documentacion/edit/${id}`, formData, { withCredentials: true }, {
+            const response = await axios.put(`https://backend-learning-java.onrender.com/admin/documentacion/edit/${id}`, formData, { withCredentials: true }, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }

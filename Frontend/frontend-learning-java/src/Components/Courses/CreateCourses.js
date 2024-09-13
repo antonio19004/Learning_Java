@@ -129,7 +129,7 @@ const navigate = useNavigate();
         formData.append('topic', JSON.stringify(course.topic));
 
         try {
-            const response = await axios.post('http://localhost:8080/course/create', formData, {
+            const response = await axios.post('https://backend-learning-java.onrender.com/course/create', formData, {
                 withCredentials: true,
                 headers: {
                     'Content-Type': 'multipart/form-data' // Especificar que estás enviando un formulario con datos de archivos

@@ -27,7 +27,7 @@ function Lessons() {
 
     const fetchCourseDetails = async () => {
         try {
-            const response = await axios.get(`http://localhost:8080/course/${id}/lessons`, { withCredentials: true });
+            const response = await axios.get(`https://backend-learning-java.onrender.com/course/${id}/lessons`, { withCredentials: true });
             setLessons(response.data.lessons);
             setLoading(false);
         } catch (error) {
@@ -44,7 +44,7 @@ function Lessons() {
 
 const handleCardClick = async (id) => {
     try {
-        const response = await axios.get(`http://localhost:8080/lesson/select/${id}`, { withCredentials: true });
+        const response = await axios.get(`https://backend-learning-java.onrender.com/lesson/select/${id}`, { withCredentials: true });
         setSelectedLesson(response.data); 
         setShowModal(true);
     } catch (error) {
@@ -67,7 +67,7 @@ const handleDeleteLesson = async (id) => {
 
     if (result.isConfirmed) {
         try {
-            await axios.delete(`http://localhost:8080/lesson/delete/${id}`, { withCredentials: true });
+            await axios.delete(`https://backend-learning-java.onrender.com/lesson/delete/${id}`, { withCredentials: true });
             Swal.fire(
                 'Eliminada!',
                 'La lección ha sido eliminada.',
@@ -146,7 +146,7 @@ const handleMoveDown = (index) => {
 const updateOrderOnServer = async (newOrder) => {
     try {
         const lessonIds = newOrder.map(lesson => lesson.id);
-        await axios.post(`http://localhost:8080/course/${id}/update-lessons-order`, lessonIds, { withCredentials: true });
+        await axios.post(`https://backend-learning-java.onrender.com/course/${id}/update-lessons-order`, lessonIds, { withCredentials: true });
         console.log('Orden actualizado en el servidor');
 
         // Actualiza el estado local con el nuevo orden de lecciones
