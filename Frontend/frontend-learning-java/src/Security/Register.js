@@ -100,109 +100,110 @@ function Register() {
     };
 
     return (
-        <div className='mt-4 '>
-            <div className='d-flex flex-column align-items-center justify-content-center '>
-                <div className='shadow bg-light px-5 pb-5 my-4 rounded'>
-                    <div className='d-flex flex-column align-items-center justify-content-center' style={{ height: '100vh' }}>
-                        {errorMessage && (
-                            <div className="alert alert-danger w-100 p-1 mx-auto mt-4" role="alert">
-                                <p className="text-danger text-center">{JSON.stringify(errorMessage)}</p>
-                            </div>
-                        )}
-                        <h2 className='fw-bold'>Crea una nueva cuenta</h2>
-                        <br />
-                        <form onSubmit={handleSubmit} className="row g-3" style={{ maxWidth: '600px' }}>
-                            <div className="col-12 mb-3">
-                                {imagePreview && (
-                                    <div className="position-relative" style={{ marginTop: '10px', marginBottom: '10px', display: 'flex', justifyContent: 'center' }}>
-                                        <img src={imagePreview} alt="Imagen de perfil" style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '50px' }} />
-                                        <button type="button" onClick={clearImage} className="btn btn-secondary ms-2" style={{ top: '-10px', right: '-10px', width: '35px', height: '35px', borderRadius: '50%' }}>X</button>
+        <div className='container-fluid mt-4'>
+            <div className='row justify-content-center'>
+                <div className='col-12 col-md-10 col-lg-8'>
+                    <div className='shadow bg-light px-4 pb-5 my-4 rounded'>
+                        <div className='d-flex flex-column align-items-center justify-content-center' style={{ minHeight: '100vh' }}>
+                            {errorMessage && (
+                                <div className="alert alert-danger w-100 p-1 mt-4" role="alert">
+                                    <p className="text-danger text-center">{JSON.stringify(errorMessage)}</p>
+                                </div>
+                            )}
+                            <h2 className='fw-bold'>Crea una nueva cuenta</h2>
+                            <br />
+                            <form onSubmit={handleSubmit} className="row g-3" style={{ maxWidth: '600px', width: '100%' }}>
+                                <div className="col-12 mb-3 text-center">
+                                    {imagePreview && (
+                                        <div className="position-relative" style={{ marginTop: '10px', marginBottom: '10px' }}>
+                                            <img src={imagePreview} alt="Imagen de perfil" style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '50px' }} />
+                                            <button type="button" onClick={clearImage} className="btn btn-secondary ms-2" style={{ top: '-10px', right: '-10px', width: '35px', height: '35px', borderRadius: '50%' }}>X</button>
+                                        </div>
+                                    )}
+                                    <div className="input-group">
+                                        <span className="input-group-text">
+                                            <FontAwesomeIcon icon={faImage} />
+                                        </span>
+                                        <input ref={fileInputRef} className='form-control' type="file" accept="image/*" onChange={handleImageChange} />
                                     </div>
-                                )}
-                                <div className="input-group">
-                                    <span className="input-group-text">
-                                        <FontAwesomeIcon icon={faImage} />
-                                    </span>
-                                    <input ref={fileInputRef} // Asignar la referencia al input
-                                                className='form-control' type="file" accept="image/*" onChange={handleImageChange} />
                                 </div>
-                            </div>
-                            <div className="col-md-6">
-                                <div className="input-group">
-                                    <span className="input-group-text">
-                                        <FontAwesomeIcon icon={faUser} />
-                                    </span>
-                                    <input className='form-control' type="text" value={nombre} onChange={(e) => setNombre(e.target.value)} placeholder='Nombre' />
+                                <div className="col-md-6">
+                                    <div className="input-group">
+                                        <span className="input-group-text">
+                                            <FontAwesomeIcon icon={faUser} />
+                                        </span>
+                                        <input className='form-control' type="text" value={nombre} onChange={(e) => setNombre(e.target.value)} placeholder='Nombre' />
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="col-md-6">
-                                <div className="input-group">
-                                    <span className="input-group-text">
-                                        <FontAwesomeIcon icon={faUser} />
-                                    </span>
-                                    <input className='form-control' type="text" value={apellido} onChange={(e) => setApellido(e.target.value)} placeholder='Apellido' />
+                                <div className="col-md-6">
+                                    <div className="input-group">
+                                        <span className="input-group-text">
+                                            <FontAwesomeIcon icon={faUser} />
+                                        </span>
+                                        <input className='form-control' type="text" value={apellido} onChange={(e) => setApellido(e.target.value)} placeholder='Apellido' />
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="col-md-6">
-                                <div className="input-group">
-                                    <span className="input-group-text">
-                                        <FontAwesomeIcon icon={faCalendar} />
-                                    </span>
-                                    <input className='form-control' type="date" value={fechaNacimiento} onChange={(e) => setFechaNacimiento(e.target.value)} />
+                                <div className="col-md-6">
+                                    <div className="input-group">
+                                        <span className="input-group-text">
+                                            <FontAwesomeIcon icon={faCalendar} />
+                                        </span>
+                                        <input className='form-control' type="date" value={fechaNacimiento} onChange={(e) => setFechaNacimiento(e.target.value)} />
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="col-md-6">
-                                <div className="input-group">
-                                    <span className="input-group-text">
-                                        <FontAwesomeIcon icon={faEnvelope} />
-                                    </span>
-                                    <input className='form-control' type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Email' />
+                                <div className="col-md-6">
+                                    <div className="input-group">
+                                        <span className="input-group-text">
+                                            <FontAwesomeIcon icon={faEnvelope} />
+                                        </span>
+                                        <input className='form-control' type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder='Email' />
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="col-md-6">
-                                <div className="input-group">
-                                    <span className="input-group-text">
-                                        <FontAwesomeIcon icon={faUser} />
-                                    </span>
-                                    <input className='form-control' type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder='Usuario' />
+                                <div className="col-md-6">
+                                    <div className="input-group">
+                                        <span className="input-group-text">
+                                            <FontAwesomeIcon icon={faUser} />
+                                        </span>
+                                        <input className='form-control' type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder='Usuario' />
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="col-md-6">
-                                <div className="input-group position-relative">
-                                    <span className="input-group-text">
-                                        <FontAwesomeIcon icon={faLock} />
-                                    </span>
-                                    <input className='form-control' type={showPassword ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Contraseña' />
-                                    <span className="position-absolute" onClick={toggleShowPassword} style={{ color: 'gray', right: '10px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer' }}>
-                                        <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
-                                    </span>
+                                <div className="col-md-6">
+                                    <div className="input-group position-relative">
+                                        <span className="input-group-text">
+                                            <FontAwesomeIcon icon={faLock} />
+                                        </span>
+                                        <input className='form-control' type={showPassword ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)} placeholder='Contraseña' />
+                                        <span className="position-absolute" onClick={toggleShowPassword} style={{ color: 'gray', right: '10px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer' }}>
+                                            <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="col-md-6">
-                                <div className="input-group position-relative">
-                                    <span className="input-group-text">
-                                        <FontAwesomeIcon icon={faLock} />
-                                    </span>
-                                    <input className='form-control' type={showConfirmPassword ? 'text' : 'password'} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder='Confirmar contraseña' />
-                                    <span className="position-absolute" onClick={toggleShowConfirmPassword} style={{ color: 'gray', right: '10px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer' }}>
-                                        <FontAwesomeIcon icon={showConfirmPassword ? faEyeSlash : faEye} />
-                                    </span>
+                                <div className="col-md-6">
+                                    <div className="input-group position-relative">
+                                        <span className="input-group-text">
+                                            <FontAwesomeIcon icon={faLock} />
+                                        </span>
+                                        <input className='form-control' type={showConfirmPassword ? 'text' : 'password'} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder='Confirmar contraseña' />
+                                        <span className="position-absolute" onClick={toggleShowConfirmPassword} style={{ color: 'gray', right: '10px', top: '50%', transform: 'translateY(-50%)', cursor: 'pointer' }}>
+                                            <FontAwesomeIcon icon={showConfirmPassword ? faEyeSlash : faEye} />
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="col-12">
-                                <div className="form-check d-flex justify-content-center">
-                                    <input className='form-check-input me-2' type="checkbox" checked={acceptTerms} onChange={(e) => setAcceptTerms(e.target.checked)} />
-                                    <label className="form-check-label">Acepto que la página maneje mi información</label>
+                                <div className="col-12">
+                                    <div className="form-check d-flex justify-content-center">
+                                        <input className='form-check-input me-2' type="checkbox" id="acceptTerms" checked={acceptTerms} onChange={(e) => setAcceptTerms(e.target.checked)} />
+                                        <label className="form-check-label" for="acceptTerms">Acepto que la página maneje mi información</label>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="col-12">
-                                <div className="d-flex justify-content-center">
-                                    <button className='btn btn-dark' type="submit">Registrarse</button>
+                                <div className="col-12">
+                                    <div className="d-flex justify-content-center">
+                                        <button className='btn btn-dark' type="submit">Registrarse</button>
+                                    </div>
                                 </div>
-                            </div>
-                            <h5 className='d-flex justify-content-center fw-light'>Si ya tienes una cuenta</h5>
-                            <h5 className='d-flex justify-content-center fw-bold'><a className='text-decoration-none text-dark hover:text-secondary' href='/login'>Inicia Sesión</a></h5>
-                        </form>
+                                <h5 className='d-flex justify-content-center fw-light'>Si ya tienes una cuenta</h5>
+                                <h5 className='d-flex justify-content-center fw-bold'><a className='text-decoration-none text-dark hover:text-secondary' href='/login'>Inicia Sesión</a></h5>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>

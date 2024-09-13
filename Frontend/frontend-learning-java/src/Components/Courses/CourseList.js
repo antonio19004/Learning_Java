@@ -69,7 +69,7 @@ function CourseList() {
         <div className="p-4">
         <div className='shadow bg-light px-5 pb-5 pt-5 rounded'>
         <div>
-        <h1 className='fs-1 fw-light my-5 text-center'>Cursos Disponibles</h1>
+        <h1 className='fs-1 fw-bold my-5 text-center'>Cursos Disponibles</h1>
             <div className="mx-5">
             {loading ? (
                     <div className='d-flex justify-content-center'>

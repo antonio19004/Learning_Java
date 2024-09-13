@@ -94,7 +94,6 @@ const Profile = ({ showModal, handleClose }) => {
                             <p><strong>Edad:</strong> {details.edad}</p>
                             <p><strong>Email:</strong> {details.email}</p>
                             <p><strong>Nombre de Usuario:</strong> {details.user}</p>
-                            <p><strong>Cursos Completados:</strong> {details.cursosCompletados}</p>
                         </div>
                     </div>
                 </div>
