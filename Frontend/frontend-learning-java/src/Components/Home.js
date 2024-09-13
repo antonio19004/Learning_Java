@@ -63,9 +63,11 @@ const Home = () => {
       try {
           const response = await axios.get(`https://backend-learning-java.onrender.com/${baseUrl}/documentacion/listar`, { withCredentials: true });
           setAllDocuments(response.data);
+          setLoading(false);
 
       } catch (error) {
           console.error('Error al obtener la lista de archivos', error);
+          setLoading(false);
 
       }
   };
@@ -75,19 +77,23 @@ const Home = () => {
     try {
         const response = await axios.get(`https://backend-learning-java.onrender.com/exercise/list`, { withCredentials: true });
         setExercises(response.data);
+        setLoading(false);
     } catch (error) {
         console.error('Error fetching course details', error);
     }
 
 };
 
-const fetchForo = () => {
-  axios.get('https://backend-learning-java.onrender.com/forum', { withCredentials: true })
-      .then(response => {
+const fetchForo = async () => {
+  
+  try {
+  const response = await axios.get('https://backend-learning-java.onrender.com/forum', { withCredentials: true });
           setForo(response.data);
-          setLoading(false)
-      })
-      .catch(error => console.error(error));
+          setLoading(false);
+      }
+      catch(error){
+        console.log(error);
+      }
 };
 
 
@@ -163,32 +169,6 @@ fecthExercises();
 };
 
 
-  const renderTableBody = () => {
-    return foro.map((forum) => {
-        const { formattedDate, lastModifier, isFixed, isHidden } = processForumData(forum);
-        const pinIconColor = isFixed ? 'dark' : 'transparent';
-        const textStyle = isHidden ? { color: 'darkgray', textDecoration: 'line-through' } : {};
-
-        return (
-            <tr key={forum.id} className={`forum-row ${isHidden ? 'hidden-row' : ''}`}>
-                <td>
-                    <Link to={`/forum-topic/${forum.id}`} className='link-foro' style={textStyle}>
-                        <FontAwesomeIcon icon={faMessage} className="icon-left" style={{ marginRight: '10px' }} />
-                        {forum.titulo}
-                    </Link>
-                </td>
-                <td style={{ ...textStyle, textIndent: '10px' }}>{forum.respuestasCount}</td>
-                <td style={{ ...textStyle, textAlign: 'center' }}>
-                    {lastModifier} - {formattedDate}
-                    {isFixed && (
-                        <FontAwesomeIcon icon={faThumbTack} style={{ marginLeft: '10px', color: pinIconColor, transform: 'rotate(40deg)' }} />
-                    )}
-                </td>
-            </tr>
-        );
-    });
-};
-
   
   return (
     <div className="d-flex flex-column min-vh-100">
@@ -247,35 +227,11 @@ fecthExercises();
       </div>
 
         <div className='my-5'>
-        <div className='m-3'>
             <div className='shadow bg-light px-5 pb-5 pt-5 rounded'>
             <div>
-                {loading ? (
-                    <center><div className='d-flex justify-content-center'>
-                        <Loader />
-                    </div></center>
-                ) : (
-                    <div>
-                        <h2 className='fw-bold mb-4'><FontAwesomeIcon icon={faVolumeHigh} style={{ marginRight: '10px', transform: 'rotate(-40deg)' }} /> Foro de Discusión</h2><br />
-                        <div className="table-responsive rounded">
-                            <table className='table table-foro'>
-                                <thead>
-                                    <tr>
-                                        <th>Tema</th>
-                                        <th style={{ textIndent: '5px' }}><FontAwesomeIcon icon={faComments} style={{ width:'25px', height: '25px'}} /></th>
-                                        <th style={{ textAlign: 'center' }}>Última Modificación</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {renderTableBody()}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                )}
-            </div>
-            </div>
-            </div>
+              
+        </div>
+        </div>
         </div>
 
       <div className="d-flex ms-4 me-4">
@@ -286,28 +242,42 @@ fecthExercises();
         <h2 className='fw-light text-center text-light'>Resumen de la Web</h2>
         <h5 className='fw-light text-center text-light'>Datos de la pagina</h5>
         <div className='mx-5'><div className='mx-5'><div className='border w-5 mx-5'></div></div></div>
-        <div className='row'>
-          <div className='col'>
-        <div className='bg-light shadow rounded mx-5 my-5 p-4'>
-              <span className='text-secondary fw-bold text-center'>Cursos en plataforma: <h2 className='text-center'>{cursos.length}</h2></span>
-        </div>
-        </div>
+        <div className="row">
+  <div className="col">
+    <div className="bg-light shadow rounded mx-5 my-5 p-4">
+      <span className="text-secondary fw-bold text-center">
+        Cursos en plataforma: 
+        <h2 className="text-center">
+          {cursos && cursos.length > 0 ? cursos.length : 'Datos no disponibles'}
+        </h2>
+      </span>
+    </div>
+  </div>
 
-        <div className='col'>
-        <div className='bg-light shadow rounded mx-5 my-5 p-4'>
-              <span className='text-secondary fw-bold text-center'>Documentacion: <h2 className='text-center'>{allDocuments.length}</h2></span>
-        </div>
-        </div>
-        </div>
+  <div className="col">
+    <div className="bg-light shadow rounded mx-5 my-5 p-4">
+      <span className="text-secondary fw-bold text-center">
+        Documentación: 
+        <h2 className="text-center">
+          {allDocuments && allDocuments.length > 0 ? allDocuments.length : 'Datos no disponibles'}
+        </h2>
+      </span>
+    </div>
+  </div>
+</div>
 
-
-        <div className='row'>
-          <div className='col'>
-        <div className='bg-light shadow rounded my-5 p-4' style={{width:'35%', marginLeft:'35%'}}>
-              <span className='text-secondary fw-bold text-center'>Ejercicios: <h2 className='text-center'>{exercises.length}</h2></span>
-        </div>
-        </div>
-        </div>
+<div className="row">
+  <div className="col">
+    <div className="bg-light shadow rounded my-5 p-4" style={{ width: '35%', marginLeft: '35%' }}>
+      <span className="text-secondary fw-bold text-center">
+        Ejercicios: 
+        <h2 className="text-center">
+          {exercises && exercises.length > 0 ? exercises.length : 'Datos no disponibles'}
+        </h2>
+      </span>
+    </div>
+  </div>
+</div>
 
       </div>
     </div>
