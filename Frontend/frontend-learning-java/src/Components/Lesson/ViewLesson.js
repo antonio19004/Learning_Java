@@ -173,7 +173,7 @@ function ViewLesson() {
                                                 <h4>{lessons[currentIndex].title}</h4>
                                                 <p>{lessons[currentIndex].description}</p>
                                             </div>
-                                            <span className='my-2 text-dark fs-sm badge badge-dark'>Creado por:</span>
+                                            <span className='my-2 text-dark fs-sm badge badge-dark'>Responsables:</span>
                                             <div className='row my-2'>
                                                 <div className='col'>
                                                     <img src={Developer1} alt='Diego' className='img-ssm rounded-circle'/>

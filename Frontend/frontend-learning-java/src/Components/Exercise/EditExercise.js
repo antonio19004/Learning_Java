@@ -13,18 +13,21 @@ function EditExercise() {
     const navigate =useNavigate();
     
     const topicOptions = [
-        "Poo",
-        "SpringBoot",
-        "NetBeans",
-        "Java",
-        "MVC",
-        "BasesdeDatos",
-        "Arrays",
-        "TiposDeDatos",
-        "Clases",
-        "Funciones",
-        "Framework",
-        "Sintaxis"
+      "Poo",
+      "SpringBoot",
+      "NetBeans",
+      "Java",
+      "MVC",
+      "BasesdeDatos",
+      "Arrays",
+      "TiposDeDatos",
+      "Clases",
+      "Funciones",
+      "Framework",
+      "NoSQL",
+      "SQL",
+      "EstructurasDeDatos",
+      "Sintaxis"
       ];
       
    

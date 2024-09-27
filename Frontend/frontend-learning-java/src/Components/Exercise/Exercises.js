@@ -4,7 +4,7 @@ import { useParams,useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronDown, faChevronLeft, faChevronUp,  faCode, faEdit, faLaptopCode, faList, faNotdef, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faChevronDown, faChevronLeft, faChevronUp,  faCode, faEdit, faLaptopCode, faList, faNotdef, faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
 import Loader from '../../Layouts/Loader';
 import Swal from 'sweetalert2';
 
@@ -14,11 +14,14 @@ function Exercises() {
   const {id}= useParams();
   const [exercises, setExercises] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState([]);
 
   const fecthExercises = async () => {
     try {
       const response = await axios.get(`https://backend-learning-java.onrender.com/exercise/list`, { withCredentials: true });
       setExercises(response.data);
+      setResults(response.data);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching course details', error);
@@ -75,9 +78,23 @@ function Exercises() {
     setOpenCollapse(openCollapse === index ? null : index);
   }
 
+
+  const handleSearch = (e) => {
+    const searchTerm = e.target.value;
+    setQuery(searchTerm);
+
+    if (searchTerm.trim() === '') {
+        setResults(exercises);
+    } else {
+        const filteredResults = exercises.filter(doc => 
+            doc.problem.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        setResults(filteredResults);
+    }
+};
+
   return(
     <div>
-      <a href='/panel/courses' className='text-blue-dark tex-decoration-none'><FontAwesomeIcon icon={faChevronLeft} size='lg'/></a>
       {loading ? (
         <div className='d-flex justify-content-center'>
           <Loader />
@@ -100,12 +117,30 @@ function Exercises() {
               <div className='shadow bg-light px-5 pb-5 pt-5 rounded'>
                 <div>
                   <h2> <FontAwesomeIcon icon={faList}/>  Lista de Ejercicios</h2>
-                  {exercises && exercises.length > 0 ? (
-                    exercises.map((exercise, index) => (
+
+                  <div className="input-group my-4 w-50">
+                        <span className="input-group-text" id="basic-addon1">
+                            <FontAwesomeIcon icon={faSearch} />
+                        </span>
+                        <input 
+                            type="text" 
+                            className="form-control" 
+                            placeholder="Buscar ejercicios..." 
+                            aria-label="Buscar ejercicios..." 
+                            aria-describedby="basic-addon1"
+                            value={query}
+                            onChange={handleSearch}
+                        />
+                    </div>
+
+
+                  {results && results.length > 0 ? (
+                    results.map((exercise, index) => (
                       <div key={exercise.id} className="cursor-pointer p-3 mt-4 shadow bg-light rounded">
                         <div className="d-flex justify-content-between">
                           <span className='fs-5 text-decoration-none text-blue-dark'>
                             <FontAwesomeIcon icon={faCode}/> {index + 1}. {exercise.problem}
+                            <div ><p className='badge bg-info rounded'>{exercise.topic}</p></div>
                           </span>
                           <div className='d-flex justify-content-between'>
                             <button className="btn btn-link text-decoration-none" type="button" onClick={() => toggleCollapse(index)} aria-expanded={openCollapse === index} aria-controls={`collapseExample${index}`}>

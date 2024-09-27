@@ -21,6 +21,9 @@ function CreateCourse() {
         'Clases',
         'Funciones',
         'Framework',
+        "NoSQL",
+        "SQL",
+        "EstructurasDeDatos",
         'Sintaxis'
     ];
 
@@ -122,17 +125,26 @@ const navigate = useNavigate();
         formData.append('description', course.description);
         formData.append('duration', course.duration);
         formData.append('level', course.level);
+        formData.append('creador', course.creador);
         formData.append('progress', course.progress);
-        formData.append('coverImage', course.coverImage);
         formData.append('objectives', JSON.stringify(course.objectives));
         formData.append('content', JSON.stringify(course.content));
         formData.append('topic', JSON.stringify(course.topic));
 
+        if (course.coverImage instanceof File) {
+            formData.append('coverImage', course.coverImage);
+        } else if (course.coverImage) {
+            formData.append('coverImage', `data:image/jpeg;base64,${course.coverImage}`);
+        } else {
+            formData.append('coverImage', '');
+        }
+
         try {
             const response = await axios.post('https://backend-learning-java.onrender.com/course/create', formData, {
+        
                 withCredentials: true,
                 headers: {
-                    'Content-Type': 'multipart/form-data' // Especificar que estás enviando un formulario con datos de archivos
+                    'Content-Type': 'multipart/form-data'
                 }
             });
             console.log(response.data);

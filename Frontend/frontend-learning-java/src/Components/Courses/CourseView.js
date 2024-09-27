@@ -119,11 +119,19 @@ function CourseView() {
                                 <h3>Objetivos del curso</h3>
                                 <div className='bg-light shadow rounded p-3 mb-4'>
                                     <ul className='list-unstyled'>
-                                        <li className='fs-5'>
-                                            <span><FontAwesomeIcon icon={faCheckCircle} /></span>  {course.objectives}
+                                    {course.objectives && course.objectives.length > 0 ? (
+                                         course.objectives.map((objetives, index) => (
+                                        <li key={index} className='fs-5'>
+                                            <span><FontAwesomeIcon icon={faCheckCircle} /></span>  {objetives}
                                         </li>
+                                           ))
+                                        ) : (
+                                            <li className='fs-5'>No hay objetivos disponibles.</li>
+                                        )}
                                     </ul>
                                 </div>
+
+                                
                                 <h3>Lecciones del curso</h3>
                                 {course.lesson && course.lesson.length > 0 ? (
                                     lessons.map((lesson, index) => (
@@ -147,7 +155,7 @@ function CourseView() {
                                                 </li>
                                             ))
                                         ) : (
-                                            <li className='fs-5'>No hay temas relacionados disponibles.</li>
+                                            <li className='fs-5'>No hay contenidos disponibles.</li>
                                         )}
                                     </ul>
                                 </div>

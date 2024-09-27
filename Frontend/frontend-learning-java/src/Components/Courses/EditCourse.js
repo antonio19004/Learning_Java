@@ -31,20 +31,24 @@ function EditCourseForm() {
     });
 
     
-const availableTopic = [
-    'Poo',
-    'SpringBoot',
-    'NetBeans',
-    'Java',
-    'MVC',
-    'BasesdeDatos',
-    'Arrays',
-    'TiposDeDatos',
-    'Clases',
-    'Funciones',
-    'Framework',
-    'Sintaxis'
-];
+    const availableTopic = [
+        'Poo',
+        'SpringBoot',
+        'NetBeans',
+        'Java',
+        'MVC',
+        'BasesdeDatos',
+        'Arrays',
+        'TiposDeDatos',
+        'Clases',
+        'Funciones',
+        'Framework',
+        "NoSQL",
+        "SQL",
+        "EstructurasDeDatos",
+        'Sintaxis'
+    ];
+
 
     useEffect(() => {
         const fetchCourseDetails = async () => {

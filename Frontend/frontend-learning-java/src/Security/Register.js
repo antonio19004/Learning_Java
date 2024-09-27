@@ -40,7 +40,7 @@ function Register() {
         setImagenPerfil(null);
         setImagePreview('');
         if (fileInputRef.current) {
-            fileInputRef.current.value = ''; // Vaciar el input de archivo
+            fileInputRef.current.value = '';
         }
     };
 
@@ -98,6 +98,9 @@ function Register() {
             }
         }
     };
+
+
+    
 
     return (
         <div className='container-fluid mt-4'>

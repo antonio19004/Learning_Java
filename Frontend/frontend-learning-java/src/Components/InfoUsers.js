@@ -3,7 +3,7 @@ import axios from "axios";
 import Loader from "../Layouts/Loader";
 import UserImg from '../Static/Img/User.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faList } from '@fortawesome/free-solid-svg-icons';
+import { faList, faSearch } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../Static/Styles/InfoUsers.css';
 
@@ -11,12 +11,15 @@ const InfoUsers = () => {
     document.title = 'Usuarios';
 
     const [users, setUsers] = useState([]);
+    const [results, setResults] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [query, setQuery] = useState('');
 
     useEffect(() => {
         axios.get('https://backend-learning-java.onrender.com/admin/users', { withCredentials: true })
         .then(response => {
             setUsers(response.data);
+            setResults(response.data);
             setLoading(false);
         })
         .catch(error => {
@@ -36,15 +39,46 @@ const InfoUsers = () => {
         return age;
     };
 
+    const handleSearch = (e) => {
+        const searchTerm = e.target.value;
+        setQuery(searchTerm);
+
+        if (searchTerm.trim() === '') {
+            setResults(users);
+        } else {
+            const filteredResults = users.filter(us => 
+                us.nombre.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            setResults(filteredResults);
+        }
+    };
+
     return (
         <div>
-            <div className="container mt-5">
+            <div className='shadow bg-light px-5 pb-5 pt-5 rounded'>
+            <div>
                 {loading ? (
-                    <div className='panelcenter'>
-                        <Loader />
-                    </div>
+                     <div className='d-flex justify-content-center'>
+                     <Loader />
+                 </div>
                 ) : (
                     <div>
+                         <div className="input-group mb-4 w-50">
+                        <span className="input-group-text" id="basic-addon1">
+                            <FontAwesomeIcon icon={faSearch} />
+                        </span>
+                        <input 
+                            type="text" 
+                            className="form-control" 
+                            placeholder="Buscar usuarios por nombre..." 
+                            aria-label="Buscar usuarios por nombre..." 
+                            aria-describedby="basic-addon1"
+                            value={query}
+                            onChange={handleSearch}
+                        />
+                    </div>
+
+
                         <h2 style={{ marginBottom: '25px' }}><FontAwesomeIcon icon={faList} style={{ marginRight: '10px' }} />  Información de Usuarios</h2>
                         <span className="badge bg-info p-2 my-2">Usuarios Registrados: {users.length + 1}</span>
                         <div className="table-responsive">
@@ -58,12 +92,12 @@ const InfoUsers = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {users.length === 0 ? (
+                                    {results.length === 0 ? (
                                         <tr>
                                             <td colSpan="5" className="text-center">No hay usuarios</td>
                                         </tr>
                                     ) : (
-                                        users.map((user, index) => (
+                                        results.map((user, index) => (
                                             <tr key={index}>
                                                 <td>
                                                     <img src={user.imagenPerfil ? `data:image/jpeg;base64,${user.imagenPerfil}` : UserImg} alt="Perfil" className="rounded-circle me-3" style={{ width: '70px', height: '70px', objectFit: 'cover' }} />
@@ -80,6 +114,8 @@ const InfoUsers = () => {
                     </div>
                 )}
             </div>
+            </div>
+
         </div>
     );
 };

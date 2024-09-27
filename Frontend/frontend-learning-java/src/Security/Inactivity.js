@@ -21,11 +21,13 @@ const useIdleTimer = (timeout, onIdle = () => {},warningTime = 1000) => {
 
       warningTimer = setTimeout(() => {
         alert('Se cerró su sesión por inactividad.');
+         
       }, timeout - warningTime);
 
       idleTimer = setTimeout(() => {
         clearTimeout(warningTimer);
         onIdle();
+        localStorage.clear();
         navigate('/login');
       }, timeout);
     };

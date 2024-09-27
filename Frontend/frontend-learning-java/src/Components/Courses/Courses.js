@@ -4,7 +4,7 @@ import { Link,useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendarDays, faChalkboardUser, faChartLine, faCircle, faCircleInfo, faClock, faEdit, faFlagCheckered, faGraduationCap, faList, faMagnifyingGlassChart, faNotdef, faSitemap, faTrash, faUserTie } from '@fortawesome/free-solid-svg-icons';
+import { faCalendarDays, faChalkboardUser, faChartLine, faCircleInfo, faClock, faEdit, faFlagCheckered, faGraduationCap, faList, faListOl, faMagnifyingGlassChart, faNotdef, faSearch, faSitemap, faTrash, faUserTie } from '@fortawesome/free-solid-svg-icons';
 import Loader from '../../Layouts/Loader';
 import { faBookmark } from '@fortawesome/free-regular-svg-icons';
 import { formatDistanceToNow, parseISO } from 'date-fns';
@@ -16,14 +16,20 @@ function Courses() {
     const [courses, setCourses] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [selectedCourse, setSelectedCourse] = useState(null);
+    const [query, setQuery] = useState('');
+    const [results, setResults] = useState([]);
     const [lessons, setLessons] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1); 
+    const [coursesPerPage, setCoursesPerPage] = useState(6);
 
     useEffect(() => {
         const fetchCourses = async () => {
             try {
                 const response = await axios.get('https://backend-learning-java.onrender.com/course/list',{withCredentials:true});
-                setCourses(response.data);
+                const sortedCourses = response.data.sort((a, b) => new Date(b.created) - new Date(a.created));
+                setCourses(sortedCourses);
+                setResults(sortedCourses);
                 setLoading(false);
             } catch (error) {
                 console.error(error);
@@ -122,6 +128,34 @@ function Courses() {
         navigate(`/panel/lessons/course/${id}`);
       };
 
+
+      const handleSearch = (e) => {
+        const searchTerm = e.target.value;
+        setQuery(searchTerm);
+
+        if (searchTerm.trim() === '') {
+            setResults(courses);
+        } else {
+            const filteredResults = courses.filter(doc => 
+                doc.title.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            setResults(filteredResults);
+        }
+    };
+
+    const indexOfLastCourse = currentPage * coursesPerPage;
+    const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
+    const currentCourses = results.slice(indexOfFirstCourse, indexOfLastCourse);
+
+    const totalPages = Math.ceil(results.length / coursesPerPage);
+
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+    const handleCoursesPerPageChange = (e) => {
+        setCoursesPerPage(Number(e.target.value)); 
+        setCurrentPage(1); 
+    };
+
     return (
         
         <div className="">
@@ -148,10 +182,43 @@ function Courses() {
         <div className='shadow bg-light px-5 pb-5 pt-5 rounded'>
             <div>
             <h2> <FontAwesomeIcon icon={faList}/>  Lista de Cursos</h2>
+
+            
+            <div className="input-group my-4 w-50">
+                        <span className="input-group-text" id="basic-addon1">
+                            <FontAwesomeIcon icon={faSearch} />
+                        </span>
+                        <input 
+                            type="text" 
+                            className="form-control" 
+                            placeholder="Buscar cursos..." 
+                            aria-label="Buscar cursos..." 
+                            aria-describedby="basic-addon1"
+                            value={query}
+                            onChange={handleSearch}
+                        />
+                    </div>
+
+
+                    <div className='row'>
+                                <div className="mb-3" style={{width:'14%'}}>
+                                    <label htmlFor="coursesPerPage" className="form-label"><FontAwesomeIcon icon={faListOl} />  Paginación:</label>
+                                    <select 
+                                        id="coursesPerPage" 
+                                        className="form-select" 
+                                        value={coursesPerPage} 
+                                        onChange={handleCoursesPerPageChange}
+                                    >
+                                        <option value={6}>6</option>
+                                        <option value={9}>9</option>
+                                        <option value={12}>12</option>
+                                    </select>
+                                </div>
+                                </div>
            
 
-                            {courses && courses.length > 0 ? (
-                                    courses.map((course) => (
+                            {currentCourses && currentCourses.length > 0 ? (
+                                    currentCourses.map((course) => (
                                     <div className="cursor-pointer d-flex justify-content-between p-3 mt-4 shadow bg-light rounded"
                                     onClick={() => handleCardClick(course.id)}   key={course.id}>
                                         
@@ -161,11 +228,10 @@ function Courses() {
                                             <div onClick={(event) => { event.stopPropagation(); handleDeleteCourse(course.id); }}><FontAwesomeIcon className='me-2' icon={faTrash} style={{color:'red',}}/></div>
                                             <div onClick={(event) => { event.stopPropagation(); handleEditCourse(course.id); }}><FontAwesomeIcon icon={faEdit} style={{color:'#ebb00f',}}/></div>
                                             </div>
-                                      
                                     </div>
                                     ))):(
                                         <div class="alert alert-primary d-flex flex-wrap" role="alert">
-                                        <FontAwesomeIcon className='mt-1' icon={faNotdef}/><p className='ms-2'>No Hay Elementos</p>
+                                        <FontAwesomeIcon className='mt-1' icon={faNotdef}/><p className='ms-2'> No hay Resultados!</p>
                                       </div>
                                     )
                                 }
@@ -263,15 +329,40 @@ function Courses() {
 
 
         </div>
+        <div  className="mt-5"><Pagination totalPages={totalPages} paginate={paginate} currentPage={currentPage} /></div>
+        </div>                         
+        </div>
+        
         </div>
         </div>
-        </div>
-        </div>
+        
                 )}
                 
 
         </div>
     );
 }
+
+const Pagination = ({ totalPages, paginate, currentPage }) => {
+    const pageNumbers = [];
+
+    for (let i = 1; i <= totalPages; i++) {
+        pageNumbers.push(i);
+    }
+
+    return (
+        <nav>
+            <ul className="pagination justify-content-center">
+                {pageNumbers.map(number => (
+                    <li key={number} className={`page-item ${number === currentPage ? 'active' : ''}`}>
+                        <button onClick={() => paginate(number)} className="page-link">
+                            {number}
+                        </button>
+                    </li>
+                ))}
+            </ul>
+        </nav>
+    );
+};
 
 export default Courses;

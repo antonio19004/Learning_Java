@@ -4,7 +4,7 @@ import React,{useState,useEffect} from "react";
 import axios from "axios";
 import '../../Static/Styles/Style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleExclamation, faDownload, faEdit, faEye, faFilePdf, faFileWord, faFolder, faPlus, faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faCircleExclamation, faDownload, faEdit, faEllipsisV, faEye, faFilePdf, faFileWord, faFolder, faPlus, faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { faJava } from '@fortawesome/free-brands-svg-icons';
 import {useNavigate} from 'react-router-dom';
 import Swal from 'sweetalert2';
@@ -92,7 +92,6 @@ const Document = () => {
                     'El archivo ha sido eliminado.',
                     'success'
                 );
-                // Actualiza la lista de archivos
                 setResults(results.filter(archivo => archivo.id !== id));
             } catch (error) {
                 console.error('Error al eliminar el archivo', error);
@@ -173,44 +172,76 @@ const Document = () => {
 
             return (
                 <div className="col-12 mb-4" key={archivo.id}>
-                    <div className="shadow bg-light d-flex flex-row align-items-center justify-content-between p-3 rounded">
-                        
-                        <div className="d-flex align-items-center">
-                            <FontAwesomeIcon icon={icon} size="xl" style={{ color: color }} className="me-3" />
-                            <div>
-                                <h5 className="fw-bold mb-0">
-                                    <FontAwesomeIcon icon={faJava} size="xl" /> {archivo.titulo}
-                                </h5>
-                                <small className="text-muted">{formattedDate}</small>
-                            </div>
-                        </div>
-                        
-                        <div className="d-flex align-items-center px-3">
-                            <a
-                                className="text-secondary me-2 cursor-pointer"
-                                onClick={() => handleVerArchivo(archivo.id)}
-                            >
-                                <FontAwesomeIcon icon={faEye} size='xl'/>
-                            </a>
-                            <a
-                                className="text-primary me-2 cursor-pointer"
-                                onClick={() => handleDescargarArchivo(archivo.id)}
-                            >
-                                <FontAwesomeIcon icon={faDownload} size='xl' />
-                            </a>
-                            {rol === 'ROLE_ADMIN' && (
-                                <>
-                                    <a className="text-warning me-2 cursor-pointer" onClick={() => handleEditDocument(archivo.id)}>
-                                        <FontAwesomeIcon icon={faEdit} size='xl' />
-                                    </a>
-                                    <a className="text-danger cursor-pointer"  onClick={() => handleDeleteDocument(archivo.id)}>
-                                        <FontAwesomeIcon icon={faTrash} size='xl' />
-                                    </a>
-                                </>
-                            )}
+                <div className="shadow bg-light d-flex flex-row align-items-center justify-content-between p-3 rounded">
+                    
+                    <div className="d-flex align-items-center">
+                        <FontAwesomeIcon icon={icon} size="xl" style={{ color: color }} className="me-3" />
+                        <div>
+                            <h5 className="fw-bold mb-0">
+                                <FontAwesomeIcon icon={faJava} size="xl" /> {archivo.titulo}
+                            </h5>
+                            <small className="text-muted">{formattedDate}</small>
                         </div>
                     </div>
+                    
+                    <div className="d-flex align-items-center d-none d-md-flex px-3">
+                        <a
+                            className="text-secondary me-2 cursor-pointer"
+                            onClick={() => handleVerArchivo(archivo.id)}
+                        >
+                            <FontAwesomeIcon icon={faEye} size='xl'/>
+                        </a>
+                        <a
+                            className="text-primary me-2 cursor-pointer"
+                            onClick={() => handleDescargarArchivo(archivo.id)}
+                        >
+                            <FontAwesomeIcon icon={faDownload} size='xl' />
+                        </a>
+                        {rol === 'ROLE_ADMIN' && (
+                            <>
+                                <a className="text-warning me-2 cursor-pointer" onClick={() => handleEditDocument(archivo.id)}>
+                                    <FontAwesomeIcon icon={faEdit} size='xl' />
+                                </a>
+                                <a className="text-danger cursor-pointer" onClick={() => handleDeleteDocument(archivo.id)}>
+                                    <FontAwesomeIcon icon={faTrash} size='xl' />
+                                </a>
+                            </>
+                        )}
+                    </div>
+            
+                    <div className="d-md-none">
+                        <button className="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <FontAwesomeIcon icon={faEllipsisV} size='xl'/>
+                        </button>
+                        <ul className="dropdown-menu">
+                            <li>
+                                <a className="dropdown-item text-secondary" onClick={() => handleVerArchivo(archivo.id)}>
+                                    <FontAwesomeIcon icon={faEye} size='lg' /> Ver
+                                </a>
+                            </li>
+                            <li>
+                                <a className="dropdown-item text-primary" onClick={() => handleDescargarArchivo(archivo.id)}>
+                                    <FontAwesomeIcon icon={faDownload} size='lg' /> Descargar
+                                </a>
+                            </li>
+                            {rol === 'ROLE_ADMIN' && (
+                                <>
+                                    <li>
+                                        <a className="dropdown-item text-warning" onClick={() => handleEditDocument(archivo.id)}>
+                                            <FontAwesomeIcon icon={faEdit} size='lg' /> Editar
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a className="dropdown-item text-danger" onClick={() => handleDeleteDocument(archivo.id)}>
+                                            <FontAwesomeIcon icon={faTrash} size='lg' /> Eliminar
+                                        </a>
+                                    </li>
+                                </>
+                            )}
+                        </ul>
+                    </div>
                 </div>
+            </div>
             );
         })}
     </div>

@@ -99,8 +99,9 @@ const Document =()=>{
                         </a>
                         <div class="collapse" id="collapseExample">
                         <div class="card card-body mb-4">
-                           En esta Seccion encontraras material de apoyo sobre progrmación en JAVA que te puede servir como ayuda para estudiar algunos conceptos sencillos o hasta mas avanzados.
+                            En esta sección encontrarás material de apoyo sobre programación en Java que te puede servir como ayuda para estudiar algunos conceptos sencillos o incluso más avanzados.
                         </div>
+
                         </div>
                         <div className="input-group mb-4 w-50">
                             <span className="input-group-text" id="basic-addon1">

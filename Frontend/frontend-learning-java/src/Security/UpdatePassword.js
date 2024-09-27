@@ -94,7 +94,7 @@ const UpdatePassword = () => {
             });
 
             if (response.status === 200) {
-                navigate('/welcome');
+                navigate('/Home');
             }
         } catch (error) {
             if (error.response && error.response.status === 400) {

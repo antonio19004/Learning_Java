@@ -84,6 +84,7 @@ function ExercisesList() {
                           <div className="d-flex justify-content-between">
                             <span className='fs-5 text-decoration-none text-blue-dark'>
                               <FontAwesomeIcon icon={faCode} /> {index + 1}. {exercise.problem}
+                              <div ><p className='badge bg-info rounded'>{exercise.topic}</p></div>
                             </span>
                             <div className='d-flex justify-content-between'>
                               <button className="btn btn-link text-decoration-none" type="button" onClick={() => toggleCollapse(index)} aria-expanded={openCollapse === index} aria-controls={`collapseExample${index}`}>

@@ -99,7 +99,7 @@ const NavMenu = () => {
                                 </li>
                             )}
                             <li className="nav-item">
-                                <Link className={`nav-link fs-5 mt-2 fw-light ${getActiveClass('/exercises')}`} to="/exercises">Practica</Link>
+                                <Link className={`nav-link fs-5 mt-2 fw-light ${getActiveClass('/exercises')}`} to="/exercises">Práctica</Link>
                             </li>
                             {isAuthenticated && (
                                 <li className="nav-item">

@@ -59,12 +59,17 @@ const Profile = ({ showModal, handleClose }) => {
         }
     };
 
+
+    const formatDate = (date) => {
+        if (!date) return '';
+        const fecha = new Date(date);
+        const options = { day: '2-digit', month: 'long', year: 'numeric', timeZone: 'UTC' };
+        return fecha.toLocaleDateString('es-ES', options);
+    };
+
     const profileDetails = (details) => {
         const img = details.imagenPerfil ? `data:image/jpeg;base64,${details.imagenPerfil}` : profileImage;
 
-        const fecha = new Date(details.fechaNacimiento);
-        const options = { day: '2-digit', month: 'long', year: 'numeric' };
-        const formattedDate = fecha.toLocaleDateString('es-ES', options);
     
         return (
             rol === 'ROLE_ADMIN' ? (
@@ -75,7 +80,7 @@ const Profile = ({ showModal, handleClose }) => {
                     <div className="col-12 col-md-8">
                         <div style={{ marginLeft: '20px' }}>
                             <p><strong>Nombre:</strong> {details.nombre} {details.apellido}</p>
-                            <p><strong>Fecha de Nacimiento:</strong> {formattedDate}</p>
+                            <p><strong>Fecha de Nacimiento:</strong> {formatDate(details.fechaNacimiento)}</p>
                             <p><strong>Edad:</strong> {details.edad}</p>
                             <p><strong>Email:</strong> {details.email}</p>
                             <p><strong>Nombre de Usuario:</strong> {details.user}</p>
@@ -90,7 +95,7 @@ const Profile = ({ showModal, handleClose }) => {
                     <div className="col-12 col-md-8">
                         <div style={{ marginLeft: '20px' }}>
                             <p><strong>Nombre:</strong> {details.nombre} {details.apellido}</p>
-                            <p><strong>Fecha de Nacimiento:</strong> {formattedDate}</p>
+                            <p><strong>Fecha de Nacimiento:</strong> {formatDate(details.fechaNacimiento)}</p>
                             <p><strong>Edad:</strong> {details.edad}</p>
                             <p><strong>Email:</strong> {details.email}</p>
                             <p><strong>Nombre de Usuario:</strong> {details.user}</p>
@@ -148,7 +153,7 @@ const Profile = ({ showModal, handleClose }) => {
         formData.append('username', username);
 
         try {
-            const url = rol === 'ROLE_ADMIN' ? 'http://localhost:8080/admin/update-profile' : 'http://localhost:8080/users/update-profile' 
+            const url = rol === 'ROLE_ADMIN' ? 'https://backend-learning-java.onrender.com/admin/update-profile' : 'https://backend-learning-java.onrender.com/users/update-profile' 
             const response = await axios.put(url, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'

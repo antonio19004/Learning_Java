@@ -4,7 +4,7 @@ import axios from "axios";
 import Loader from "../../Layouts/Loader";
 import Swal from 'sweetalert2';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMessage, faEllipsisH, faThumbtack, faThumbtackSlash, faEye, faEyeSlash, faPenToSquare, faTrash, faVolumeHigh, faList } from '@fortawesome/free-solid-svg-icons';
+import { faMessage, faEllipsisH, faThumbtack, faThumbtackSlash, faEye, faEyeSlash, faPenToSquare, faTrash, faVolumeHigh, faList, faSearch, faNotdef } from '@fortawesome/free-solid-svg-icons';
 import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -149,6 +149,7 @@ const ForumSettings = () => {
     }
 
     const renderTopics = () => {
+        if(results && results.length > 0){
         return results.map((forum, index) => {
             const { formattedDate, lastModifier, isFixed, isHidden } = processForumData(forum);
             const textStyle = isHidden ? { color: 'darkgray', textDecoration: 'line-through' } : {};
@@ -200,6 +201,29 @@ const ForumSettings = () => {
                 </div>
             );            
         });
+    }else{
+        return(
+        <div class="alert alert-primary d-flex flex-wrap" role="alert">
+         <FontAwesomeIcon className='mt-1' icon={faNotdef}/><p className='ms-2'>No Hay Elementos</p>
+         </div>
+        );
+    }
+        
+    };
+
+
+    const handleSearch = (e) => {
+        const searchTerm = e.target.value;
+        setQuery(searchTerm);
+
+        if (searchTerm.trim() === '') {
+            setResults(foro);
+        } else {
+            const filteredResults = foro.filter(doc => 
+                doc.titulo.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            setResults(filteredResults);
+        }
     };
 
     return (
@@ -225,6 +249,23 @@ const ForumSettings = () => {
                                 <div className='shadow bg-light px-5 pb-5 pt-5 rounded'>
                                     <div>
                                         <h2 style={{ marginBottom: '25px' }}><FontAwesomeIcon icon={faList} style={{ marginRight: '10px' }} />  Lista de Temas</h2>
+
+                                         
+            <div className="input-group my-4 w-50">
+                        <span className="input-group-text" id="basic-addon1">
+                            <FontAwesomeIcon icon={faSearch} />
+                        </span>
+                        <input 
+                            type="text" 
+                            className="form-control" 
+                            placeholder="Buscar tema..." 
+                            aria-label="Buscar tema..." 
+                            aria-describedby="basic-addon1"
+                            value={query}
+                            onChange={handleSearch}
+                        />
+                    </div>
+           
                                         {error && (
                                             <div>
                                                 <div className="alert alert-danger" role="alert">

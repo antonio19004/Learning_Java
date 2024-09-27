@@ -12,18 +12,21 @@ function CreateExercise() {
     const navigate =useNavigate();
     
     const topicOptions = [
-        "Poo",
-        "SpringBoot",
-        "NetBeans",
-        "Java",
-        "MVC",
-        "BasesdeDatos",
-        "Arrays",
-        "TiposDeDatos",
-        "Clases",
-        "Funciones",
-        "Framework",
-        "Sintaxis"
+      "Poo",
+      "SpringBoot",
+      "NetBeans",
+      "Java",
+      "MVC",
+      "BasesdeDatos",
+      "Arrays",
+      "TiposDeDatos",
+      "Clases",
+      "Funciones",
+      "Framework",
+      "NoSQL",
+      "SQL",
+      "EstructurasDeDatos",
+      "Sintaxis"
       ];
       
    
@@ -62,7 +65,7 @@ function CreateExercise() {
   
     return (
         <div>
-        <a href='/panel/courses' className='text-blue-dark text-decoration-none'>
+        <a href='/panel/exercises' className='text-blue-dark text-decoration-none'>
           <FontAwesomeIcon icon={faChevronLeft} size='lg' />
         </a>
         <div className='shadow bg-light px-5 pb-5 pt-5 my-4 rounded'>

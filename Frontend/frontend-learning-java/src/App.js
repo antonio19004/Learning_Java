@@ -29,7 +29,7 @@ function App(){
 
 
   const handleIdle = () => {
-    fetch('http://localhost:8080/logout', {
+    fetch('https://backend-learning-java.onrender.com/logout', {
       method: 'POST',
       credentials: 'include',
     }).then(() => {
@@ -39,7 +39,7 @@ function App(){
     });
   };
 
-  useIdleTimer(43200000, handleIdle);
+  useIdleTimer(14400000, handleIdle);
   const isAuthenticated = localStorage.getItem('username') !== null;
 
 

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar, faStarHalfAlt, faStar as faStarEmpty, faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
+import { faStar, faStarHalfAlt, faStar as faStarEmpty, faChevronDown, faChevronUp, faEllipsisH, faQuestionCircle, faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { formatDistanceToNow } from 'date-fns';
 import { es } from 'date-fns/locale';
 import axios from 'axios';
 import UserImg from '../Static/Img/User.png';
+import Swal from 'sweetalert2';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import '../Static/Styles/Comment.css';
@@ -12,6 +13,7 @@ import '../Static/Styles/Comment.css';
 const Comment = ({id}) => {
 
     const isAuthenticated = localStorage.getItem('username') !== null;
+    const username = localStorage.getItem('username');
     const [stars, setStars] = useState(0);
     const [comment, setComment] = useState('');
     const [averageSource, setAverageSource] = useState(0);
@@ -19,6 +21,8 @@ const Comment = ({id}) => {
     const [lowest, setLowest] = useState(null);
     const [comments, setComments] = useState([]);
     const [showMore, setShowMore] = useState(false);
+    const [userHasCommented, setUserHasCommented] = useState(false);
+    const [editingComment, setEditingComment] = useState(null);
 
     useEffect(() => {
         fetchAverageSource();
@@ -27,9 +31,14 @@ const Comment = ({id}) => {
         fetchAllComments();
     }, [])
 
+    const checkUserCommented = (comments) => {
+        const hasCommented = comments.some(comment => comment.user?.user === username || comment.admin?.user === username);
+        setUserHasCommented(hasCommented);
+    };
+
     const fetchAverageSource = async () => {
         try {
-            const response = await axios.get(`https://backend-learning-java.onrender.com/http://localhost:8080/comment/view/average-score/${id}`);
+            const response = await axios.get(`https://backend-learning-java.onrender.com/comment/view/average-score/${id}`);
             if (response.status === 200) {
                 setAverageSource(response.data);
             }
@@ -65,6 +74,7 @@ const Comment = ({id}) => {
             const response = await axios.get(`https://backend-learning-java.onrender.com/comment/view/${id}`);
             if (response.status === 200) {
                 setComments(response.data);
+                checkUserCommented(response.data);
             }
         } catch (error) {
             console.error("Error al obtener los comentarios: ", error);
@@ -137,6 +147,94 @@ const Comment = ({id}) => {
         return starsArray;
     }
 
+    const handleEdit = (commentToEdit) => {
+        setStars(commentToEdit.stars);
+        setComment(commentToEdit.comentario);
+        setEditingComment(commentToEdit);
+    };
+
+    const handleUpdate = async (e) => {
+        e.preventDefault();
+
+        const updatedData = {
+            id: editingComment.id,
+            stars: stars,
+            comentario: comment,
+            course: { id: id }
+        };
+
+        try {
+            const response = await axios.post('https://backend-learning-java.onrender.com/comment/score', updatedData, {
+                headers: { 'Content-Type': 'application/json' },
+                withCredentials: true
+            });
+            setEditingComment(null);
+            setComment('');
+            setStars(0);
+            fetchAverageSource();
+            fetchHighestScoreComment();
+            fetchLowestScoreComment();
+            fetchAllComments();
+        } catch (error) {
+            console.error("Error al actualizar el comentario: ", error);
+        }
+    };
+
+    const handleDeleteComment = async (id) => {
+        const result = await Swal.fire({
+            title: '¿Estás seguro?',
+            text: "No podrás visualizar este comentario ni su puntuación después de eliminarlo.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Sí, eliminar!',
+            cancelButtonText: 'Cancelar'
+        });
+        if (result.isConfirmed) {
+            try {
+                await axios.delete(`https://backend-learning-java.onrender.com/comment/${id}`, { withCredentials: true });
+                Swal.fire(
+                    'Eliminado!',
+                    'El tema ha sido eliminado.',
+                    'success'
+                );
+                fetchAverageSource();
+                fetchHighestScoreComment();
+                fetchLowestScoreComment();
+                fetchAllComments();
+            } catch (error) {
+                console.error('Error al eliminar el comentario', error);
+                Swal.fire(
+                    'Error!',
+                    'No se pudo eliminar el comentario.',
+                    'error'
+                );
+            }
+        }
+    };
+
+    const renderDropdown = (comment) => {
+        if ((comment.user && comment.user.user === username) || (comment.admin && comment.admin.user === username)) {
+            return (
+                <div className="dropdown">
+                    <button className="btn btn-link p-0" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        <FontAwesomeIcon icon={faEllipsisH} style={{ marginLeft: '100px', color: '#333' }} />
+                    </button>
+                    <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                        <li><button className="dropdown-item" onClick={() => handleEdit(comment)}>
+                            <FontAwesomeIcon icon={faPenToSquare} /> Editar
+                        </button></li>
+                        <li><button className="dropdown-item" onClick={() => handleDeleteComment(comment.id)}>
+                            <FontAwesomeIcon icon={faTrash} style={{ color: 'red' }} /> Eliminar
+                        </button></li>
+                    </ul>
+                </div>
+            );
+        }
+        return null;
+    };
+
     return (
         <div className='my-4 mx-2'>
             <div className='stars-container'>
@@ -161,6 +259,7 @@ const Comment = ({id}) => {
                             </div>
                             <p className='mt-2'>{highest.comentario}</p>
                         </div>
+                        {renderDropdown(highest)}
                     </div>
                 )}
                 {lowest && comments.length > 1 && (
@@ -181,6 +280,7 @@ const Comment = ({id}) => {
                             </div>
                             <p className='mt-2'>{lowest.comentario}</p>
                         </div>
+                        {renderDropdown(lowest)}
                     </div>
                 )}
                 {showMore && comments.length > 1 && (
@@ -204,6 +304,7 @@ const Comment = ({id}) => {
                                     </div>
                                     <p className='mt-2'>{comment.comentario}</p>
                                 </div>
+                                {renderDropdown(comment)}
                             </li>
                         ))}
                     </ul>
@@ -214,17 +315,40 @@ const Comment = ({id}) => {
                         <FontAwesomeIcon icon={showMore ? faChevronUp : faChevronDown} className='ms-2' />
                     </button>
                 )}
-                {isAuthenticated && (
-                    <div className='rating-form'>
-                        <textarea className='form-control mb-2' value={comment} onChange={(e) => setComment(e.target.value)} onKeyPress={handleKeyPress} placeholder='Escribe tu comentario aquí...' />
-                        <div className='stars-selection'>
-                            {[1, 2, 3, 4, 5].map((star) => (
-                                <span key={star} onClick={() => setStars(star)} className={`star ${star <= stars ? 'filled' : ''}`}>
-                                    <FontAwesomeIcon icon={faStar} />
-                                </span>
-                            ))}
+                {isAuthenticated && !userHasCommented && (
+                    <div>
+                        <span className="info-icon" title="Debes ingresar un comentario y seleccionar al menos una estrella como puntuación.">
+                            <FontAwesomeIcon icon={faQuestionCircle} style={{ fontSize: '20px', marginBottom: '-10px', marginTop: '-10px', marginLeft: '95%' }} />
+                        </span>
+                        <div className='rating-form'>
+                            <textarea className='form-control mb-2' value={comment} onChange={(e) => setComment(e.target.value)} onKeyPress={handleKeyPress} placeholder='Escribe tu comentario aquí...' />
+                            <div className='stars-selection'>
+                                {[1, 2, 3, 4, 5].map((star) => (
+                                    <span key={star} onClick={() => setStars(star)} className={`star ${star <= stars ? 'filled' : ''}`}>
+                                        <FontAwesomeIcon icon={faStar} />
+                                    </span>
+                                ))}
+                            </div>
+                            <button className='btn btn-dark mt-2' onClick={handleSubmit} disabled={!comment.trim() || stars === 0}>Enviar</button>
                         </div>
-                        <button className='btn btn-dark mt-2' onClick={handleSubmit} disabled={!comment.trim()}>Enviar</button>
+                    </div>
+                )}
+                {editingComment && (
+                    <div>
+                        <span className="info-icon" title="Debes ingresar un comentario y seleccionar al menos una estrella como puntuación.">
+                            <FontAwesomeIcon icon={faQuestionCircle} style={{ fontSize: '20px', marginBottom: '-10px', marginTop: '-10px', marginLeft: '95%' }} />
+                        </span>
+                        <div className='rating-form'>
+                            <textarea className='form-control mb-2' value={comment} onChange={(e) => setComment(e.target.value)} onKeyPress={handleKeyPress} placeholder='Escribe tu comentario aquí...' />
+                            <div className='stars-selection'>
+                                {[1, 2, 3, 4, 5].map((star) => (
+                                    <span key={star} onClick={() => setStars(star)} className={`star ${star <= stars ? 'filled' : ''}`}>
+                                        <FontAwesomeIcon icon={faStar} />
+                                    </span>
+                                ))}
+                            </div>
+                            <button className='btn btn-dark mt-2' onClick={handleUpdate} disabled={!comment.trim() || stars === 0}>Actualizar</button>
+                        </div>
                     </div>
                 )}
             </div>
